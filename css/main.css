@@ -2,7 +2,7 @@
 .str { color: #a682cd; }
 .key { color: #ccc; font-weight: bold; }
 
-body, h1, h2, p, div, ul { margin: 0; padding: 0; }
+body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body { text-align: center; }
 
 #wrapper {
