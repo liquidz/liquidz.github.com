@@ -55,7 +55,7 @@ $ cd liquidz
 ### project.clj
 こちらも[@making](http://twitter.com/making)さんの以下の記事をベースにwarファイルを作成できるようにしています。
 [@making](http://twitter.com/making)さん様々です。
-http://blog.ik.am/entry/view/id/58/title/Clojure%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9FWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92AWS+Elastic+Beanstalk%E3%81%AB%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4/
+[http://blog.ik.am/entry/view/id/58/title/Clojureで作成したWebアプリをAWS Elastic Beanstalkにデプロイ/](http://blog.ik.am/entry/view/id/58/title/Clojure%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9FWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92AWS+Elastic+Beanstalk%E3%81%AB%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4/)
 
 {% highlight clj %}
 (defproject liquidz "1.0.0-SNAPSHOT"
@@ -184,7 +184,7 @@ $ dotcloud push liquidz.www ./service
 
 [http://www.liquidz.dotcloud.com/sql](http://www.liquidz.dotcloud.com/sql)
 
-"{:40+2 42}" こんな結果が返ってくるはずです。
+`{:40+2 42}` こんな結果が返ってくるはずです。
 ちゃんとMySQL上で足し算ができ、結果も受け取れてますね。
 
 
@@ -198,7 +198,7 @@ $ dotcloud push liquidz.www ./service
 でもappengineと比べると
 
  * SQLが使える
- * スピンアップタイムがない
+ * SpinUp Timeがない
 
 という2点だけでも大きな利点になるではないかなぁと思いました。
 
