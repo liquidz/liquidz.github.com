@@ -1,21 +1,18 @@
-.paren, .vec, .map { color: #444; }
-.str { color: #aaa; }
-code { background: #222; color: #fff; }
-
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body {
     background: #fff url(/img/back.png) no-repeat bottom right fixed;
     text-align: center;
 }
+a:link { color: #04c; }
+a:hover { color: #37f; }
+code { background: #222; color: #fff; }
+
 
 #wrapper {
     width: 60%;
     text-align: left;
     margin: 20px auto 0 auto;
 }
-
-a:link { color: #04c; }
-a:hover { color: #37f; }
 
 /* =header */
 #header { margin-bottom: 30px; }
@@ -25,8 +22,11 @@ a:hover { color: #37f; }
 
 /* =container */
 #container > h2 { font-size: medium; color: #e8ba1f; }
+#container .str { color: #777; }
+#container .vec, #container .map { color: #aaa; font-size: small; }
 #container ul { list-style: none; }
-#container ul li { text-indent: 10px; margin-bottom: 0.5em; }
+#container ul li { font-size: x-small; text-indent: 10px; margin-bottom: 0.5em; }
+#container ul li a { font-size: small; }
 
 /* =post */
 #post { width: 90%; margin-bottom: 30px; }
