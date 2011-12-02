@@ -9,10 +9,10 @@ title: パスワードチェックライブラリ作ったった
 
 自分で使うためのものだけど、パスワードの入力制限を簡単に実装できるライブラリ作ったった。
 
-* ソース
- * [https://github.com/liquidz/clj-password-check](https://github.com/liquidz/clj-password-check)
-* clojars
- * [http://clojars.org/org.clojars.liquidz/clj-password-check](http://clojars.org/org.clojars.liquidz/clj-password-check)
+ * ソース
+  * [https://github.com/liquidz/clj-password-check](https://github.com/liquidz/clj-password-check)
+ * clojars
+  * [http://clojars.org/org.clojars.liquidz/clj-password-check](http://clojars.org/org.clojars.liquidz/clj-password-check)
 
 使い方は、一般的に使われるであろうチェック用関数は用意してあるので、
 その中で自サービスで使いたいものを選ぶだけな感じ。
