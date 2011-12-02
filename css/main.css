@@ -16,17 +16,20 @@ code { background: #222; color: #fff; }
 
 /* =header */
 #header { margin-bottom: 30px; }
-#header h1 { font-size: large; }
+#header h1 { font-size: 1.1em; }
 #header h1 a { text-decoration: none; color: #444; }
 #header h1 span { color: #87c530; }
 
 /* =container */
-#container > h2 { font-size: medium; color: #e8ba1f; }
+/*
+#container > h2 { font-size: 0.9em; color: #e8ba1f; color: #999; }
+*/
 #container .str { color: #777; }
-#container .vec, #container .map { color: #aaa; font-size: small; }
+#container .vec, #container .map { color: #aaa; font-size: 0.5em; }
 #container ul { list-style: none; }
-#container ul li { font-size: x-small; text-indent: 10px; margin-bottom: 0.5em; }
-#container ul li a { font-size: small; }
+#container ul li { text-indent: 10px; margin-bottom: 0.3em; }
+#container ul li span.date { font-size: 0.5em; }
+#container ul li a { font-size: 0.85em; }
 
 /* =post */
 #post { width: 90%; margin-bottom: 30px; }
@@ -41,6 +44,6 @@ code { background: #222; color: #fff; }
 }
 
 /* =footer */
-#footer { border-top: 5px solid #efefef; margin: 30px 0 20px 0; padding-top: 10px; font-size: small; }
+#footer { border-top: 5px solid #efefef; margin: 30px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
 #footer ul { list-style: none; }
 #footer ul li { display: inline; margin-right: 20px; }
