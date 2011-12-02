@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Plojuctor: Clojure REPL上で動作するプレゼンツールを作ってみた(半分ネタ)
+title: Plojuctor > Clojure REPL上で動作するプレゼンツールを作ってみた(半分ネタ)
 ---
 
 # {{page.title}}
