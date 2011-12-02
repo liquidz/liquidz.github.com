@@ -1,0 +1,30 @@
+.paren, .vec, .map { color: #980008; }
+.str { color: #a682cd; }
+.key { color: #ccc; font-weight: bold; }
+
+body, h1, h2, p, div, ul { margin: 0; padding: 0; }
+body { text-align: center; }
+
+#wrapper {
+    width: 60%;
+    text-align: left;
+    margin: 20px auto 0 auto;
+}
+
+a:link { color: #04c; }
+a:hover { color: #37f; }
+
+/* =header */
+#header { margin-bottom: 30px; }
+#header h1 { font-size: large; }
+#header h1 a { text-decoration: none; color: #444; }
+
+/* =container */
+#container h2 { font-size: medium; }
+#container ul { list-style: none; }
+#container ul li { text-indent: 10px; }
+
+/* =footer */
+#footer { border-top: 5px solid #efefef; margin-top: 30px; padding-top: 10px; font-size: small; }
+#footer ul { list-style: none; }
+#footer ul li { display: inline; margin-right: 20px; }
