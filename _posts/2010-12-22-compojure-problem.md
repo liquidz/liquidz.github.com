@@ -10,7 +10,9 @@ title: Compojure 0.5.3 on GAE/Jの問題点?自分だけ?
 ローカルでdevサーバを起動してアクセスすると
 以下の例外が起きるのはうちだけの問題？？
 
-    java.lang.NoClassDefFoundError: compojure/response/Renderable
+{% highlight sh %}
+java.lang.NoClassDefFoundError: compojure/response/Renderable
+{% endhighlight %}
 
 ググっても特にそれらしい情報がなかった。
 Renderableだから0.5系全般でそうだったのかな？
@@ -19,7 +21,9 @@ Renderableだから0.5系全般でそうだったのかな？
 クラスファイルが参照できてないだけっぽいから、
 compojure の project.clj に以下を追加してみて問題なくなったことを確認。
 
-	:aot [compojure.response]
+{% highlight clj %}
+:aot [compojure.response]
+{% endhighlight %}
 
 ちなみに上記を追加して lein compile とかすると classes に
 Renderable.class が生成されてることがわかるはず。
