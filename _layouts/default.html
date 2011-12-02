@@ -4,10 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ page.title }}</title>
-    <!--
     <link href="/css/main.css" media="screen" rel="stylesheet" type="text/css">
-    -->
-    <link href="../css/main.css" media="screen" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div id="wrapper">
@@ -16,24 +13,7 @@
         </div>
 
         <div id="container">
-            <h2>:posts</h2>
-<span class="vec">[</span>
-            <ul class="posts">
-                {% for post in site.posts %}
-                <li><span class="map">{</span>
-                    <span class="key">:date</span>
-                    <span class="str">"{{ post.date | date_to_string }}"</span>
-                    <span class="key">:title</span>
-                    <a href="{{ post.url }}">"{{ post.title }}"</a>
-                    <span class="map">}</span>
-                </li>
-                {% endfor %}
-            </ul>
-<span class="vec">]</span>
-
-            <!--
             {{ content }}
-            -->
         </div>
 
         <div id="footer">
