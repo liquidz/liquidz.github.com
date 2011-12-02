@@ -4,6 +4,7 @@ title: case マクロ
 ---
 
 # {{page.title}}
+<p class="meta">2010-04-24</p>
 
 てきとーに書いた。ハイライトさせたいな
 
