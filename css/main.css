@@ -1,6 +1,6 @@
-.paren, .vec, .map { color: #980008; }
-.str { color: #a682cd; }
-.key { color: #ccc; font-weight: bold; }
+.paren, .vec, .map { color: #444; }
+.str { color: #a4e04e; }
+.key { color: #aaa; }
 
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body { text-align: center; }
@@ -18,9 +18,10 @@ a:hover { color: #37f; }
 #header { margin-bottom: 30px; }
 #header h1 { font-size: large; }
 #header h1 a { text-decoration: none; color: #444; }
+#header h1 span { color: #87c530; }
 
 /* =container */
-#container h2 { font-size: medium; }
+#container h2 { font-size: medium; color: #e8ba1f; }
 #container ul { list-style: none; }
 #container ul li { text-indent: 10px; }
 

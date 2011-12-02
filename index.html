@@ -8,9 +8,13 @@ title: (code "liquidz.uo")
 <ul class="posts">
     {% for post in site.posts %}
     <li><span class="map">{</span>
+    <!--
     <span class="key">:date</span>
+    -->
     <span class="str">"{{ post.date | date_to_string }}"</span>
+    <!--
     <span class="key">:title</span>
+    -->
     <a href="{{ post.url }}">"{{ post.title }}"</a>
     <span class="map">}</span>
     </li>
