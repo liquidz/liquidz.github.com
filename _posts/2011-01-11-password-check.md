@@ -9,6 +9,9 @@ title: パスワードチェックライブラリ作ったった
 
 自分で使うためのものだけど、パスワードの入力制限を簡単に実装できるライブラリ作ったった。
 
+ - hoge
+ - fuga
+
  - ソース
      [https://github.com/liquidz/clj-password-check](https://github.com/liquidz/clj-password-check)
  - clojars
