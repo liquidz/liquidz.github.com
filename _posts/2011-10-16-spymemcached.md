@@ -13,7 +13,8 @@ herokuでmemcached使うのにちょうど良いライブラリが見当たら�
  - [https://github.com/liquidz/clj-spymemcached](https://github.com/liquidz/clj-spymemcached)
  - [https://clojars.org/clj-spymemcached](https://clojars.org/clj-spymemcached)
 
-# 使い方
+
+## 使い方
 
 {% highlight clj %}
 ; 接続
