@@ -10,10 +10,13 @@ title: Gravatarのライブラリ作ったった
 需要は全然ないと思うけど自分でちょっと使いそうだったから作ったった。
 でもGravatarのAPIをそのままラッピングだけの簡単なものデス。
 
- * ソース
-    * [https://github.com/liquidz/clj-gravatar](https://github.com/liquidz/clj-gravatar)
+ * github
+
+    [https://github.com/liquidz/clj-gravatar](https://github.com/liquidz/clj-gravatar)
+
  * clojars
-    * [http://clojars.org/org.clojars.liquidz/clj-gravatar](http://clojars.org/org.clojars.liquidz/clj-gravatar)
+
+    [http://clojars.org/org.clojars.liquidz/clj-gravatar](http://clojars.org/org.clojars.liquidz/clj-gravatar)
 
 以下、使用例
 
