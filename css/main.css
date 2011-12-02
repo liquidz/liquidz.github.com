@@ -31,7 +31,7 @@ a:hover { color: #37f; }
 #post { width: 90%; margin-bottom: 30px; }
 #post .meta { color: #aaa; margin-bottom: 20px; }
 #post h1 { margin-bottom: 20px; }
-#post h2, #post h3, #post h4 { margin: 10px 0; }
+#post h2, #post h3, #post h4 { color: #e8ba1f; margin: 20px 0; }
 #post p { margin-bottom: 1em; }
 #post ul {
     list-style: disc;
