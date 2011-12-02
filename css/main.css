@@ -34,6 +34,7 @@ a:hover { color: #37f; }
 #post h2, #post h3, #post h4 { margin: 10px 0; }
 #post p { margin-bottom: 1em; }
 #post ul {
+    list-style: disc;
     margin-left: 1.5em;
 }
 
