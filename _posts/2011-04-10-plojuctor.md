@@ -6,7 +6,7 @@ title: Plojuctor > Clojure REPL上で動作するプレゼンツールを作っ�
 # {{page.title}}
 <p class="meta">2011-04-11</p>
 
-![thumbnail](/img/post/plojuctor.pn "thumbnail")
+![thumbnail](/img/post/plojuctor.png "thumbnail")
 
 
 元ネタは以下です。
