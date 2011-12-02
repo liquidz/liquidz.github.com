@@ -3,7 +3,7 @@
 
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body {
-    background: #fff url(../img/back.png) no-repeat bottom right fixed;
+    background: #fff url(/img/back.png) no-repeat bottom right fixed;
     text-align: center;
 }
 
