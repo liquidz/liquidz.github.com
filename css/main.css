@@ -1,6 +1,6 @@
 .paren, .vec, .map { color: #444; }
 .str { color: #aaa; }
-code { background: #444; color: #fff; }
+code { background: #222; color: #fff; }
 
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body {
