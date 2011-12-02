@@ -23,7 +23,7 @@ a:hover { color: #37f; }
 #header h1 span { color: #87c530; }
 
 /* =container */
-#container h2 { font-size: medium; color: #e8ba1f; }
+#container > h2 { font-size: medium; color: #e8ba1f; }
 #container ul { list-style: none; }
 #container ul li { text-indent: 10px; }
 
