@@ -25,7 +25,7 @@ a:hover { color: #37f; }
 #container ul li { text-indent: 10px; }
 
 /* =post */
-#post { margin-top: 20px; }
+#post { margin-top: 40px; }
 
 /* =footer */
 #footer { border-top: 5px solid #efefef; margin-top: 30px; padding-top: 10px; font-size: small; }
