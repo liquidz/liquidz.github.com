@@ -42,6 +42,7 @@ code { background: #222; color: #fff; }
     list-style: disc;
     margin-left: 1em;
 }
+#tweet { margin-bottom: 20px; }
 
 /* =footer */
 #footer { border-top: 5px solid #efefef; margin: 30px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
