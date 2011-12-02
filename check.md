@@ -63,7 +63,7 @@ src/helloworld/core.clj の編集
     (run-jetty app {:port port})))
 {% endhighlight %}
 
- - 実行
+実行
 
 {% highlight sh %}
 $ lein deps
@@ -71,12 +71,12 @@ $ lein run
 $ open http://localhost:8080
 {% endhighlight %}
 
-{% highlight clj %}
-{% endhighlight %}
+Hello World!!
 
 ## 静的ファイルを扱う
 
 無事HelloWorldが表示できました。
+
 あとはhiccupやenliveといったテンプレートエンジンを使えば動的な画面は問題ないでしょう。
 では静的な画面は？というと以下のようにします。
 
@@ -118,6 +118,8 @@ Jettyの再起動を再起動して http://localhost:8080/neko.txt へアクセ�
 
 先ほどの静的ファイルへの対応では修正後にJettyを再起動しました。
 でも修正の度に再起動するのは効率的ではありません。
+
+そこでring-develの`reload`と`stacktrace`を
 
 
  - static file
