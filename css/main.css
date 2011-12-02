@@ -1,6 +1,5 @@
 .paren, .vec, .map { color: #444; }
-.str { color: #a4e04e; }
-.key { color: #aaa; }
+.str { color: #aaa; }
 
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
 body { text-align: center; }
