@@ -26,7 +26,7 @@ a:hover { color: #37f; }
 /* =container */
 #container > h2 { font-size: medium; color: #e8ba1f; }
 #container ul { list-style: none; }
-#container ul li { text-indent: 10px; line-height: 1.3em; }
+#container ul li { text-indent: 10px; margin-bottom: 0.5em; }
 
 /* =post */
 #post { width: 90%; margin-bottom: 30px; }
