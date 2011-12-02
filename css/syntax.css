@@ -23,6 +23,7 @@
 .highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
 .highlight .m { color: #009999 } /* Literal.Number */
 .highlight .s { color: #a682cd; } /* Literal.String */
+.highlight .n { color: #fff; } 
 .highlight .na { color: #008080 } /* Name.Attribute */
 .highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
 .highlight .no { color: #008080 } /* Name.Constant */
