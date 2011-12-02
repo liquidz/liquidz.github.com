@@ -17,7 +17,7 @@ title: Javaのstaticメソッドをclojureのfnに変換してみた
 引数の個数分別々に定義しないといけなくて面倒だったから
 そこらへんも考慮してclojureのfnに変換するコードを書いてみた
 
-<script src="https://gist.github.com/743485.js?file=jstatic.clj"></script>
+https://gist.github.com/743485
 
 以下、簡単な例
 
