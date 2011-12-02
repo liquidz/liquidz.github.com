@@ -33,7 +33,7 @@ user=> (f "hello" 1 2)
 
 reifyは以下を見る限り「&」もシンボルとして扱われちゃう。
 
-http://markmail.org/thread/rtxresashciapdnc#query:clojure%20%22no%20single%20method%22+page:1+mid:afahohroee6dfsmr+state:results
+[http://markmail.org/thread/rtxresashciapdnc](http://markmail.org/thread/rtxresashciapdnc#query:clojure%20%22no%20single%20method%22+page:1+mid:afahohroee6dfsmr+state:results)
 
 extendはそれっぽく動くけど、可変部が2つ以上でないとエラーになっちゃう。
 
