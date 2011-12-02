@@ -8,6 +8,7 @@ title: Plojuctor: Clojure REPL上で動作するプレゼンツールを作っ�
 
 ![thumbnail](/img/post/plojuctor.pn "thumbnail")
 
+
 元ネタは以下です。
 
 > Here Comes Clojure: A Clojure Talk in Clojure
