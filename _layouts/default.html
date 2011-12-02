@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ page.title }}</title>
-    <link href="../css/main.css" media="screen" rel="stylesheet" type="text/css">
-    <link href="../css/syntax.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/css/main.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/css/syntax.css" media="screen" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div id="wrapper">
@@ -15,18 +15,6 @@
 
         <div id="container">
             {{ content }}
-
-
-
-<div class='highlight'><pre><code class='clj'><span class='p'>(</span><span class='k'>defmacro </span><span class='nv'>case</span> <span class='p'>[</span><span class='nv'>base-value</span> <span class='nv'>&amp;amp</span><span class='c1'>; patterns]</span> 
- <span class='p'>(</span><span class='nf'>cons</span> 
-  <span class='ss'>&#39;cond</span> 
-  <span class='p'>(</span><span class='nf'>fold</span> <span class='p'>(</span><span class='k'>fn </span><span class='p'>[[</span><span class='nv'>val</span> <span class='nv'>&amp;amp</span><span class='c1'>; more] res]</span> 
-         <span class='p'>(</span><span class='nb'>concat </span><span class='nv'>res</span> <span class='p'>(</span><span class='nb'>list </span><span class='p'>(</span><span class='k'>if </span><span class='p'>(</span><span class='nb'>= </span><span class='nv'>val</span> <span class='nv'>:else</span><span class='p'>)</span> <span class='nv'>val</span> <span class='o'>`</span><span class='p'>(</span><span class='nb'>= </span><span class='nv'>~base-value</span> <span class='nv'>~val</span><span class='p'>))</span> <span class='p'>(</span><span class='nb'>first </span><span class='nv'>more</span><span class='p'>))))</span> <span class='p'>(</span> 
-    <span class='p'>(</span><span class='nf'>partition</span> <span class='mi'>2</span> <span class='nv'>patterns</span><span class='p'>)))))</span> 
-</code></pre> 
-</div> 
-
 
 
         </div>
