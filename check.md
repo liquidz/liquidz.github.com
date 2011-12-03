@@ -11,6 +11,8 @@ title: 実践(?)Compojure
 今回はCompojureでウェブアプリを作る際に使える
 ある程度実践的(?)なTipsなどを紹介します。
 
+** 長文なのでご注意ください **
+
 ## Compojureとは
 
 [Compojure](https://github.com/weavejester/compojure)はClojure向けの軽量ウェブフレームワークです。
@@ -23,6 +25,7 @@ Clojure版Sinatraのようなフレームワークでウェブアプリをシン
 最初にベースとなるHelloWorldを作ります。
 HelloWorldの作り方自体はググれば他にたくさん記事が見つかると思うので
 詳細な説明は割愛して、コード内のコメントで軽く補足します。
+
 なおこれから先は[Leiningen](https://github.com/technomancy/leiningen)がインストール済みであることを前提にしています。
 
 プロジェクトの作成
@@ -162,9 +165,9 @@ $ lein run
 {% endhighlight %}
 
 Jettyの再起動に関係なく index の戻り値が反映されるのが確認できたでしょうか？
-また stacktrace を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。
+また `stacktrace` を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。
 
-なおreloadですが、`defroutes`内の変更は反映されないようなので、
+なお `reload` ですが、`defroutes`内の変更は反映されないようなので、
 routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)
 
 
@@ -256,6 +259,7 @@ $ open "http://localhost:8080/set/helloworld"
 
 ### ring.middleware.flash
 セッションを使って一時的なメッセージを保存。要 `wrap-session`。
+
 リダイレクト先でちょろっとメッセージを表示したいときとかに使う
 
 {% highlight clj %}
@@ -364,9 +368,6 @@ HTMLを出力するroute向け。以下7つをラップ
  - wrap-nested-params
  - wrap-keyword-params
 
-{% highlight clj %}
-{% endhighlight %}
-
 
 ## テストする
 
@@ -431,6 +432,14 @@ test/helloworld/test/core.clj
       200 (:status res)
       2 (:hello body)
       1 (:world body))))
+{% endhighlight %}
+
+{% highlight sh %}
+$ lein deps
+$ lein test
+Testing helloworld.test.core
+Ran 1 tests containing 3 assertions.
+0 failures, 0 errors.
 {% endhighlight %}
 
 このような感じで `ring-mock` を使うと
