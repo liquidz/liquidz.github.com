@@ -187,3 +187,66 @@ QueryString, POSTデータを `{:params request}` に展開
 (defroutes app
   (-> main-routes wrap-params))
 {% endhighlight %}
+
+
+### ring.middleware.nested-params/wrap-nested-params
+
+添字付きのパラメータをネストしたマップに展開。要wrap-params。
+なお展開できる階層は1階層のネストまで
+
+{% highlight clj %}
+(defroutes main-routes
+  (GET "/" {params :params} (str params)))
+
+(defroutes app
+  (-> main-routes wrap-nested-params wrap-params))
+{% endhighlight %}
+
+{% highlight sh %}
+$ open "http://localhost:8080/?a[b]=c&a[d]=e"
+{% endhighlight %}
+
+{% highlight clj %}
+{"a" {"d" "e", "b" "c"}}
+{% endhighlight %}
+
+### ring.middleware.keyword-params/wrap-keyword-params
+
+パラメータ名をStringからKeywordに変換。wrap-params, wrap-nested-paramsと一緒に使う
+
+{% highlight clj %}
+(defroutes main-routes
+  ; 分配束縛が楽
+  (GET "/" {{:keys [param1 param2]} :params}
+    (str "param1 = " param1 ", param2 = " param2)))
+
+(defroutes app
+  (-> main-routes wrap-keyword-params wrap-params))
+{% endhighlight %}
+
+### ring.middleware.session
+
+セッションを扱う。
+セッション情報はリクエストの :session キーで渡される
+
+{% highlight clj %}
+(ns helloworld.core
+  (:use
+    ..省略..
+    [ring.util.response :only [redirect]]))
+
+(defroutes main-routes
+  (GET "/set/:vlue" [value]
+    ; セッションのセットはレスポンスに :session を指定するだけ
+    (assoc (redirect "/") :session {:value value}))
+
+  (GET "/" {{:keys [value], :or {value "no data"}} :session}
+    (str "value = " value)))
+
+(defroutes app
+  (-> main-routes wrap-session))
+{% endhighlight %}
+
+{% highlight sh %}
+$ open "http://localhost:8080/set/helloworld"
+{% endhighlight %}
