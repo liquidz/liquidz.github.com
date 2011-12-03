@@ -3,15 +3,33 @@ layout: default
 title: (code "liquidz.uo")
 ---
 
-<span class="vec">[</span>
+{% assign first_post = site.posts.first %}
+{% assign last_post = site.posts.last %}
+
 <ul class="posts">
     {% for post in site.posts %}
+
+    {% if post == first_post %}
+    <li class="first"><span class="map">[{</span>
+    {% else %}
     <li><span class="map">{</span>
+    {% endif %}
+
     <span class="date">"{{ post.date | date_to_string }}"</span>
     <a href="{{ post.url }}">"{{ post.title }}"</a>
+
+    {% if post == last_post %}
+    <span class="map">}]</span>
+    {% else %}
     <span class="map">}</span>
+    {% endif %}
     </li>
     {% endfor %}
 </ul>
-<span class="vec">]</span>
+
+<div id="aboutme">
+    <p>(<span class="keyword">identity</span></p>
+    <p class="indent">:name "@uochan"</p>
+    <p class="indent">:desc "プログラミングと紅茶とニコ動と読書が好き。リラックマとダッフィーくんも好き。クマの人。Vimmer兼Clojurian")</p>
+</div>
 

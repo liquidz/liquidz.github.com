@@ -1,6 +1,6 @@
 ---
 layout: post
-title: clojure でspymemcachedの薄すぎるラッパー書いた
+title: clojureでspymemcachedの薄すぎるラッパー書いた
 ---
 
 # {{page.title}}

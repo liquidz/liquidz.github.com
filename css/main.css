@@ -9,7 +9,7 @@ code { background: #222; color: #fff; padding: 0 2px; }
 
 
 #wrapper {
-    width: 60%;
+    width: 55%;
     text-align: left;
     margin: 20px auto 0 auto;
 }
@@ -21,30 +21,33 @@ code { background: #222; color: #fff; padding: 0 2px; }
 #header h1 span { color: #87c530; }
 
 /* =container */
-/*
-#container > h2 { font-size: 0.9em; color: #e8ba1f; color: #999; }
-*/
 #container .str { color: #777; }
-#container .vec, #container .map { color: #aaa; font-size: 0.5em; }
+#container .map { color: #aaa; font-size: 0.5em; }
 #container ul { list-style: none; }
 #container ul li { text-indent: 10px; margin-bottom: 0.3em; }
+#container ul li.first { text-indent: 5px; }
 #container ul li span.date { font-size: 0.5em; }
 #container ul li a { font-size: 0.85em; }
 
+/* =aboutme */
+#aboutme { margin: 20px 0; font-size: 0.8em; color: #444; }
+#aboutme .keyword { color: #87c530; }
+#aboutme p.indent { text-indent: 10px; }
+
 /* =post */
-#post { width: 90%; margin-bottom: 30px; }
-#post .meta { color: #aaa; margin-bottom: 20px; }
+#post { font-size: 0.9em; width: 90%; margin-bottom: 30px; }
+#post .meta { color: #aaa; font-weight: bold; font-size: 0.9em; margin-bottom: 20px; }
 #post h1 { margin-bottom: 20px; }
 #post h2, #post h3, #post h4 { color: #444; margin: 20px 0; }
 #post h2 { color: #87c530; }
+#post h3 { background: transparent url(/img/h3.png) no-repeat left 50%; padding-left: 12px; }
 #post p { margin-bottom: 1em; }
-#post ul {
-    list-style: disc;
-    margin-left: 1em;
-}
+#post ul { list-style: disc; margin-left: 1.5em; }
+#post ul li { text-indent: 0; }
+#post blockquote { font-style: italic; font-size: 130%; }
 #tweet { margin-bottom: 20px; }
 
 /* =footer */
-#footer { border-top: 5px solid #efefef; margin: 30px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
+#footer { margin: 40px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
 #footer ul { list-style: none; }
 #footer ul li { display: inline; margin-right: 20px; }
