@@ -224,29 +224,3 @@ $ open "http://localhost:8080/?a[b]=c&a[d]=e"
   (-> main-routes wrap-keyword-params wrap-params))
 {% endhighlight %}
 
-### ring.middleware.session
-
-セッションを扱う。
-セッション情報はリクエストの :session キーで渡される
-
-{% highlight clj %}
-(ns helloworld.core
-  (:use
-    ..省略..
-    [ring.util.response :only [redirect]]))
-
-(defroutes main-routes
-  (GET "/set/:vlue" [value]
-    ; セッションのセットはレスポンスに :session を指定するだけ
-    (assoc (redirect "/") :session {:value value}))
-
-  (GET "/" {{:keys [value], :or {value "no data"}} :session}
-    (str "value = " value)))
-
-(defroutes app
-  (-> main-routes wrap-session))
-{% endhighlight %}
-
-{% highlight sh %}
-$ open "http://localhost:8080/set/helloworld"
-{% endhighlight %}
