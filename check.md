@@ -210,17 +210,3 @@ $ open "http://localhost:8080/?a[b]=c&a[d]=e"
 {"a" {"d" "e", "b" "c"}}
 {% endhighlight %}
 
-### ring.middleware.keyword-params/wrap-keyword-params
-
-パラメータ名をStringからKeywordに変換。wrap-params, wrap-nested-paramsと一緒に使う
-
-{% highlight clj %}
-(defroutes main-routes
-  ; 分配束縛が楽
-  (GET "/" {{:keys [param1 param2]} :params}
-    (str "param1 = " param1 ", param2 = " param2)))
-
-(defroutes app
-  (-> main-routes wrap-keyword-params wrap-params))
-{% endhighlight %}
-
