@@ -191,7 +191,7 @@ QueryString, POSTデータを `{:params request}` に展開
 
 ### ring.middleware.nested-params/wrap-nested-params
 
-添字付きのパラメータをネストしたマップに展開。要wrap-params。
+添字付きのパラメータをネストしたマップに展開。要 `wrap-params`。
 なお展開できる階層は1階層のネストまで
 
 {% highlight clj %}
@@ -212,7 +212,7 @@ $ open "http://localhost:8080/?a[b]=c&a[d]=e"
 
 ### ring.middleware.keyword-params/wrap-keyword-params
 
-パラメータ名をStringからKeywordに変換。wrap-params, wrap-nested-paramsと一緒に使う
+パラメータ名をStringからKeywordに変換。`wrap-params`, `wrap-nested-params`と一緒に使う
 
 {% highlight clj %}
 (defroutes main-routes
@@ -255,7 +255,7 @@ $ open "http://localhost:8080/set/helloworld"
 
 
 ### ring.middleware.flash
-セッションを使って一時的なメッセージを保存。要wrap-session。
+セッションを使って一時的なメッセージを保存。要 `wrap-session`。
 リダイレクト先でちょろっとメッセージを表示したいときとかに使う
 
 {% highlight clj %}

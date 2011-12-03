@@ -5,7 +5,7 @@ body {
 }
 a:link { color: #04c; }
 a:hover { color: #37f; }
-code { background: #222; color: #fff; }
+code { background: #222; color: #fff; padding: 0 2px; }
 
 
 #wrapper {
