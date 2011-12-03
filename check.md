@@ -217,7 +217,7 @@ $ open "http://localhost:8080/?a[b]=c&a[d]=e"
 {% highlight clj %}
 (defroutes main-routes
   ; 分配束縛が楽
-  (GET "/" {hoge :params}
+  (GET "/" { {:keys [param1 param2]} :params}
     (str "param1 = " param1 ", param2 = " param2)))
 
 (defroutes app
