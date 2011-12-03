@@ -121,3 +121,50 @@ Jettyの再起動を再起動して http://localhost:8080/neko.txt へアクセ�
 
 そこでring-develの`reload`と`stacktrace`を使いましょう。
 
+project.clj に追加
+
+{% highlight clj %}
+:dev-dependencies [[ring/ring-devel "0.3.11"]]
+{% endhighlight %}
+
+src/helloworld/core.clj の修正
+
+{% highlight clj %}
+(ns helloworld.core
+  (:use
+    [compojure.core :only [defroutes GET]]
+    [compojure.route :only [not-found files]]
+    [ring.middleware reload stacktrace]
+    [ring.adapter.jetty :only [run-jetty]]))
+
+(defn index
+  "/ にアクセスされたときの処理"
+  [req]
+  "hello world")
+
+(defroutes main-route
+  (GET "/" req (index req)) ; 処理を関数に
+  (GET "/err" _ (throw (Exception.))) ; stacktraceの確認用
+  (files "/")
+  (not-found "NOT FOUND"))
+
+(defroutes app
+  (-> main-route
+    (wrap-reload '[helloworld.core])
+    wrap-stacktrace))
+{% endhighlight %}
+
+実行
+
+{% highlight sh %}
+$ lein deps
+$ lein run
+{% endhighlight %}
+
+Jettyの再起動に関係なく index の戻り値が反映されるのが確認できたでしょうか？
+また stacktrace を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。
+
+なおreloadですが、`defroutes`内の変更は反映されないようなので、
+routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)
+
+
