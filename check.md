@@ -168,3 +168,22 @@ Jettyの再起動に関係なく index の戻り値が反映されるのが確�
 routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)
 
 
+## Middlewareで拡張
+
+先ほどの reload, stacktrace はringのmiddlewareと言われるもので、
+これらを使うとCompojureの挙動を拡張することができます。
+
+主要なmiddlewareは以下の通りです。
+
+### ring.middleware.params/wrap-params
+
+QueryString, POSTデータを `{:params request}` に展開
+
+{% highlight clj %}
+(defroutes main-routes
+  (GET "/" {params :params}
+    (get params "get_parameter")))
+
+(defroutes app
+  (-> main-routes wrap-params))
+{% endhighlight %}
