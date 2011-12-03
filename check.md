@@ -177,7 +177,7 @@ routeの変更の際にはJettyの再起動が必要です。(この点、対処
 
 ### ring.middleware.params/wrap-params
 
-QueryString, POSTデータを {:params request} に展開
+QueryString, POSTデータを `{:params request}` に展開
 
 {% highlight clj %}
 (defroutes main-routes
