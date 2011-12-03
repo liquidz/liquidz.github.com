@@ -47,6 +47,10 @@ code { background: #222; color: #fff; padding: 0 2px; }
 #post blockquote { font-style: italic; font-size: 130%; }
 #tweet { margin-bottom: 20px; }
 
+/* =bottom_menu */
+ul#bottom_menu { text-align: right; list-style: none; margin: 15px 0; }
+ul#bottom_menu li { display: inline; margin-right: 1.5em; }
+
 /* =footer */
 #footer { margin: 40px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
 #footer ul { list-style: none; }
