@@ -1,0 +1,36 @@
+Blog=~/blog CD=. filter="*.html" {
+ index.html
+
+ layouts=./_layouts CD=. filter="**/*.html" {
+  default.html
+  post.html
+ }
+
+ css=./css CD=. filter="*.css" {
+  main.css
+  syntax.css
+ }
+
+ js=./js CD=. filter="*.js" {
+ }
+
+ posts=./_posts CD=. filter="**/*.md" {
+  2010-04-24-case-macro.md
+  2010-04-24-case-macro2.md
+  2010-04-25-lein.vim.md
+  2010-09-07-clojure-reify-extend.md
+  2010-11-25-clojure-sort.md
+  2010-11-25-todays-shortcode.md
+  2010-12-16-java-static-to-clojure-fn.md
+  2010-12-22-compojure-problem.md
+  2011-01-11-password-check.md
+  2011-02-14-java-scala-clojure.md
+  2011-02-25-dotcloud-clojure.md
+  2011-04-10-plojuctor.md
+  2011-1-7-gravatar.md
+  2011-10-15-heroku-mongodb.md
+  2011-10-16-spymemcached.md
+  2011-12-03-practical-compojure.md
+ }
+}
+
