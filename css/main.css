@@ -1,18 +1,11 @@
 body, h1, h2, p, div, pre, ul { margin: 0; padding: 0; }
-body {
-    background: #fff url(/img/back.png) no-repeat bottom right fixed;
-    text-align: center;
-}
+body { background: #fff url(/img/back.png) no-repeat bottom right fixed; text-align: center; }
 a:link { color: #04c; }
 a:hover { color: #37f; }
 code { background: #222; color: #fff; padding: 0 2px; }
 
-
-#wrapper {
-    width: 55%;
-    text-align: left;
-    margin: 20px auto 0 auto;
-}
+/* =wrapper */
+#wrapper { width: 55%; text-align: left; margin: 20px auto 0 auto; }
 
 /* =header */
 #header { margin-bottom: 30px; }
@@ -33,6 +26,7 @@ code { background: #222; color: #fff; padding: 0 2px; }
 #aboutme { margin: 20px 0; font-size: 0.8em; color: #444; }
 #aboutme .keyword { color: #87c530; }
 #aboutme p.indent { text-indent: 10px; }
+#aboutme .bear { background: transparent url(/img/bear.png) no-repeat right 50%; padding-right: 17px; }
 
 /* =post */
 #post { font-size: 0.9em; width: 90%; margin-bottom: 30px; }
@@ -42,24 +36,14 @@ code { background: #222; color: #fff; padding: 0 2px; }
 #post h2 { color: #87c530; }
 #post h3 { background: transparent url(/img/h3.png) no-repeat left 50%; padding-left: 12px; }
 #post p { margin-bottom: 1em; }
-#post ul { list-style: disc; margin-left: 1.5em; }
-#post ul li { text-indent: 0; }
+#post ul { margin-left: 0.5em; }
+#post ul li { background: transparent url(/img/li.png) no-repeat left 50%; padding-left: 17px; text-indent: 0; }
 #post blockquote { font-style: italic; font-size: 130%; }
 #tweet { margin-bottom: 20px; }
 
 /* =toc */
-ul#toc {
-    position: absolute;
-    margin-top: 10%;
-    right: 10%;
-
-    list-style: none;
-}
-ul#toc li {
-    color: #777;
-    font-size: 0.9em;
-    margin-bottom: 0.5em;
-}
+ul#toc { position: absolute; margin-top: 10%; right: 10%; list-style: none; }
+ul#toc li { font-size: 0.9em; margin-bottom: 0.5em; }
 
 /* =bottom_menu */
 ul#bottom_menu { text-align: right; list-style: none; margin: 15px 0; }

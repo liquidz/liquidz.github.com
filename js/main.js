@@ -39,21 +39,41 @@
         });
     }; // }}}
 
+    /* =wink {{{
+    var changeBackgroundUrl = function(url){
+        $("body").css("background-image", "url(" + url + ")");
+    };
+
+    var wink = function(){
+        changeBackgroundUrl("/img/back2.png");
+        setTimeout(function(){
+            changeBackgroundUrl("/img/back.png");
+        }, 100)
+    };
+
+    var getRandomSec = function(){
+        return Math.floor(Math.random() * 10) * 1000;
+    };
+
+    var setWinkTimeout = function(sec){
+        var timeoutSec = sec || getRandomSec();
+
+        setTimeout(function(){
+            wink();
+            setWinkTimeout(getRandomSec());
+        }, timeoutSec);
+    };
+    }}} */
+
     $(function(){
-        // 目次の作成
-        makeTableOfContents({ header: "#post h2", min: 3 })
-            //.insertAfter($("#post p.meta"));
-            .insertAfter($("#header"));
+       // 目次の作成
+       makeTableOfContents({ header: "#post h2", min: 3 })
+           .insertAfter($("#header"));
+       $("#toc").containedStickyScroll({
+           unstick: false
+       });
 
-        $("#toc").containedStickyScroll({
-            unstick: false
-        });
-
-
-//.containedStickyScroll();
-
-
-        applySmoothScroll();
+       applySmoothScroll();
     });
 
 }(this));
