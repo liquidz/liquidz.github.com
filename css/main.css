@@ -9,9 +9,15 @@ code { background: #222; color: #fff; padding: 0 2px; }
 
 /* =header */
 #header { margin-bottom: 30px; }
-#header h1 { font-size: 1.1em; }
-#header h1 a { text-decoration: none; color: #444; }
-#header h1 span { color: #87c530; }
+#header h1 a {
+    display: block;
+    width: 189;
+    height: 18px;
+    text-indent: -10000px;
+    font-size: 0;
+    background: transparent url(/img/logo.png) no-repeat top left;
+}
+
 
 /* =container */
 #container .str { color: #777; }
@@ -48,6 +54,11 @@ ul#toc li { font-size: 0.9em; margin-bottom: 0.5em; }
 /* =bottom_menu */
 ul#bottom_menu { text-align: right; list-style: none; margin: 15px 0; }
 ul#bottom_menu li { display: inline; margin-right: 1em; font-size: 1.2em; }
+
+/* =coderwall */
+div#coderwall {
+
+}
 
 /* =footer */
 #footer { margin: 40px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
