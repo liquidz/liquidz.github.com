@@ -12,6 +12,9 @@ Blog=~/blog CD=. filter="*.html" {
  }
 
  js=./js CD=. filter="*.js" {
+  jquery-1.7.1.min.js
+  jquery-contained-sticky-scroll-min.js
+  main.js
  }
 
  posts=./_posts CD=. filter="**/*.md" {
