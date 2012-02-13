@@ -4,10 +4,11 @@ title: (code "liquidz.uo")
 ---
 
 {% assign first_post = site.posts.first %}
-{% assign last_post = site.posts.last %}
+{% assign last_post = site.posts[14] %}
 
+<p class="comment">(take 15 lastest-posts)</p>
 <ul class="posts">
-    {% for post in site.posts %}
+    {% for post in site.posts limit:15 %}
 
     {% if post == first_post %}
     <li class="first"><span class="map">[{</span>
@@ -33,3 +34,7 @@ title: (code "liquidz.uo")
     <p class="indent">:desc "プログラミングと紅茶とニコ動と読書が好き。リラックマとダッフィーくんも好き。<span class="bear">クマの人</span>。Vimmer兼Clojurian")</p>
 </div>
 
+<div id="coderwall"></div>
+
+<script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/js/coderwall.js"></script>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<html lang="ja">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8" />
     <link href="/atom.xml" rel="alternate" title="(code liquidz.uo)" type="application/atom+xml" />
     <link href="/css/main.css" media="screen" rel="stylesheet" type="text/css">
     <link href="/css/syntax.css" media="screen" rel="stylesheet" type="text/css">
@@ -16,15 +15,19 @@
         <!-- /github ribbon -->
 
 
-        <div id="header">
+        <header>
             <h1><a href="/">(code <span>"liquidz.uo"</span>)</a></h1>
-        </div>
+
+            <nav><ul>
+                <li>&raquo; <a href="/archive.html">記事一覧</a></li>
+            </ul></nav>
+        </header>
+
 
         <div id="container">
             {{ content }}
         </div>
 
-        <div id="coderwall"></div>
 
         <div id="footer">
             <ul>
@@ -38,10 +41,6 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="/js/jquery-contained-sticky-scroll-min.js"></script>
-    <script type="text/javascript" src="/js/coderwall.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>
 
