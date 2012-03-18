@@ -2,12 +2,16 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8" />
+    <meta property="og:image" content="http://liquidz.github.com/img/site_image.png" />
+    <meta property="image_src" content="http://liquidz.github.com/img/site_image.png" />
+
     <link href="/atom.xml" rel="alternate" title="(code liquidz.uo)" type="application/atom+xml" />
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css' />
     <link href="/css/main.css" media="screen" rel="stylesheet" type="text/css">
     <link href="/css/syntax.css" media="screen" rel="stylesheet" type="text/css">
     <title>{{ page.title }}</title>
 </head>
-<body id="top">
+<body id="top" class="inconsolata">
     <div id="wrapper">
 
         <!-- github ribbon -->
@@ -16,7 +20,11 @@
 
 
         <header id="header">
-            <h1><a href="/">(code <span>"liquidz.uo"</span>)</a></h1>
+            <h1 class="inconsolata">
+                <a href="/">
+                    <span class="paren">(</span>code <span class="string">&quot;liquidz.uo&quot;</span><span class="paren">)</span>
+                </a>
+            </h1>
 
             <nav><ul>
                 <li>&raquo; <a href="/archive.html">記事一覧</a></li>

@@ -3,38 +3,35 @@ body { background: #fff url(/img/back.png) no-repeat bottom right fixed; text-al
 a:link { color: #04c; }
 a:hover { color: #37f; }
 code { background: #222; color: #fff; padding: 0 2px; }
+.inconsolata { font-family: 'Inconsolata', sans-serif; }
 
 /* =wrapper */
 #wrapper { width: 55%; text-align: left; margin: 20px auto 0 auto; }
 
 /* =header */
 header { margin-bottom: 30px; overflow: hidden; }
-header h1 a {
-    display: block;
-    width: 189;
-    height: 18px;
-    text-indent: -10000px;
-    font-size: 0;
-    background: transparent url(/img/logo.png) no-repeat top left;
-}
-header h1  { width: 200px; float: left; }
+
+header h1 { font-size: 23px; float: left; }
+header h1 a { color: #444; text-decoration: none; }
+header h1 a .string { color: #87c530; }
+header h1 a .paren { color: #777;}
 
 /* =header nav */
-header nav { float: left; margin-left: 5%;}
+header nav { float: left; margin: 10px 0 0 5%;}
 header nav ul { list-style: none; }
 header nav ul li { display: inline; font-size: small; }
 header nav ul li a { color: #04c; }
 
 /* =index */
-p.comment { margin-bottom: 0.5em; font-size: 0.7em; color: #777; }
+p.comment { margin-bottom: 0.5em; font-size: 0.8em; color: #777; }
 
 /* =container */
 #container .str { color: #777; }
-#container .map { color: #aaa; font-size: 0.5em; }
+#container .map { color: #aaa; font-size: 0.6em; }
 #container ul { list-style: none; }
 #container ul li { text-indent: 10px; margin-bottom: 0.3em; }
 #container ul li.first { text-indent: 5px; }
-#container ul li span.date { font-size: 0.5em; }
+#container ul li span.date { font-size: 0.7em; }
 #container ul li a { font-size: 0.85em; }
 
 /* =aboutme */
@@ -50,7 +47,7 @@ p.comment { margin-bottom: 0.5em; font-size: 0.7em; color: #777; }
 #post h2, #post h3, #post h4 { color: #444; margin: 20px 0; }
 #post h2 { color: #87c530; }
 #post h3 { background: transparent url(/img/h3.png) no-repeat left 50%; padding-left: 12px; }
-#post p { margin-bottom: 1em; }
+#post p { margin-bottom: 0.7em; }
 #post ul { margin-left: 0.5em; }
 #post ul li { background: transparent url(/img/li.png) no-repeat left 50%; padding-left: 17px; text-indent: 0; }
 #post blockquote { font-style: italic; font-size: 130%; }
@@ -72,6 +69,9 @@ h2.archive { margin-top: 1em; font-size: 1.5em; }
 ul.archive li { font-size: 1em; }
 
 /* =footer */
-#footer { margin: 40px 0 20px 0; padding-top: 10px; font-size: 0.7em; }
+#footer { margin: 40px 0 20px 0; padding-top: 10px; font-size: 0.8em; }
 #footer ul { list-style: none; }
 #footer ul li { display: inline; margin-right: 20px; }
+#footer ul li:before {
+    content: '* ';
+}
