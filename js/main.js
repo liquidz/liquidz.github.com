@@ -18,7 +18,7 @@
                   , h2 = $(this).attr("id", id);
 
                 $("<li>").append(
-                    $("<a>").attr("href", "#" + id).html("&raquo; " + h2.text())).appendTo(ul);
+                    $("<a>").attr("href", "#" + id).html("&raquo; " + i + ". " + h2.text())).appendTo(ul);
             });
 
             return ul;
