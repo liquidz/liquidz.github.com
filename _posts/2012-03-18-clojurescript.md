@@ -155,3 +155,11 @@ lein run
 
 <p style="color: #777;">なおここまで書いて <a href="https://github.com/ibdknox/cljs-template">cljs-template</a> に気づきました、、、
 こっちを使えばもっと簡単にできそうなのであとで試してみたいと思います。</p>
+
+
+※追記
+
+参考ページを書き忘れていました。。ClojureScriptの記述については以下を参考にさせていただきました。
+
+ * [Clojure Scriptを使ってみる](http://dev.classmethod.jp/ria/clojurescript/)
+ * [DOM Element を def で束縛する](http://qiita.com/items/1548)
