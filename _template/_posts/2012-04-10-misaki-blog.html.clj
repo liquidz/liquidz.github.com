@@ -4,6 +4,7 @@
 (p "ちょこちょこ直しながらの作業だったので時間がかかってしまいましたが、
    ブログを" (html/link "misaki" "https://github.com/liquidz/misaki") "に移行しました。")
 
+(p "misakiの詳細については" (html/link "前回のポスト" "http://liquidz.github.com/2012/04/misaki.html") "をご参照ください。")
 
 (p "まだ改善すべき点は多くあって、HTMLに比べれば楽に書けるけど
    Markdownには劣ってる(それでも個人的にはMarkdownの記法がうるおぼえなのでmisakiの方が迷わずに書けますが)
