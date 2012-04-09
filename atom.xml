@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated>2012-04-08T16:19:37</updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>ClojureでJekyllライクなブログジェネレータ「misaki」を作ったった</title><link>http://localhost:8080/2012/04/misaki.html</link><updated>2012-04-01T00:00:00</updated><id>http://localhost:8080/2012/04/misaki.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;エイプリルフールに被ってしまいましたが、
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated>2012-04-09T15:07:33</updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>ブログをmisaki移行したった</title><link>http://localhost:8080/2012/04/misaki-blog.html</link><updated>2012-04-10T00:00:00</updated><id>http://localhost:8080/2012/04/misaki-blog.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;ちょこちょこ修正しながらだったので時間かかってしまいましたが
+   このブログを&lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;misaki&lt;/a&gt;&lt;/p&gt;</content></entry><entry><title>ClojureでJekyllライクなブログジェネレータ「misaki」を作ったった</title><link>http://localhost:8080/2012/04/misaki.html</link><updated>2012-04-01T00:00:00</updated><id>http://localhost:8080/2012/04/misaki.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;エイプリルフールに被ってしまいましたが、
    Clojureで&lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll&lt;/a&gt;ライクなブログジェネレータを作りました。&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;&lt;img alt=&quot;misaki logo&quot; src=&quot;/img/post/misaki-logo.png&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;misaki / Jekyll inspired static site generator&lt;/a&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;当ブログはJekyllを使ってGitHub Pages上で運用しているのですが、
    &lt;code class=&quot;prettyprint&quot;&gt;jekyll --server&lt;/code&gt; のファイル変更から反映までの遅さ(何か手があるのかもしれないですが)
    とClojurianで主にClojureのブログなのにrubyで運用してるのが納得いかなかったので(rubyは好きですが)
@@ -549,18 +550,4 @@ System.out.println(str1 + &quot; == &quot; + str3 + &quot; = &quot; + (str1 == s
 (println (apply encode (list &quot;ほげ&quot; &quot;Shift_JIS&quot;)))
 ; =&gt; %82%D9%82%B0&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;オーバーロードされたメソッドに対してapplyできるのが
    ちょっとだけ嬉しいかも？
-   でもあまり使い道多くないかも&lt;/p&gt;</content></entry><entry><title>clojureのsortでちょっとはまったこと</title><link>http://localhost:8080/2010/11/clojure-sort.html</link><updated>2010-11-25T00:00:00</updated><id>http://localhost:8080/2010/11/clojure-sort.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;以下のリストをそれぞれの2番目の値でソートすることを考える&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def ls '((bbb 50) (ddd 100) (aaa 20) (ccc 50)))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;この時clojure 1.2では以下の2つのコードで挙動が同じになってしまう&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(sort #(&gt; (second%) (second%2)) ls)
-; =&gt; ((ddd 100) (bbb 50) (ccc 50) (aaa 20))
-(sort #(&gt;= (second%) (second%2)) ls)
-; =&gt; ((ddd 100) (bbb 50) (ccc 50) (aaa 20))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;つまりソート条件に同値も含むようにしても判別されない。
-   ちなみにgaucheで同様のことをやると以下のように同値も判別されるので
-   後に出てきたcccがbbbより先になる&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(sort ls (lambda (x y) (&gt; (cadr x) (cadr y))))
-; =&gt; ((ddd 100) (bbb 50) (ccc 50) (aaa 20))
-(sort ls (lambda (x y) (&gt;= (cadr x) (cadr y))))
-; =&gt; ((ddd 100) (ccc 50) (bbb 50) (aaa 20))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;で、何でかなぁと思って&lt;code class=&quot;prettyprint&quot;&gt;clojure.core/sort&lt;/code&gt;のソースを見ると
-ソートの実態は &lt;code class=&quot;prettyprint&quot;&gt;java.util.Arrays&lt;/code&gt; の &lt;code class=&quot;prettyprint&quot;&gt;sort&lt;/code&gt; メソッドで、
-比較関数は &lt;code class=&quot;prettyprint&quot;&gt;java.util.Comparator&lt;/code&gt; としてsortメソッドに渡されているだけ。
-このComparatorインターフェイスは &lt;code class=&quot;prettyprint&quot;&gt;compare&lt;/code&gt; というメソッドを持っていて
-これは比較した結果を int型 で小さいか、同値か、大きいかを返す。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;それならばということで &lt;code class=&quot;prettyprint&quot;&gt;compare&lt;/code&gt; メソッドを意識してみると。。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(sort #(if(&gt;(second%) (second%2)) -1 1) ls)
-; =&gt; ((ddd 100) (ccc 50) (bbb 50) (aaa 20))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;こんな感じでうまくいった。
-ソートで同値まで厳密に扱うことはほとんどないけど、忘れないようにメモ。&lt;/p&gt;</content></entry></feed>
+   でもあまり使い道多くないかも&lt;/p&gt;</content></entry></feed>

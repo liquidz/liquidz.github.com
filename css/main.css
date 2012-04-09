@@ -72,6 +72,7 @@ header h1 a span.string { color: #d657c1; }
 
 #tweet_button { margin-bottom: 1em; }
 
+#disqus_thread { margin-top: 1.5em; }
 
 ul#toc { position: absolute; margin-top: 10%; right: 5%; list-style: none; width: 15%; }
 ul#toc li { font-size: 0.9em; margin-bottom: 0.5em; }
