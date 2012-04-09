@@ -66,9 +66,11 @@
     }}} */
 
     $(function(){
+        prettyPrint();
+
        // 目次の作成
-       makeTableOfContents({ header: "#post h2", min: 3 })
-           .insertAfter($("#header"));
+       makeTableOfContents({ header: ".post h2", min: 3 })
+           .insertAfter($("header"));
        if($("#toc").length !== 0){
            $("#toc").containedStickyScroll({
                unstick: false

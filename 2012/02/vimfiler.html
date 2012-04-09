@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="VimFiler上で「送る」機能を実装するプラグイン作ったった" type="application/atom-xml"><title>VimFiler上で「送る」機能を実装するプラグイン作ったった</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body id="top"><a href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="wrapper"><header><h1><a href="/">(<span>code</span> <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="container"><article><div class="page-header"><h1><span>V</span>imFiler上で「送る」機能を実装するプラグイン作ったった</h1><p>12 Feb 2012</p></div><div class="post"><p class="paragraph add">2012-02-12 @ShougoMatsu さんにTwitterで指摘していただいたところを修正・追記しています。</p><p class="paragraph">メインのファイラをVimFilerに移行中です。</p><p class="paragraph">Ubuntuではシェルのみで操作していたのですが、
+   会社のWindows環境ではずっと<a href="http://homepage1.nifty.com/bee/df/">DF</a>を愛用していて、
+   それと同じような環境をUbuntuでも使いたいと思っていました。</p><p class="paragraph">そこでVimmerとしてはVimFilerだろ！ということでいろいろと設定している中で
+   VimFilerにエクスプローラの「送る」ライクな機能を提供するプラグインを作ってしまったので紹介です。</p><h2><span>s</span>endto plugin for vimfiler</h2><dl><dt>github</dt><dd><a href="https://github.com/liquidz/vimfiler-sendto">https://github.com/liquidz/vimfiler-sendto</a></dd></dl><p class="paragraph">もともとVimFiler上で "!" コマンドを使えば外部コマンドでファイルを実行できるのですが、
+    毎回入力するのが面倒だったのと unite.vim のインターフェイスを使って選択できれば
+    より便利なんじゃないかということで書いてみた次第です。
+    なおVimScriptはほどんど初心者に近いので書き方でおかしなところがあればご指摘ください。。</p><p class="paragraph">設定方法などはGitHub上のREADMEを参照してください。</p><h2><span>.</span>vimrc for vimfiler</h2><p class="paragraph">以下、おまけですが .vimrc に書いているVimFiler向けの設定です。</p><p class="paragraph">基本的にはDFのキーマップに合わせて変更しているのと<s>Ubuntuではシステム側の関連付けがVimFiler上では使えなかったので
+       xdg-open を明示的に関連付けています。
+       (mpg, wmv, rm あたりが開けないのは困りますよね！</s></p><p class="paragraph add">Ubuntuでの関連付けが使えない件はEnter(VimFilerの関連付け)で開けなかっただけで
+ x(システムの関連付け)であれば開けました。勘違いスミマセン</p><pre class="prettyprint">let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_sort_type = "Time"
+let g:vimfiler_sendto = {
+\   'unzip' : 'unzip'
+\ , 'Inkscape ベクターグラフィックエディタ' : 'inkspace'
+\ , 'GIMP 画像エディタ' : 'gimp'
+\ , 'gedit' : 'gedit'
+\ }
+
+nnoremap <Leader><leader> :VimFiler<CR>
+aug VimFilerKeyMapping
+    au!
+    autocmd FileType vimfiler call s:vimfiler_local()
+
+    function! s:vimfiler_local()
+        " キーマップのカスタマイズ
+        nmap <buffer> <C-r> <Plug>(vimfiler_rename_file)
+        nmap <buffer> a <Plug>(vimfiler_toggle_mark_all_lines)
+        nmap <buffer> m <Plug>(vimfiler_set_current_mask)
+        nmap <buffer> M <Plug>(vimfiler_move_file)
+        nmap <buffer> D <Plug>(vimfiler_make_directory)
+        nmap <buffer> h <Plug>(vimfiler_smart_h)zz
+        nmap <buffer> F <Plug>(vimfiler_new_file)
+        " sendto呼び出し
+        nnoremap <buffer> <Leader>s :Unite sendto<CR>
+
+        " 関連付け
+        if has('unix')
+            call vimfiler#set_execute_file('sh', 'sh')
+            " 2/12 不要になったのでコメントアウト
+            "for ext in ["html", "htm", "pdf", "jpg", "gif", "png", "svg", "zip", "lzh", "mp3", "mpg", "wmv", "rm", "flv"]
+            "    call vimfiler#set_execute_file(ext, 'xdg-open')
+            "endfor
+        endif
+
+        " Unite bookmark連携
+        nnoremap <buffer> z <C-u>:Unite bookmark<CR>
+        nnoremap <buffer> A <C-u>:UniteBookmarkAdd<CR>
+        " Unite bookmarkのアクションをVimFilerに
+        call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+        " incremental search
+        nnoremap <buffer> / /^\s*\(\|-\\|\|+\\|+\\|-\) \zs
+    endfunction
+aug END</pre><p class="paragraph">以上です。</p><p class="paragraph add">追記</p><p class="paragraph">ちなみに vimfiler#set_execute_file は拡張子の指定にコンマ区切りが使えるそうです。
+    (現状、コンマの前後にスペースは入れられないようです)</p><p class="paragraph">なので上記のように for で回す必要はありませんでした。</p><pre class="prettyprint">call vimfiler#set_execute_file("jpg,png", 'xdg-open')</pre><p class="paragraph">また sendto に似た機能で g:vimfiler_execute_file_list というのがすでにありました。</p><p class="paragraph">以下のように指定するとjpgファイルを開こうとした場合に
+    Uniteのインターフェイスで xdg-open, gimp のどちらで開くかを指定できます。</p><pre class="prettyprint">let g:vimfiler_execute_file_list = {
+\   'jpg' : ['xdg-open', 'gimp']
+\ }</pre><p class="paragraph">sendtoでは必要な時だけ指定するようにできることと、
+   ワイルドカードの追加などで差別化していければと思います。</p></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article><script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer><p class="copy"><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2012</p><span>generated by </span><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>

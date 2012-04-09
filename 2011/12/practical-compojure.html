@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="実践(?)Compojure" type="application/atom-xml"><title>実践(?)Compojure</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body id="top"><a href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="wrapper"><header><h1><a href="/">(<span>code</span> <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="container"><article><div class="page-header"><h1><span>実</span>践(?)Compojure</h1><p>03 Dec 2011</p></div><div class="post"><p class="paragraph">この記事は<a href="http://partake.in/events/393770ce-4637-4f07-bc14-a1f5120eab71">Clojrure Advent Calendar 2011</a>の参加記事です。</p><p class="paragraph">今回はCompojureでウェブアプリを作る際に使える
+   ある程度実践的(?)なTipsなどを紹介します。</p><strong>長文なのでご注意ください</strong><h2><span>C</span>ompojureとは</h2><p class="paragraph"><a href="https://github.com/weavejester/compojure">Compojure</a>はClojure向けの軽量ウェブフレームワークです。</p><p class="paragraph">Clojure版Sinatraのようなフレームワークでウェブアプリをシンプルに記述できることが特徴で、<a href="https://github.com/mmcgrana/ring">ring</a>というウェブアプリケーションライブラリがベースになっています。</p><h2><span>H</span>ello World</h2><p class="paragraph">最初にベースとなるHelloWorldを作ります。
+   HelloWorldの作り方自体はググれば他にたくさん記事が見つかると思うので
+   詳細な説明は割愛して、コード内のコメントで軽く補足します。</p><p class="paragraph">なおこれから先は<a href="https://github.com/technomancy/leiningen">Leiningen</a>がインストール済みであることを前提にしています。</p><p class="paragraph">プロジェクトの作成</p><pre class="prettyprint">$ lein new helloworld
+$ cd helloworld</pre><p class="paragraph">project.clj の編集</p><pre class="prettyprint lang-clj">(defproject helloworld "1.0.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :dependencies [[org.clojure/clojure "1.3.0"]
+                 [compojure "0.6.5"] ; 12/03時点で最新のタグ
+                 [ring/ring-jetty-adapter "0.3.11"]]
+  :main helloworld.core)</pre><p class="paragraph">src/helloworld/core.clj の編集</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    [compojure.core :only [defroutes GET]]
+    [compojure.route :only [not-found]]
+    [ring.adapter.jetty :only [run-jetty]]))
+
+(defroutes app
+  (GET "/" req "hello world")
+  ; defroutesは定義した順に処理するためnot-foundは最後に書く
+  (not-found "NOT FOUND"))
+
+(defn -main []
+  ; heroku向けのport取得
+  (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
+    (run-jetty app {:port port})))</pre><p class="paragraph">実行</p><pre class="prettyprint">$ lein deps
+$ lein run
+$ open http://localhost:8080</pre><p class="paragraph">Hello World!!</p><h2><span>静</span>的ファイルを扱う</h2><p class="paragraph">無事HelloWorldが表示できました。</p><p class="paragraph">あとはhiccupやenliveといったテンプレートエンジンを使えば動的な画面は問題ないでしょう。
+    では静的な画面は？というと以下のようにします。</p><p class="paragraph">project.clj に以下を追加</p><pre class="prettyprint lang-clj">:web-content "public"</pre><p class="paragraph">src/helloworld/core.clj のルートを編集</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    [compojure.core :only [defroutes GET]]
+    ; filesを追加
+    [compojure.route :only [not-found files]]
+    [ring.adapter.jetty :only [run-jetty]]))
+
+(defroutes app
+  (GET "/" req "hello world")
+  (files "/") ; publicディレクトリを"/"にひもづける
+  (not-found "NOT FOUND"))</pre><p class="paragraph">静的ファイルを用意</p><pre class="prettyprint">$ pwd
+プロジェクトディレクトリ
+$ mkdir public; cd public
+$ echo NEKO > neko.txt</pre><p class="paragraph">Jettyの再起動を再起動して http://localhost:8080/neko.txt へアクセスすれば
+   静的ファイルを参照できます。</p><h2><span>開</span>発を効率化</h2><p class="paragraph">先ほどの静的ファイルへの対応では修正後にJettyを再起動しました。
+   でも修正の度に再起動するのは効率的ではありません。</p><p class="paragraph">そこでring-develの<code class="prettyprint">reload</code> と <code class="prettyprint">stacktrace</code> を使いましょう。</p><p class="paragraph">project.clj に追加</p><pre class="prettyprint lang-clj">:dev-dependencies [[ring/ring-devel "0.3.11"]]</pre><p class="paragraph">src/helloworld/core.clj の修正</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    [compojure.core :only [defroutes GET]]
+    [compojure.route :only [not-found files]]
+    [ring.middleware reload stacktrace]
+    [ring.adapter.jetty :only [run-jetty]]))
+
+(defn index
+  "/ にアクセスされたときの処理"
+  [req]
+  "hello world")
+
+(defroutes main-route
+  (GET "/" req (index req)) ; 処理を関数に
+  (GET "/err" _ (throw (Exception.))) ; stacktraceの確認用
+  (files "/")
+  (not-found "NOT FOUND"))
+
+(defroutes app
+  (-> main-route
+    (wrap-reload '[helloworld.core])
+    wrap-stacktrace))</pre><p class="paragraph">実行</p><pre class="prettyprint">$ lein deps
+$ lein run</pre><p class="paragraph">Jettyの再起動に関係なく index の戻り値が反映されるのが確認できたでしょうか？
+   また <code class="prettyprint">stacktrace</code> を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。</p><p class="paragraph">なお <code class="prettyprint">reload</code> ですが、<code class="prettyprint">defroutes</code> 内の変更は反映されないようなので、
+routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)</p><h2><span>M</span>iddlewareで拡張</h2><p class="paragraph">先ほどの reload, stacktrace はringのmiddlewareと言われるもので、
+    これらを使うとCompojureの挙動を拡張することができます。</p><p class="paragraph">主要なmiddlewareは以下の通りです。</p><h3><span>r</span>ing.middleware.params/wrap-params</h3><p class="paragraph">QueryString, POSTデータを <code class="prettyprint">{:params request}</code> に展開</p><pre class="prettyprint lang-clj">(defroutes main-routes
+  (GET "/" {params :params}
+    (get params "get_parameter")))
+
+(defroutes app
+  (-> main-routes wrap-params))</pre><h3><span>r</span>ing.middleware.nested-params/wrap-nested-params</h3><p class="paragraph">添字付きのパラメータをネストしたマップに展開。要 <code class="prettyprint">wrap-params</code>。</p><p class="paragraph">なお展開できる階層は1階層のネストまで</p><pre class="prettyprint lang-clj">(defroutes main-routes
+  (GET "/" {params :params} (str params)))
+
+(defroutes app
+  (-> main-routes wrap-nested-params wrap-params))</pre><pre class="prettyprint">$ open "http://localhost:8080/?a[b]=c&a[d]=e"</pre><pre class="prettyprint lang-clj">{"a" {"d" "e", "b" "c"}}</pre><h3><span>r</span>ing.middleware.keyword-params/wrap-keyword-params</h3><p class="paragraph">パラメータ名をStringからKeywordに変換。<code class="prettyprint">wrap-params</code>, <code class="prettyprint">wrap-nested-params</code>と一緒に使う</p><pre class="prettyprint lang-clj">(defroutes main-routes
+  ; 分配束縛が楽
+  (GET "/" { {:keys [param1 param2]} :params}
+    (str "param1 = " param1 ", param2 = " param2)))
+
+(defroutes app
+  (-> main-routes wrap-keyword-params wrap-params))</pre><h3><span>r</span>ing.middleware.session</h3><p class="paragraph">セッションを扱う。
+   セッション情報はリクエストの :session キーで渡される</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    ..省略..
+    [ring.util.response :only [redirect]]))
+
+(defroutes main-routes
+  (GET "/set/:vlue" [value]
+    ; セッションのセットはレスポンスに :session を指定するだけ
+    (assoc (redirect "/") :session {:value value}))
+
+  (GET "/" { {:keys [value], :or {value "no data"}} :session}
+    (str "value = " value)))
+
+(defroutes app
+  (-> main-routes wrap-session))</pre><pre class="prettyprint">$ open "http://localhost:8080/set/helloworld"</pre><h3><span>r</span>ing.middleware.flash</h3><p class="paragraph">セッションを使って一時的なメッセージを保存。要 <code class="prettyprint">wrap-session</code>。</p><p class="paragraph">リダイレクト先でちょろっとメッセージを表示したいときとかに使う</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    ..省略..
+    [ring.util.response :only [redirect]]))
+
+(defroutes main-routes
+  (GET "/set/:value" [value]
+    ; flashのセットはレスポンスに :flash で指定
+    (assoc (redirect "/") :flash value))
+  (GET "/" {flash :flash}
+    (str "flash = " flash)))
+
+(defroutes app
+  (-> main-routes wrap-flash wrap-session))</pre><p class="paragraph">flashをセット</p><pre class="prettyprint">$ open "http://localhost:8080/set/helloworld"</pre><p class="paragraph">セットされてるのが確認できますが、もう一度アクセスすると一時的な情報なので削除されています。</p><pre class="prettyprint">$ open "http://localhost:8080/"</pre><p class="paragraph">なお以下のような凡ミスはしないようご注意を</p><a href="http://twitter.com/#!/uochan/status/141546228574982144">http://twitter.com/#!/uochan/status/141546228574982144</a><h3><span>r</span>ing.middleware.cookies</h3><p class="paragraph">クッキーを扱う。クッキー情報はリクエストの :cookies キーで渡される</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    ..省略..
+    [ring.util.response :only [redirect]]))
+
+(defroutes main-routes
+  (GET "/set/:value" [value]
+    ; クッキーの設定はレスポンスの :cookies キーで行う
+    (assoc (redirect "/") :cookies {:hello {:value value :path "/"}}))
+  (GET "/" {cookies :cookies}
+    (str cookies)))
+
+(defroutes app
+  (-> main-routes wrap-cookies))</pre><p class="paragraph">クッキー設定時には上記以外に
+   :domain, :port, :max-age, :expires, :secure, :http-only
+   が使えます。</p><p class="paragraph">詳細は以下のソース末尾を見ると良いです。</p><a href="https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj">https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj</a><h3><span>r</span>ing.middleware.file/file</h3><p class="paragraph">静的ファイルを扱います。こちらだと project.clj に <code class="prettyprint">:web-content</code> を指定しなくてもディレクトリを割り当てられます。</p><pre class="prettyprint lang-clj">(defroutes app
+  (-> main-routes (wrap-file "public")))</pre><h3><span>M</span>iddlewareのちょっとした注意</h3><p class="paragraph">wrap系は処理をラップした関数を返すので
+   <code class="prettyprint">-></code>, <code class="prettyprint">->></code>で適用する場合には逆順に処理されるので注意してください。</p><pre class="prettyprint lang-clj">(wrap-A (wrap-B (wrap-C app))) ; A->B->Cの順で処理される
+(-> app wrap-A wrap-B wrap-C)  ; C->B->Aの順で処理される
+(-> app wrap-params wrap-keyword-params) ; NG: paramsの前にkeyword-paramsが処理される
+(-> app wrap-keyword-params wrap-params) ; OK: paramsのあとにkeyword-paramsが処理される</pre><h3><span>面</span>倒くさい</h3><p class="paragraph">route毎にどのmiddlewareをラップすれば良いのかわからない！面倒くさい！
+   という人用に(?)、Compojureでは<code class="prettyprint">site</code>、<code class="prettyprint">api</code>を用意しています。</p><h4><span>c</span>ompojure.handler/site</h4><p class="paragraph">HTMLを出力するroute向け。以下7つをラップ</p><ul><li><span>wrap-session</span></li><li><span>wrap-flash</span></li><li><span>wrap-cookies</span></li><li><span>wrap-multipart-params</span></li><li><span>wrap-params</span></li><li><span>wrap-nested-params</span></li><li><span>wrap-keyword-params</span></li></ul><h4><span>c</span>ompojure.handler/api</h4><p class="paragraph">ウェブAPI向け。以下3つをラップ</p><ul><li><span>wrap-params</span></li><li><span>wrap-nested-params</span></li><li><span>wrap-keyword-params</span></li></ul><h2><span>テ</span>ストする</h2><p class="paragraph">ここまでに紹介したmiddlewareを使えば一般的なウェブアプリであれば
+    問題なく開発できるかと思います。</p><p class="paragraph">最後にテストです。例えば以下のようなAPIのテストを書いてみましょう。</p><p class="paragraph">project.clj の dependencies に以下を追加</p><pre class="prettyprint lang-clj">[org.clojure/data.json "0.1.1"]</pre><p class="paragraph">src/helloworld/core.clj</p><pre class="prettyprint lang-clj">(ns helloworld.core
+  (:use
+    ..省略..
+    [compojure.handler :only [api]]
+    [clojure.data.json :only [json-str]]))
+
+(defn word-count [text]
+  (->> text (re-seq #"\w+") (map (fn [x] {x 1})) (apply (partial merge-with +))))
+
+(defroutes api-route
+  (GET "/wc" { {:keys [text]} :params}
+    (json-str (word-count text))))
+
+(defroutes app
+  (api api-route))</pre><p class="paragraph">HTMLを返すルートのテストは難しいですが、APIでデータを返すルートのテストは<code class="prettyprint">ring-mock</code> を使うことで簡単に記述することができます。</p><p class="paragraph">project.clj の dev-dependencies に以下を追加</p><pre class="prettyprint lang-clj">[ring-mock "0.1.1"]</pre><p class="paragraph">test/helloworld/test/core.clj</p><pre class="prettyprint lang-clj">(ns helloworld.test.core
+  (:use
+    helloworld.core
+    clojure.test
+    [clojure.data.json :only [read-json]]
+    [ring.mock.request :only [request]]))
+
+(deftest word-count-test
+  (let [; ring.mock.request/request でレスポンスを取得
+        ; 第3引数のマップはQueryStringに展開される
+        res (app (request :get "/wc" {:text "hello world hello"}))
+        ; JSON形式からマップに変換
+        body (-> res :body read-json)]
+    ; are って便利
+    (are [x y] (= x y)
+      200 (:status res)
+      2 (:hello body)
+      1 (:world body))))</pre><pre class="prettyprint">$ lein deps
+$ lein test
+Testing helloworld.test.core
+Ran 1 tests containing 3 assertions.
+0 failures, 0 errors.</pre><p class="paragraph">このような感じで <code class="prettyprint">ring-mock</code> を使うと関数のテストだけではカバーできない
+   実際にリクエストで得られる結果もテストできます。</p><h2><span>最</span>後に</h2><p class="paragraph">長文になってしまいましたがいかがでしたでしょうか？
+    少しでも Compojure でのウェブアプリ開発に役立てれば幸いです。</p><p class="paragraph">具体的なコード例は以下にコミットしてあります。
+    (middlewareまわりは面倒だったので書いてないです。もし要望があれば書きます)</p><a href="https://github.com/liquidz/practical-compojure-sample">https://github.com/liquidz/practical-compojure-sample</a><p class="paragraph">なお間違いや、より良い方法などあればご指摘ください！</p></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article><script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer><p class="copy"><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2012</p><span>generated by </span><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>
