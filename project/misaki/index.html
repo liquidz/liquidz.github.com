@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><title>misaki</title><link href="/project/misaki/favicon.ico" rel="shortcut icon"><link href="/project/misaki/atom.xml" rel="alternate" title="misaki" type="application/atom-xml"><link href="http://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet" type="text/css"><link href="/project/misaki/css/prettify.css" rel="stylesheet" type="text/css"><link href="/project/misaki/css/main.css" rel="stylesheet" type="text/css"></head><body><a href="https://github.com/liquidz/misaki"><img alt="Fork me on GitHub" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/project/misaki/">misaki</a></h1><p><a href="https://github.com/mojombo/jekyll">Jekyll</a> inspired static site generator in Clojure</p></header><div class="page-header"><h1><span>S</span>ample posts</h1></div><ul><li><a href="/project/misaki/2012/02/post2.html">The quick brown fox</a></li><li><a href="/project/misaki/2011/01/post1.html">Sample components</a></li></ul><div class="page-header"><h1><span>T</span>emplate source</h1></div><p>you can highlight your code with <a href="http://code.google.com/p/google-code-prettify/">google-code-prettify</a></p><pre class="prettyprint lang-clj">;; Define template options here
+<html lang="en"><head><title>misaki</title><link href="/project/misaki/favicon.ico" rel="shortcut icon"><link href="/project/misaki/atom.xml" rel="alternate" title="misaki" type="application/atom-xml"><link href="http://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet" type="text/css"><link href="/project/misaki/css/prettify.css" rel="stylesheet" type="text/css"><link href="/project/misaki/css/main.css" rel="stylesheet" type="text/css"></head><body><a href="https://github.com/liquidz/misaki"><img alt="Fork me on GitHub" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/project/misaki/">misaki</a></h1><p><a href="https://github.com/mojombo/jekyll">Jekyll</a> inspired static site generator in Clojure</p></header><div class="page-header"><h1><span>S</span>ample posts</h1></div><ul><li><span><a href="/project/misaki/2012/02/post2.html">The quick brown fox</a></span></li><li><span><a href="/project/misaki/2011/01/post1.html">Sample components</a></span></li></ul><div class="page-header"><h1><span>S</span>ample tags</h1></div><ul><li><span><a href="/project/misaki/tag/tag1.html">tag1 (1)</a></span></li><li><span><a href="/project/misaki/tag/tag2.html">tag2 (2)</a></span></li><li><span><a href="/project/misaki/tag/tag3.html">tag3 (1)</a></span></li></ul><div class="page-header"><h1><span>T</span>emplate source</h1></div><p>you can highlight your code with <a href="http://code.google.com/p/google-code-prettify/">google-code-prettify</a></p><pre class="prettyprint lang-clj">;; Define template options here
 ; @layout  default
 ; @title   misaki
 
@@ -20,12 +20,19 @@
   #(html/link (:title %) (:url %))
   (:posts site))
 
+;; Sample post tags
+(page-header "Sample tags")
+(html/ul
+  #(html/link (str (:name %) " (" (:count %) ")")
+              (:url %))
+  (:tags site))
+
 ;; Template source
 (page-header "Template source")
 [:p "you can highlight your code with "
  (html/link "google-code-prettify" "http://code.google.com/p/google-code-prettify/")]
-;#-CLJ
-;CLJ
+#-CLJ
+CLJ
 
 ;; Document
 (page-header "Document")
