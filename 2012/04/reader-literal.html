@@ -19,7 +19,7 @@ $ vi project.clj</pre><pre class="prettyprint lang-clj">(defproject myreader "1.
   (println #upper"hello")
   ;=> HELLO
   (println (eval (read-string "#upper\"hello\""))))
-  ;=> _HELLO_</pre><h2><span>G</span>acuheのデバッグプリント</h2><p class="paragraph">少し使えそうなものとしてGaucheのデバッグプリント<code class="prettyprint">?=</code>を実装してみましょう。</p><p class="paragraph"><strong>src/data_readers.clj</strong></p><pre class="prettyprint lang-clj">{
+  ;=> _HELLO_</pre><h2><span>G</span>aucheのデバッグプリント</h2><p class="paragraph">少し使えそうなものとしてGaucheのデバッグプリント<code class="prettyprint">?=</code>を実装してみましょう。</p><p class="paragraph"><strong>src/data_readers.clj</strong></p><pre class="prettyprint lang-clj">{
  ?=   myreader.core/debug-print
  }</pre><p class="paragraph"><strong>src/myreader/core.clj</strong></p><pre class="prettyprint lang-clj">(ns myreader.core)
 
