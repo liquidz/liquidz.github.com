@@ -28,13 +28,13 @@ CLJ
 ; => ((ddd 100) (ccc 50) (bbb 50) (aaa 20))
 CLJ
 
-(p "で、何でかなぁと思って" (html/code clojure.core/sort) "のソースを見ると
-ソートの実態は " (html/code java.util.Arrays) " の " (html/code sort) " メソッドで、
-比較関数は " (html/code java.util.Comparator) " としてsortメソッドに渡されているだけ。
-このComparatorインターフェイスは " (html/code compare) " というメソッドを持っていて
+(p "で、何でかなぁと思って" (code clojure.core/sort) "のソースを見ると
+ソートの実態は " (code java.util.Arrays) " の " (code sort) " メソッドで、
+比較関数は " (code java.util.Comparator) " としてsortメソッドに渡されているだけ。
+このComparatorインターフェイスは " (code compare) " というメソッドを持っていて
 これは比較した結果を int型 で小さいか、同値か、大きいかを返す。")
 
-(p "それならばということで " (html/code compare) " メソッドを意識してみると。。")
+(p "それならばということで " (code compare) " メソッドを意識してみると。。")
 
 #-CLJ
 (sort #(if(>(second%) (second%2)) -1 1) ls)

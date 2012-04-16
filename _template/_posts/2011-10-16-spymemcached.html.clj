@@ -2,13 +2,13 @@
 ; @title  clojureでspymemcachedの薄すぎるラッパー書いた
 
 (p "herokuでmemcached使うのにちょうど良いライブラリが見当たらなかったので、"
-   (html/link "spymemcached" "http://code.google.com/p/spymemcached/")
+   (link "spymemcached" "http://code.google.com/p/spymemcached/")
    " の set/get のみをラップしたclojureライブラリ書きました。薄い！")
 
 
-(html/dl
-  {:github  (html/link "https://github.com/liquidz/clj-spymemcached")
-   :clojars (html/link "https://clojars.org/clj-spymemcached")})
+(dl
+  {:github  (link "https://github.com/liquidz/clj-spymemcached")
+   :clojars (link "https://clojars.org/clj-spymemcached")})
 
 
 (h2 "使い方")

@@ -11,7 +11,7 @@ CLJ
 (p "ググっても特にそれらしい情報がなかった。
    Renderableだから0.5系全般でそうだったのかな？")
 
-(p "で、例外からして単純に " (html/code defprotocol) " で生成されるはずの
+(p "で、例外からして単純に " (code defprotocol) " で生成されるはずの
    クラスファイルが参照できてないだけっぽいから、
    compojure の project.clj に以下を追加してみて問題なくなったことを確認。")
 
@@ -25,7 +25,7 @@ CLJ
 (p "毎回修正しなくても良いように :aot を追加修正しただけのを
    clojarsにプッシュして作業終了。")
 
-(html/link "http://clojars.org/org.clojars.liquidz/compojure")
+(link "http://clojars.org/org.clojars.liquidz/compojure")
 
 (p "という自分のためのメモ")
 

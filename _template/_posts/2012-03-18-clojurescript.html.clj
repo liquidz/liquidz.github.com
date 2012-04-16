@@ -2,11 +2,11 @@
 ; @title  全部Clojureのターン(noir+noir-cljs)
 
 (p "node.jsがサーバ、クライアントをJSだけで書けるのに対して、Clojureも"
-   (html/link "ClojureScript" "https://github.com/clojure/clojurescript")
+   (link "ClojureScript" "https://github.com/clojure/clojurescript")
    "を使えばサーバ、クライアントを1つの言語で書けます。")
 
 (p "さらにClojureには"
-   (html/link "hiccup" "https://github.com/weavejester/hiccup")
+   (link "hiccup" "https://github.com/weavejester/hiccup")
    "というS式を使ったテンプレートエンジンがあるので"
    [:strong "サーバ(ビューも含め)+クライアントを全部Clojureで書けます。"])
 
@@ -14,9 +14,9 @@
  "まさに全部Clojureのターン！"]
 
 (p "今回は "
-   (html/link "noir" "http://webnoir.org/")
+   (link "noir" "http://webnoir.org/")
    " と "
-   (html/link "noir-cljs" "https://github.com/ibdknox/noir-cljs")
+   (link "noir-cljs" "https://github.com/ibdknox/noir-cljs")
    " を使って、単純にボタンを押してテキストを変更するだけのアプリ(?)を作るまでの手順です。")
 
 
@@ -117,7 +117,7 @@ CLJ
     noir-cljs 0.2.5 では \"cljs\" という名前のディレクトリは
     ClojureScriptとして認識されてしまうようでサーバ起動時にエラーになってしまいます。")
 
-(ps "(同作者の" (html/link "watchtower" "https://github.com/ibdknox/watchtower")
+(ps "(同作者の" (link "watchtower" "https://github.com/ibdknox/watchtower")
     "というライブラリによる挙動で、pull requestだけ出してあるのでもしマージされれば問題なくなるかもしれません)")
 
 (warn "2012-04-08 追記: マージしていただいたので ver 0.1.1 を使えば問題ありません")
@@ -162,7 +162,7 @@ SH
 
 [:p {:class "paragraph" :style "color: #777;"}
 "なおここまで書いて "
- (html/link "cljs-template" "https://github.com/ibdknox/cljs-template")
+ (link "cljs-template" "https://github.com/ibdknox/cljs-template")
  " に気づきました、、、"
  "こっちを使えばもっと簡単にできそうなのであとで試してみたいと思います。"]
 
@@ -171,7 +171,7 @@ SH
 
 (p "参考ページを書き忘れていました。。ClojureScriptの記述については以下を参考にさせていただきました。")
 
-(html/links
+(links
   "Clojure Scriptを使ってみる"    "http://dev.classmethod.jp/ria/clojurescript/"
   "DOM Element を def で束縛する" "http://qiita.com/items/1548")
 

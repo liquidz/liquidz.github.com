@@ -3,19 +3,19 @@
 
 (p "約2ヶ月の時間を経てDotCloudのinvitationがようやくきたからいじってみました。")
 
-(p (html/link "@making" "http://twitter.com/making")
+(p (link "@making" "http://twitter.com/making")
    "さんの以下の記事と同じことをClojureでやってみただけなので
    真新しいことは何一つやってませんのでご承知置きください。")
 
-(html/quote
-  (html/link "新しいPaaS？のDotCloudを試す" "http://blog.ik.am/entry/view/id/59/title/%E6%96%B0%E3%81%97%E3%81%84PaaS%EF%BC%9F%E3%81%AEDotCloud%E3%82%92%E8%A9%A6%E3%81%99/"))
+(blockquote
+  (link "新しいPaaS？のDotCloudを試す" "http://blog.ik.am/entry/view/id/59/title/%E6%96%B0%E3%81%97%E3%81%84PaaS%EF%BC%9F%E3%81%AEDotCloud%E3%82%92%E8%A9%A6%E3%81%99/"))
 
 (p "なおeasy_install, leiningenはインストール済みという前提で進めます。")
 
 (h2 "環境作り")
 (p "以下の公式ドキュメントに沿って進めます。")
 
-(html/link "http://docs.dotcloud.com/static/tutorials/firststeps/")
+(link "http://docs.dotcloud.com/static/tutorials/firststeps/")
 
 (p "dotcloudのインストール")
 
@@ -37,7 +37,7 @@ SH
 
 (p "今回はClojureを使うのでサービスのタイプはJavaを選びました。
    またサービス名を liquidz.www としてので、このサービスには"
-   (html/link "http://www.liquidz.dotcloud.com/")
+   (link "http://www.liquidz.dotcloud.com/")
    "というURLが割り当てられることになります。")
 
 
@@ -50,9 +50,9 @@ $ cd liquidz
 SH
 
 (h3 "project.clj")
-(p "こちらも" (html/link "@making" "http://twitter.com/making") "さんの以下の記事をベースにwarファイルを作成できるようにしています。"
-(html/link "@making" "http://twitter.com/making") "さん様々です。")
-(html/link "http://blog.ik.am/entry/view/id/58/title/Clojureで作成したWebアプリをAWS Elastic Beanstalkにデプロイ/"
+(p "こちらも" (link "@making" "http://twitter.com/making") "さんの以下の記事をベースにwarファイルを作成できるようにしています。"
+(link "@making" "http://twitter.com/making") "さん様々です。")
+(link "http://blog.ik.am/entry/view/id/58/title/Clojureで作成したWebアプリをAWS Elastic Beanstalkにデプロイ/"
            "http://blog.ik.am/entry/view/id/58/title/Clojure%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9FWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92AWS+Elastic+Beanstalk%E3%81%AB%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4/")
 
 #-CLJ
@@ -114,7 +114,7 @@ SH
 
 (p "プッシュが完了すると以下のURLから動作が確認できます。")
 
-(html/link "http://www.liquidz.dotcloud.com/")
+(link "http://www.liquidz.dotcloud.com/")
 
 (p "ね？簡単でしょ？")
 
@@ -154,7 +154,7 @@ CLJ
 
 (h3 "MySQLのJDBCドライバを準備")
 (p "以下から拾ってきて leiningen で作成したプロジェクトの lib にコピーしておきます。"
-   (html/link "http://java.keicode.com/lib/mysql-driver.php"))
+   (link "http://java.keicode.com/lib/mysql-driver.php"))
 
 (p "これがないと " (_string "java.sql.SQLException: No suitable driver") " のようなエラーが出るはずです。")
 
@@ -181,9 +181,9 @@ SH
 
 (p "プッシュが完了したら本番環境でも確認してみましょう。")
 
-(html/link "http://www.liquidz.dotcloud.com/sql")
+(link "http://www.liquidz.dotcloud.com/sql")
 
-(p (html/code {:40+2 42})
+(p (code {:40+2 42})
    "こんな結果が返ってくるはずです。
    ちゃんとMySQL上で足し算ができ、結果も受け取れてますね。")
 
@@ -197,7 +197,7 @@ SH
 
 (p "でもappengineと比べると")
 
-(html/ul ["SQLが使える"
+(ul ["SQLが使える"
           "SpinUp Timeがない"])
 
 (p "という2点だけでも大きな利点になるではないかなぁと思いました。")
@@ -205,7 +205,7 @@ SH
 (p "そんな感じで開発はものすごくしやすい環境ではあるので、
    まだベータに申し込んでない人は申し込んでみるのをオススメします。")
 
-(html/link "http://www.dotcloud.com/")
+(link "http://www.dotcloud.com/")
 
 
 

@@ -3,14 +3,14 @@
 
 (p "自分で使うためのものだけど、パスワードの入力制限を簡単に実装できるライブラリ作ったった。")
 
-(html/dl
-  {:github  (html/link "https://github.com/liquidz/clj-password-check")
-   :clojars (html/link "http://clojars.org/org.clojars.liquidz/clj-password-check")})
+(dl
+  {:github  (link "https://github.com/liquidz/clj-password-check")
+   :clojars (link "http://clojars.org/org.clojars.liquidz/clj-password-check")})
 
-;(html/ul
+;(ul
 ;  (fn [[title url]]
 ;    (list title
-;          (html/ul [(html/link url)])))
+;          (ul [(link url)])))
 ;  {:github "https://github.com/liquidz/clj-password-check"
 ;   :clojars "http://clojars.org/org.clojars.liquidz/clj-password-check"})
 

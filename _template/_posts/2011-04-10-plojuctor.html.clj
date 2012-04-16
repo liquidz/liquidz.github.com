@@ -2,20 +2,20 @@
 ; @title  Plojuctor > Clojure REPL上で動作するプレゼンツールを作ってみた(半分ネタ)
 
 
-(html/img "thumbnail" "/img/post/plojuctor.png")
+(img "thumbnail" "/img/post/plojuctor.png")
 
 (p "元ネタは以下です。")
 
-(html/quote
+(blockquote
   "Here Comes Clojure: A Clojure Talk in Clojure"
-  (html/link "http://bit.ly/hU4qDx"))
+  (link "http://bit.ly/hU4qDx"))
 
 (p "中身が全部素のテキストだったので、こういうツールがあっても良いんじゃないかなぁ
    という軽い気持ちでツールにしてみました。")
 
 (h2 "Plojuctor")
 
-(html/link "https://github.com/liquidz/plojuctor")
+(link "https://github.com/liquidz/plojuctor")
 
 (p "テストコードもドキュメントも書いてない&alpha;バージョンです。
    動作がおかしいところもあると思いますがご了承ください。")
@@ -31,8 +31,8 @@ user=> (use 'plojuctor.core :reload)
 user=> (next-page!)
 SH
 
-(p "スライドの移動は " (html/code (next-page!)) " , " (html/code (prev-page!)) " で行います。"
-   (html/code (move-page! N)) " でページ番号指定の移動も可です。")
+(p "スライドの移動は " (code (next-page!)) " , " (code (prev-page!)) " で行います。"
+   (code (move-page! N)) " でページ番号指定の移動も可です。")
 
 (h3 "VimClojure")
 

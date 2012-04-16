@@ -11,7 +11,7 @@ CLJ
    引数の個数分別々に定義しないといけなくて面倒だったから
    そこらへんも考慮してclojureのfnに変換するコードを書いてみた")
 
-(html/link "https://gist.github.com/743485")
+(link "https://gist.github.com/743485")
 
 (p "以下、簡単な例")
 

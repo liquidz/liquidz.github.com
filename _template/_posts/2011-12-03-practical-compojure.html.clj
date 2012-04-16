@@ -3,7 +3,7 @@
 
 
 (p "この記事は"
-   (html/link "Clojrure Advent Calendar 2011" "http://partake.in/events/393770ce-4637-4f07-bc14-a1f5120eab71")
+   (link "Clojrure Advent Calendar 2011" "http://partake.in/events/393770ce-4637-4f07-bc14-a1f5120eab71")
    "の参加記事です。")
 
 (p "今回はCompojureでウェブアプリを作る際に使える
@@ -13,11 +13,11 @@
 
 (h2 "Compojureとは")
 
-(p (html/link "Compojure" "https://github.com/weavejester/compojure")
+(p (link "Compojure" "https://github.com/weavejester/compojure")
    "はClojure向けの軽量ウェブフレームワークです。")
 
 (p "Clojure版Sinatraのようなフレームワークでウェブアプリをシンプルに記述できることが特徴で、"
-   (html/link "ring" "https://github.com/mmcgrana/ring") "というウェブアプリケーションライブラリがベースになっています。")
+   (link "ring" "https://github.com/mmcgrana/ring") "というウェブアプリケーションライブラリがベースになっています。")
 
 (h2 "Hello World")
 
@@ -26,7 +26,7 @@
    詳細な説明は割愛して、コード内のコメントで軽く補足します。")
 
 (p "なおこれから先は"
-   (html/link "Leiningen" "https://github.com/technomancy/leiningen")
+   (link "Leiningen" "https://github.com/technomancy/leiningen")
    "がインストール済みであることを前提にしています。")
 
 (p "プロジェクトの作成")
@@ -123,7 +123,7 @@ SH
 (p "先ほどの静的ファイルへの対応では修正後にJettyを再起動しました。
    でも修正の度に再起動するのは効率的ではありません。")
 
-(p "そこでring-develの" (html/code reload) " と " (html/code stacktrace) " を使いましょう。")
+(p "そこでring-develの" (code reload) " と " (code stacktrace) " を使いましょう。")
 
 (p "project.clj に追加")
 
@@ -166,9 +166,9 @@ $ lein run
 SH
 
 (p "Jettyの再起動に関係なく index の戻り値が反映されるのが確認できたでしょうか？
-   また " (html/code stacktrace) " を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。")
+   また " (code stacktrace) " を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。")
 
-(p "なお " (html/code reload) " ですが、" (html/code defroutes) " 内の変更は反映されないようなので、
+(p "なお " (code reload) " ですが、" (code defroutes) " 内の変更は反映されないようなので、
 routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)")
 
 
@@ -182,7 +182,7 @@ routeの変更の際にはJettyの再起動が必要です。(この点、対処
 
 (h3 "ring.middleware.params/wrap-params")
 
-(p "QueryString, POSTデータを " (html/code {:params request}) " に展開")
+(p "QueryString, POSTデータを " (code {:params request}) " に展開")
 
 #-CLJ
 (defroutes main-routes
@@ -196,7 +196,7 @@ CLJ
 
 (h3 "ring.middleware.nested-params/wrap-nested-params")
 
-(p "添字付きのパラメータをネストしたマップに展開。要 " (html/code wrap-params) "。")
+(p "添字付きのパラメータをネストしたマップに展開。要 " (code wrap-params) "。")
 (p "なお展開できる階層は1階層のネストまで")
 
 #-CLJ
@@ -217,7 +217,7 @@ CLJ
 
 (h3 "ring.middleware.keyword-params/wrap-keyword-params")
 
-(p "パラメータ名をStringからKeywordに変換。" (html/code wrap-params) ", " (html/code wrap-nested-params) "と一緒に使う")
+(p "パラメータ名をStringからKeywordに変換。" (code wrap-params) ", " (code wrap-nested-params) "と一緒に使う")
 
 #-CLJ
 (defroutes main-routes
@@ -260,7 +260,7 @@ SH
 
 
 (h3 "ring.middleware.flash")
-(p "セッションを使って一時的なメッセージを保存。要 " (html/code wrap-session) "。")
+(p "セッションを使って一時的なメッセージを保存。要 " (code wrap-session) "。")
 
 (p "リダイレクト先でちょろっとメッセージを表示したいときとかに使う")
 
@@ -295,7 +295,7 @@ SH
 
 (p "なお以下のような凡ミスはしないようご注意を")
 
-(html/link "http://twitter.com/#!/uochan/status/141546228574982144")
+(link "http://twitter.com/#!/uochan/status/141546228574982144")
 
 (h3 "ring.middleware.cookies")
 
@@ -324,12 +324,12 @@ CLJ
 
 (p "詳細は以下のソース末尾を見ると良いです。")
 
-(html/link "https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj")
+(link "https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj")
 
 (h3 "ring.middleware.file/file")
 
 (p "静的ファイルを扱います。こちらだと project.clj に "
-   (html/code :web-content) " を指定しなくてもディレクトリを割り当てられます。")
+   (code :web-content) " を指定しなくてもディレクトリを割り当てられます。")
 
 #-CLJ
 (defroutes app
@@ -338,7 +338,7 @@ CLJ
 
 (h3 "Middlewareのちょっとした注意")
 (p "wrap系は処理をラップした関数を返すので
-   " (html/code ->) ", " (html/code ->>) "で適用する場合には逆順に処理されるので注意してください。")
+   " (code ->) ", " (code ->>) "で適用する場合には逆順に処理されるので注意してください。")
 
 #-CLJ
 (wrap-A (wrap-B (wrap-C app))) ; A->B->Cの順で処理される
@@ -350,13 +350,13 @@ CLJ
 (h3 "面倒くさい")
 
 (p "route毎にどのmiddlewareをラップすれば良いのかわからない！面倒くさい！
-   という人用に(?)、Compojureでは" (html/code site) "、" (html/code api) "を用意しています。")
+   という人用に(?)、Compojureでは" (code site) "、" (code api) "を用意しています。")
 
 (h4 "compojure.handler/site")
 
 (p "HTMLを出力するroute向け。以下7つをラップ")
 
-(html/ul
+(ul
   ["wrap-session"
    "wrap-flash"
    "wrap-cookies"
@@ -369,8 +369,7 @@ CLJ
 
 (p "ウェブAPI向け。以下3つをラップ")
 
-(html/ul
-  ;#(html/code %)
+(ul
   ["wrap-params"
    "wrap-nested-params"
    "wrap-keyword-params"])
@@ -410,7 +409,7 @@ CLJ
 CLJ
 
 (p "HTMLを返すルートのテストは難しいですが、APIでデータを返すルートのテストは"
-   (html/code ring-mock) " を使うことで簡単に記述することができます。")
+   (code ring-mock) " を使うことで簡単に記述することができます。")
 
 (p "project.clj の dev-dependencies に以下を追加")
 
@@ -449,7 +448,7 @@ Ran 1 tests containing 3 assertions.
 0 failures, 0 errors.
 SH
 
-(p "このような感じで " (html/code ring-mock) " を使うと"
+(p "このような感じで " (code ring-mock) " を使うと"
    "関数のテストだけではカバーできない
    実際にリクエストで得られる結果もテストできます。")
 
@@ -461,7 +460,7 @@ SH
     "具体的なコード例は以下にコミットしてあります。
     (middlewareまわりは面倒だったので書いてないです。もし要望があれば書きます)")
 
-(html/link "https://github.com/liquidz/practical-compojure-sample")
+(link "https://github.com/liquidz/practical-compojure-sample")
 
 (p "なお間違いや、より良い方法などあればご指摘ください！")
 

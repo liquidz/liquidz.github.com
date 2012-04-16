@@ -5,7 +5,7 @@
 (def h3 (partial _header :h3))
 (def h4 (partial _header :h4))
 
-(defn p [& x] [:p {:class "paragraph"} x])
+;(defn p [& x] [:p {:class "paragraph"} x])
 (defn ps [& xs] (map p xs))
 (defn warn [x] [:p {:class "paragraph add"} x])
 
@@ -19,9 +19,9 @@
  ; contents
  [:div {:class "post"} contents]
 
- (html/tweet-button :lang "ja" :label "ツイート")
+ (tweet-button :lang "ja" :label "ツイート")
 
- [:p {:class "gotop"} (html/link "&raquo; Go page top" "#top")] ]
+ [:p {:class "gotop"} (link "&raquo; Go page top" "#top")] ]
 
 
 "
@@ -41,5 +41,5 @@
 <a href='http://disqus.com' class='dsq-brlink'>blog comments powered by <span class='logo-disqus'>Disqus</span></a>
 "
 
-(html/js "http://embedtweet.com/javascripts/embed_v2.js")
+(js "http://embedtweet.com/javascripts/embed_v2.js")
 

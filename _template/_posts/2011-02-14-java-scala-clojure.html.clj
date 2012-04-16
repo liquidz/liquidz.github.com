@@ -3,9 +3,9 @@
 
 (p "元ネタは以下なので、先に参照しておくとわかりやすいと思います。")
 
-(html/quote
+(blockquote
   "Java使いをScalaに引き込むサンプル集"
-  (html/link "http://www.mwsoft.jp/programming/scala/java_to_scala.html"))
+  (link "http://www.mwsoft.jp/programming/scala/java_to_scala.html"))
 
 (p "同じJVM上で動く言語としてClojureだってあるんだよというのを
    知らしめたくて書いてみました。
@@ -76,14 +76,14 @@ SCALA
   (do something))
 CLJ
 
-(p "factory, builder を束縛する必要がないなら " (html/code ..) " を使って以下のようにも書けます。")
+(p "factory, builder を束縛する必要がないなら " (code ..) " を使って以下のようにも書けます。")
 
 #-CLJ
 (let [doc (.. (DocumentBuilderFactory/newInstance) (newDocumentBuilder) (parse (File. "foo.xml")))]
   (do something))
 CLJ
 
-(p "言語の説明記事じゃないので" (html/code ..) "の詳細は省きますが、Clojureなら1つ1つ束縛しなくても書けます。
+(p "言語の説明記事じゃないので" (code ..) "の詳細は省きますが、Clojureなら1つ1つ束縛しなくても書けます。
 なお Scala にある 別名import はClojureにはありません。(ドキュメントを見る限り)")
 
 [:hr]
@@ -130,8 +130,8 @@ SCALA
 CLJ
 
 (p "1つの引数の場合でも名前を指定しないといけないところがScalaとの違いです。
-また " (html/code keys) " や " (html/code or) " でゴチャゴチャしてます。
-ここは " (html/code clojure.contrib.def/defnk) " を使うと見やすくなります。")
+また " (code keys) " や " (code or) " でゴチャゴチャしてます。
+ここは " (code clojure.contrib.def/defnk) " を使うと見やすくなります。")
 
 #-CLJ
 (use '[clojure.contrib.def :only [defnk]])
@@ -178,7 +178,7 @@ JAVA
   (println str1 "=" str3 "=" (= str1 str3))) ; => true
 CLJ
 
-(p "オブジェクトの比較を行う場合は " (html/code identical?) " が使えます。")
+(p "オブジェクトの比較を行う場合は " (code identical?) " が使えます。")
 
 #-CLJ
 (println str1 "identical?" str2 "=" (identical? str1 str2))
@@ -224,7 +224,7 @@ CLJ
 (println (trycatch (/ 10 0))) ; => nil
 CLJ
 
-(p "最初の例で使った " (html/code with-open) " も同様に close するという処理を共通化したマクロです。")
+(p "最初の例で使った " (code with-open) " も同様に close するという処理を共通化したマクロです。")
 
 [:hr]
 
@@ -248,7 +248,7 @@ JAVA
 CLJ
 
 (p "ただClojureのforは他言語のforと違ってリストを返す関数なので
-   " (html/code doseq) " でループして出力してあげてます。
+   " (code doseq) " でループして出力してあげてます。
    またScala同様に入れ子はいくつでも可能です。")
 
 #-CLJ

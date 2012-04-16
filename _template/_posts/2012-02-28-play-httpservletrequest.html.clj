@@ -10,7 +10,7 @@
 (p "ちょっとしたものを Play framework(Java) で書いて
    Tomcat上で動かすということをしているのですが、")
 
-(html/ul ["Apache ->(mod_proxy_ajp)-> Tomcat"])
+(ul ["Apache ->(mod_proxy_ajp)-> Tomcat"])
 
 (ps "という連携でApacheからTomcatに渡される環境変数を
     playで受け取れなくて困っていました。"
@@ -20,14 +20,14 @@
 [:p {:class "paragraph" :style "font-size: x-large;"}
  "隠されてましたが"]
 
-(html/quote
-  (html/link "#99: Lighthouse 588 patch by grandfatha for playframework/play - Pull Request - GitHub"
+(blockquote
+  (link "#99: Lighthouse 588 patch by grandfatha for playframework/play - Pull Request - GitHub"
              "https://github.com/playframework/play/pull/99"))
 
 (p "すべてはここに書いてあります。
    ものすごく意訳すると")
 
-(html/quote
+(blockquote
   "こんなに美しくないアイデアはないけど、"
   "Servlet APIにアクセスせざるを得ないユーザがいるのは事実。"
   "モジュールに切り離せればベストだけどそれもできないからマージするよ。"

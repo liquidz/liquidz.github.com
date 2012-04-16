@@ -6,9 +6,9 @@
                              (conv/day d)])))
 
 (defn make-post-list [posts]
-  (html/ul
+  (ul
     #(list [:span (date->str (:date %))]
-           (html/link (:title %) (:url %)))
+           (link (:title %) (:url %)))
     posts))
 
 

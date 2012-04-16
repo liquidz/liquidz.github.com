@@ -4,9 +4,9 @@
 (p "需要は全然ないと思うけど自分でちょっと使いそうだったから作ったった。
    でもGravatarのAPIをそのままラッピングだけの簡単なものデス。")
 
-(html/dl
-  {:github  (html/link "https://github.com/liquidz/clj-gravatar")
-   :clojars (html/link "http://clojars.org/org.clojars.liquidz/clj-gravatar")})
+(dl
+  {:github  (link "https://github.com/liquidz/clj-gravatar")
+   :clojars (link "http://clojars.org/org.clojars.liquidz/clj-gravatar")})
 
 
 (p "以下、使用例")

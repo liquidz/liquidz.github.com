@@ -3,17 +3,17 @@
 
 (p "エイプリルフールに被ってしまいましたが、
    Clojureで"
-   (html/link "Jekyll" "https://github.com/mojombo/jekyll")
+   (link "Jekyll" "https://github.com/mojombo/jekyll")
    "ライクなブログジェネレータを作りました。")
 
-[:p (html/link (html/img "misaki logo" "/img/post/misaki-logo.png")
+[:p (link (img "misaki logo" "/img/post/misaki-logo.png")
            "https://github.com/liquidz/misaki")]
-(p (html/link "misaki / Jekyll inspired static site generator" "https://github.com/liquidz/misaki"))
+(p (link "misaki / Jekyll inspired static site generator" "https://github.com/liquidz/misaki"))
 
 
 
 (p "当ブログはJekyllを使ってGitHub Pages上で運用しているのですが、
-   " (html/code "jekyll --server")
+   " (code "jekyll --server")
    " のファイル変更から反映までの遅さ(何か手があるのかもしれないですが)
    とClojurianで主にClojureのブログなのにrubyで運用してるのが納得いかなかったので(rubyは好きですが)
    作ってみました。")
@@ -35,11 +35,11 @@ $ lein run sample
 SH
 
 (p "ローカルサーバが起動するので "
-   (html/link "http://localhost:8080/")
+   (link "http://localhost:8080/")
    " にアクセスしましょう。")
 
 (p "なおサンプルと同じものをデモページとして"
-   (html/link "こちら" "http://liquidz.github.com/project/misaki/")
+   (link "こちら" "http://liquidz.github.com/project/misaki/")
    "にも公開しています。")
 
 (h2 "自分のブログを作る")
@@ -53,7 +53,7 @@ $ lein run your_blog
 SH
 
 (p "ローカルサーバの起動中は "
-   (html/link "watchtower" "https://github.com/ibdknox/watchtower")
+   (link "watchtower" "https://github.com/ibdknox/watchtower")
    " でテンプレートファイルを監視しているので変更すれば自動的にHTMLへのコンパイルが走ります。")
 
 (p "デフォルトではコピーしたディレクトリ配下の \"_template\" 内にテンプレート(.clj)、ポストファイル(_post)、レイアウトファイル(_layout)が
@@ -65,7 +65,7 @@ SH
 
 
 (p "なおテンプレートなどディレクトリ構成の詳細はドキュメントの "
-   (html/link "Directory Structure" "https://github.com/liquidz/misaki/wiki/Directory-Structure")
+   (link "Directory Structure" "https://github.com/liquidz/misaki/wiki/Directory-Structure")
    " を参照してください。")
 
 (p "ただドキュメントよりサンプルソースを見たほうが早いかもしれないです。")
@@ -74,7 +74,7 @@ SH
 (h2 "テンプレートサンプル")
 
 (p "テンプレートはclojureのコードになっています。HTMLへのコンパイルには "
-   (html/link "hiccup" "https://github.com/weavejester/hiccup")
+   (link "hiccup" "https://github.com/weavejester/hiccup")
    " を使っているのでhiccupを使ったことのある方であればすんなり入れるかなと思っています。")
 
 
@@ -113,11 +113,11 @@ CLJ
     共通して使う定義や関数についてはレイアウト側で定義しておくと便利かもしれないです。")
 
 (p "レイアウトの詳細についてはドキュメントの "
-   (html/link "Edit Template" "https://github.com/liquidz/misaki/wiki/Edit-Template")
+   (link "Edit Template" "https://github.com/liquidz/misaki/wiki/Edit-Template")
    " の \"Layout file\" の項目を参照してください。")
 
 (p "なおテンプレートオプションへのアクセスについては
-   上記サンプルにもある通り " (html/code site) " といった特別な変数が利用できます。")
+   上記サンプルにもある通り " (code site) " といった特別な変数が利用できます。")
 
 (h3 "site の内容")
 
@@ -128,7 +128,7 @@ site
 ;    :posts [post1 post2 ... postN]
 CLJ
 
-(p (html/code :posts) "の内容については後述します。")
+(p (code :posts) "の内容については後述します。")
 
 (h2 "エントリーの追加")
 
@@ -154,7 +154,7 @@ CLJ
 
 
 (p "なおテンプレート編集やレイアウトに関する詳細はドキュメントの "
-   (html/link "Edit Template" "https://github.com/liquidz/misaki/wiki/Edit-Template")
+   (link "Edit Template" "https://github.com/liquidz/misaki/wiki/Edit-Template")
    " を参照してください。")
 
 (h2 "出力されたHTML")
@@ -177,7 +177,7 @@ CLJ
    紹介している機能でも詳細を省いたりしています。")
 
 (p "少しでも興味をもっていただけたのならば、GitHubの "
-   (html/link "Wiki" "https://github.com/liquidz/misaki/wiki")
+   (link "Wiki" "https://github.com/liquidz/misaki/wiki")
    " にまとめていますのでご参照ください。")
 
 (p "なお英文はかなり適当です。。")
@@ -196,7 +196,7 @@ CLJ
 
 
 (h3 "参考ページ")
-(html/links
+(links
   "Jekyll" "https://github.com/mojombo/jekyll"
   "Simple static blog with Clojure" "http://thegeez.github.com/2012/03/15/static_blog_on_github_with_enlive.html"
   "Clojureのリードマクロでヒアドキュメント実装してみた" "http://d.hatena.ne.jp/nokturnalmortum/20100527/1274961805")

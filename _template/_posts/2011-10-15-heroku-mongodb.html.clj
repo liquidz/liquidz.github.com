@@ -2,14 +2,14 @@
 ; @title  自分用に heroku + clojure + mongodb のテンプレートプロジェクト作った
 
 [:strong "追記: このテンプレートは以下を参考にしています。"]
-(html/quote
+(blockquote
   "Clojure on Heroku with Noir and Mongo in 10 minutes"
-  (html/link "http://thecomputersarewinning.com/post/clojure-heroku-noir-mongo"))
+  (link "http://thecomputersarewinning.com/post/clojure-heroku-noir-mongo"))
 
 (p "heroku + clojure + mongo の環境作りに
    ちょっと時間を使ってしまったのでテンプレートプロジェクトとしてまとめてみました。自分用に。")
 
-(html/link "https://github.com/liquidz/heroku-template")
+(link "https://github.com/liquidz/heroku-template")
 
 (h2 "準備")
 

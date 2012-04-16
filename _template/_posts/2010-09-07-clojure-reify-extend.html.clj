@@ -28,7 +28,7 @@ CLJ
 
 (p "reifyは以下を見る限り「&」もシンボルとして扱われちゃう。")
 
-(html/link "http://markmail.org/thread/rtxresashciapdnc"
+(link "http://markmail.org/thread/rtxresashciapdnc"
            "http://markmail.org/thread/rtxresashciapdnc#query:clojure%20%22no%20single%20method%22+page:1+mid:afahohroee6dfsmr+state:results")
 
 (p "extendはそれっぽく動くけど、可変部が2つ以上でないとエラーになっちゃう。")

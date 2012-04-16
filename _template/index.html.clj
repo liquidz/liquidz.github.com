@@ -1,6 +1,6 @@
 ; @layout  default
 
-(def links
+(def mylinks
   (partition 2
     ["Twitter" "http://twitter.com/uochan"
      "Facebook" "http://www.facebook.com/masashi.iizuka"
@@ -14,7 +14,7 @@
    (_map (if first? "[{" "{"))
    [:span {:class "date"} (_string (conv/date->string (:date post)))]
    _space
-   (html/link (_string (:title post)) (:url post))
+   (link (_string (:title post)) (:url post))
    (_map (if last? "}]" "}"))])
 
 ;; POSTS
@@ -40,7 +40,7 @@
  [:p {:class "indent"}
   (_keyword ":link")
   (_map "[")
-  (interpose _space (for [[title url] links] (html/link (_string title) url)))
+  (interpose _space (for [[title url] mylinks] (link (_string title) url)))
   (_map "]}")]]
 
 [:div {:id "coderwall"}]

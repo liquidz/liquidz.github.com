@@ -6,7 +6,7 @@
 (p "メインのファイラをVimFilerに移行中です。")
 
 (p "Ubuntuではシェルのみで操作していたのですが、
-   会社のWindows環境ではずっと" (html/link "DF" "http://homepage1.nifty.com/bee/df/") "を愛用していて、
+   会社のWindows環境ではずっと" (link "DF" "http://homepage1.nifty.com/bee/df/") "を愛用していて、
    それと同じような環境をUbuntuでも使いたいと思っていました。")
 
 (p "そこでVimmerとしてはVimFilerだろ！ということでいろいろと設定している中で
@@ -14,7 +14,7 @@
 
 (h2 "sendto plugin for vimfiler")
 
-(html/dl {:github (html/link "https://github.com/liquidz/vimfiler-sendto")})
+(dl {:github (link "https://github.com/liquidz/vimfiler-sendto")})
 
 (ps "もともとVimFiler上で \"!\" コマンドを使えば外部コマンドでファイルを実行できるのですが、
     毎回入力するのが面倒だったのと unite.vim のインターフェイスを使って選択できれば
