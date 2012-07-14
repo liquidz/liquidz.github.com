@@ -1,17 +1,36 @@
 {
  ;directory setting
  :public-dir   "./"
+ :tag-out-dir  "tag/"
  :template-dir "_template/"
  :post-dir     "_posts/"
  :layout-dir   "_layouts/"
 
+ :url-base     "/"
+ :port 8080
+
  ; default site data
- :site {:site-title "(code \"liquidz.uo\")"
-        :post-max 15}
+ :site {:charset    "utf-8"
+        :site-title "(code \"liquidz.uo\")"
+        :twitter    "uochan"
+        :css        ["http://fonts.googleapis.com/css?family=Josefin+Sans"
+                     "/css/main.css"]
+        :device-css ["/css/smartphone.css"]
+        :js         ["/js/main.js"]
+        :post-max   15}
 
  :lang "ja"
 
  :compile-with-post ["index.html.clj"]
+
+ ;; tag setting
+ :tag-layout "tag"
+
+ :post-filename-regexp #"(\d{4})[-_](\d{1,2})[-_](\d{1,2})[-_](.+)$"
+ :post-filename-format "{{year}}/{{month}}/{{filename}}"
+
+ ;;   default value: :date-desc
+ :post-sort-type :date-desc
 
  ;highlight setting
  :code-highlight {:CLJ "lang-clj"

@@ -9,8 +9,8 @@ span.comment { color: #aaa; }
 span.map { color: #bbb; padding: 0 3px; }
 span.keyword { color: #719871; }
 
-/* WRAPPER */
-.wrapper {
+/* CONTAINER */
+.container {
     width: 60%;
     margin: 0 auto; }
 
@@ -99,4 +99,5 @@ ul#toc li { font-size: 0.9em; margin-bottom: 0.5em; }
 footer { margin: 1.5em 0 1em; text-align: right; }
 footer p.copy { margin-bottom: 0.5em; }
 footer span { font-size: 14px; color: #666; }
+footer p.back_to_top { margin-bottom: 0.5em; }
 

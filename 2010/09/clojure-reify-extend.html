@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="ja"><head><meta charset="UTF-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="clojureのreify,extendの挙動" type="application/atom-xml"><title>clojureのreify,extendの挙動</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body id="top"><a href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="wrapper"><header><h1><a href="/">(<span>code</span> <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="container"><article><div class="page-header"><h1><span>c</span>lojureのreify,extendの挙動</h1><p>07 Sep 2010</p></div><div class="post"><p class="paragraph">どっちも何かおかしい。それとも可変長引数は使えないのかな？</p><pre class="prettyprint lang-clj">Clojure 1.2.0
-user=> (defprotocol Protocol (f [a & b]))
+<html lang="ja"><head><meta charset="utf-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="clojureのreify,extendの挙動" type="application/atom-xml"><title>clojureのreify,extendの挙動</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"></head><body id="top"><a class="github_ribbon" href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/">(code <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="contents"><article><div class="page-header"><h1><span>c</span>lojureのreify,extendの挙動</h1><p class="paragraph">07 Sep 2010</p></div><div class="post"><p class="paragraph">どっちも何かおかしい。それとも可変長引数は使えないのかな？</p><pre class="prettyprint lang-clj">Clojure 1.2.0
+user=&gt; (defprotocol Protocol (f [a &amp; b]))
 Protocol
-user=> (def x (reify Protocol (f [a & b] {'a a '& & 'b b})))
+user=&gt; (def x (reify Protocol (f [a &amp; b] {'a a '&amp; &amp; 'b b})))
 #'user/x
-user=> (f x 1)
+user=&gt; (f x 1)
 java.lang.IllegalArgumentException: No single method: f of
 interface: user.Protocol found for function: f of protocol: Protocol
 (NO_SOURCE_FILE:3)
-user=> (f x 1 2)
-{a #, & 1, b 2}
-user=> (extend String Protocol {:f (fn [a & b] {'a a 'b b})})
+user=&gt; (f x 1 2)
+{a #, &amp; 1, b 2}
+user=&gt; (extend String Protocol {:f (fn [a &amp; b] {'a a 'b b})})
 nil
-user=> (f "hello" 1)
+user=&gt; (f &quot;hello&quot; 1)
 java.lang.IllegalArgumentException: No single method: f of
 interface: user.Protocol found for function: f of protocol: Protocol
 (NO_SOURCE_FILE:6)
-user=> (f "hello" 1 2)
-{a "hello", b (1 2)}</pre><p class="paragraph">reifyは以下を見る限り「&」もシンボルとして扱われちゃう。</p><a href="http://markmail.org/thread/rtxresashciapdnc#query:clojure%20%22no%20single%20method%22+page:1+mid:afahohroee6dfsmr+state:results">http://markmail.org/thread/rtxresashciapdnc</a><p class="paragraph">extendはそれっぽく動くけど、可変部が2つ以上でないとエラーになっちゃう。</p><p class="paragraph">だからと言って以下のようにしてもダメ。</p><pre class="prettyprint lang-clj">user=> (defprotocol Protocol2 (f [a]) (f [a b]) (f [a b & c]))
+user=&gt; (f &quot;hello&quot; 1 2)
+{a &quot;hello&quot;, b (1 2)}</pre><p class="paragraph">reifyは以下を見る限り「&」もシンボルとして扱われちゃう。</p><a href="http://markmail.org/thread/rtxresashciapdnc#query:clojure%20%22no%20single%20method%22+page:1+mid:afahohroee6dfsmr+state:results">http://markmail.org/thread/rtxresashciapdnc</a><p class="paragraph">extendはそれっぽく動くけど、可変部が2つ以上でないとエラーになっちゃう。</p><p class="paragraph">だからと言って以下のようにしてもダメ。</p><pre class="prettyprint lang-clj">user=&gt; (defprotocol Protocol2 (f [a]) (f [a b]) (f [a b &amp; c]))
 Warning: protocol #'user/Protocol2 is overwriting method f of
 protocol Protocol
 Protocol2
-user=> (extend Integer Protocol2 {:f (fn ([a] {'a a}) ([a b] {'a a 'b b}) ([a b & c] {'a a 'b b 'c c}))})
+user=&gt; (extend Integer Protocol2 {:f (fn ([a] {'a a}) ([a b] {'a a 'b b}) ([a b &amp; c] {'a a 'b b 'c c}))})
 nil
-user=> (f 1 2)
+user=&gt; (f 1 2)
 java.lang.IllegalArgumentException: No single method: f of interface: user.Protocol2 found for function: f of protocol: Protocol2
 (NO_SOURCE_FILE:10)
-user=> (f 1 2 3)
+user=&gt; (f 1 2 3)
 java.lang.IllegalArgumentException: No single method: f of interface: user.Protocol2 found for function: f of protocol: Protocol2
 (NO_SOURCE_FILE:11)
-user=> (f 1 2 3 4)
+user=&gt; (f 1 2 3 4)
 {a 1, b 2, c (3 4)}</pre><p class="paragraph">うーん、、</p></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article>
 <div id='disqus_thread'></div>
 <script type='text/javascript'>
@@ -45,4 +45,4 @@ user=> (f 1 2 3 4)
 </script>
 <noscript>Please enable JavaScript to view the <a href='http://disqus.com/?ref_noscript'>comments powered by Disqus.</a></noscript>
 <a href='http://disqus.com' class='dsq-brlink'>blog comments powered by <span class='logo-disqus'>Disqus</span></a>
-<script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer><p class="copy"><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2012</p><span>generated by </span><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>
+<script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer class="footer"><p class="right back_to_top"><a href="#">Back to top</a></p><p><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2012<p class="paragraph"><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></p></p></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>

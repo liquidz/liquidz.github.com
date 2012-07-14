@@ -12,7 +12,7 @@
 (defn make-post-link [post & {:keys [first? last?], :or {first? false, last? false}}]
   [:li (if first? {:class "first"})
    (_map (if first? "[{" "{"))
-   [:span {:class "date"} (_string (conv/date->string (:date post)))]
+   [:span {:class "date"} (_string (date->string (:date post)))]
    _space
    (link (_string (:title post)) (:url post))
    (_map (if last? "}]" "}"))])

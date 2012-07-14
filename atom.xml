@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated>2012-04-09T15:07:33</updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>Clojure1.4のReader Literalsで遊んでみた</title><link>http://localhost:8080/2012/04/reader-literal.html</link><updated>2012-04-16T00:00:00</updated><id>http://localhost:8080/2012/04/reader-literal.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;Clojure 1.4が出ました！
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated></updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>Clojure1.4のReader Literalsで遊んでみた</title><link>http://localhost:8080/2012/04/reader-literal.html</link><updated>2012-04-16T00:00:00</updated><id>http://localhost:8080/2012/04/reader-literal.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;Clojure 1.4が出ました！
    前々から話題になっていたReader Literalsが使えるようになったので
    ちょっと遊んでみました。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;ま&lt;/span&gt;ずは下準備&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;基本は&lt;a href=&quot;https://github.com/clojure/clojure/blob/master/changes.md&quot;&gt;こちら&lt;/a&gt;に書いてある通りです。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein new myreader
 $ cd myreader
-$ vi project.clj&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject myreader &quot;1.0.0-SNAPSHOT&quot;
-  :description &quot;FIXME: write description&quot;
-  :dependencies [[org.clojure/clojure &quot;1.4.0&quot;]]) ; 1.4.0&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;readerの定義は src ディレクトリ直下に &lt;code class=&quot;prettyprint&quot;&gt;data_readers.clj&lt;/code&gt; というファイルを作り、そこに定義します。
+$ vi project.clj&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject myreader &amp;quot;1.0.0-SNAPSHOT&amp;quot;
+  :description &amp;quot;FIXME: write description&amp;quot;
+  :dependencies [[org.clojure/clojure &amp;quot;1.4.0&amp;quot;]]) ; 1.4.0&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;readerの定義は src ディレクトリ直下に &lt;code class=&quot;prettyprint&quot;&gt;data_readers.clj&lt;/code&gt; というファイルを作り、そこに定義します。
    手始めに文字列を大文字に変換するreaderを定義してみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/data_readers.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{
  upper  myreader.core/upper-case
  }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/myreader/core.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns myreader.core)
 
 (defn upper-case [s]
-  `(.toUpperCase s))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ここまで書いたらreplで試してみましょう。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein repl&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;#upper&quot;hello, world&quot;
-;=&gt; &quot;HELLO, WORLD&quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;なおreaderの定義は &lt;em&gt;data-readers&lt;/em&gt; にbindingすることでも定義できます。ただ当然のことながらbinding後のreadから有効になるので、それ以前のものには適用されません。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn upper-case2 [s]
-  `(str &quot;_&quot; (.toUpperCase ~s) &quot;_&quot;))
-;=&gt; #'fuga.core/upper-case2
+  `(.toUpperCase s))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ここまで書いたらreplで試してみましょう。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein repl&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;#upper&amp;quot;hello, world&amp;quot;
+;=&amp;gt; &amp;quot;HELLO, WORLD&amp;quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;なおreaderの定義は &lt;em&gt;data-readers&lt;/em&gt; にbindingすることでも定義できます。ただ当然のことながらbinding後のreadから有効になるので、それ以前のものには適用されません。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn upper-case2 [s]
+  `(str &amp;quot;_&amp;quot; (.toUpperCase ~s) &amp;quot;_&amp;quot;))
+;=&amp;gt; #'fuga.core/upper-case2
 (binding [*data-readers* {'upper fuga.core/upper-case2}]
-  (println #upper&quot;hello&quot;)
-  ;=&gt; HELLO
-  (println (eval (read-string &quot;#upper\&quot;hello\&quot;&quot;))))
-  ;=&gt; _HELLO_&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;G&lt;/span&gt;aucheのデバッグプリント&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;少し使えそうなものとしてGaucheのデバッグプリント&lt;code class=&quot;prettyprint&quot;&gt;?=&lt;/code&gt;を実装してみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/data_readers.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{
+  (println #upper&amp;quot;hello&amp;quot;)
+  ;=&amp;gt; HELLO
+  (println (eval (read-string &amp;quot;#upper\&amp;quot;hello\&amp;quot;&amp;quot;))))
+  ;=&amp;gt; _HELLO_&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;G&lt;/span&gt;aucheのデバッグプリント&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;少し使えそうなものとしてGaucheのデバッグプリント&lt;code class=&quot;prettyprint&quot;&gt;?=&lt;/code&gt;を実装してみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/data_readers.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{
  ?=   myreader.core/debug-print
  }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/myreader/core.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns myreader.core)
 
 (defn debug-print [x]
   `(let [res# ~x]
-     (println &quot;?=&quot; res#)
+     (println &amp;quot;?=&amp;quot; res#)
      res#))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;こんなものを定義してあげると以下のようなことができます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(map inc #?=(range 10))
 ;?= (0 1 2 3 4 5 6 7 8 9)
-;=&gt; (1 2 3 4 5 6 7 8 9 10)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ここの値がどうなってるか確認したいけど、わざわざletで囲んでprintlnするの面倒！ということは多いと思いますがこれで解決ですね！&lt;/p&gt;&lt;h2&gt;&lt;span&gt;文&lt;/span&gt;字列中の式を展開&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;perlの &quot;$var&quot; 然り、rubyの &quot;#{var}&quot; 然り、他言語では文字列中で変数を展開する構文があります。これをClojureで実装してみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;今回は文字列中のバッククオートに囲まれた部分を式として評価するように変換します。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/data_readers.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{
+;=&amp;gt; (1 2 3 4 5 6 7 8 9 10)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ここの値がどうなってるか確認したいけど、わざわざletで囲んでprintlnするの面倒！ということは多いと思いますがこれで解決ですね！&lt;/p&gt;&lt;h2&gt;&lt;span&gt;文&lt;/span&gt;字列中の式を展開&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;perlの &quot;$var&quot; 然り、rubyの &quot;#{var}&quot; 然り、他言語では文字列中で変数を展開する構文があります。これをClojureで実装してみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;今回は文字列中のバッククオートに囲まれた部分を式として評価するように変換します。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/data_readers.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{
  str myreader.core/expand-sexp
  }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;src/myreader/core.clj&lt;/strong&gt;&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn expand-sexp [s]
   (let [ls (map-indexed #(if (even? %) %2 (read-string %2))
-                        (str/split s #&quot;`&quot;))]
+                        (str/split s #&amp;quot;`&amp;quot;))]
     `(apply str (list ~@ls))))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ではreplで試してみましょう。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def i 100)
-;=&gt; #'hoge.core/i
-#str&quot;i = `i`&quot;
-;=&gt; &quot;i = 100&quot;
-#str&quot;(+ 1 2) = `(+ 1 2)`&quot;
-;=&gt; &quot;(+ 1 2) = 3&quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;イイネ！&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;使いどころはちゃんと見極めないとですが、可能性がぐんっと広がりますね！
+;=&amp;gt; #'hoge.core/i
+#str&amp;quot;i = `i`&amp;quot;
+;=&amp;gt; &amp;quot;i = 100&amp;quot;
+#str&amp;quot;(+ 1 2) = `(+ 1 2)`&amp;quot;
+;=&amp;gt; &amp;quot;(+ 1 2) = 3&amp;quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;イイネ！&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;使いどころはちゃんと見極めないとですが、可能性がぐんっと広がりますね！
    そんな感じでReader Literalsで遊んでみました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;コードは一応&lt;a href=&quot;https://gist.github.com/2399254&quot;&gt;Gist&lt;/a&gt;にも貼っておきます。&lt;/p&gt;</content></entry><entry><title>ブログをJekyllからmisakiに移行したった</title><link>http://localhost:8080/2012/04/misaki-blog.html</link><updated>2012-04-10T00:00:00</updated><id>http://localhost:8080/2012/04/misaki-blog.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;ちょこちょこ直しながらの作業だったので時間がかかってしまいましたが、
    ブログを&lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;misaki&lt;/a&gt;に移行しました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;misakiの詳細については&lt;a href=&quot;http://liquidz.github.com/2012/04/misaki.html&quot;&gt;前回のポスト&lt;/a&gt;をご参照ください。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;まだ改善すべき点は多くあって、HTMLに比べれば楽に書けるけど
    Markdownには劣ってる(それでも個人的にはMarkdownの記法がうるおぼえなのでmisakiの方が迷わずに書けますが)
@@ -63,22 +63,22 @@ $ lein run your_blog&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ローカ�
 
 ;; site変数でテンプレートオプションにアクセスできます
 (h1 (:title site))
-[:p &quot;Welcome to misaki world!&quot;]
+[:p &amp;quot;Welcome to misaki world!&amp;quot;]
 
 ;; コードハイライト
 #-CLJ
-(println &quot;google-code-prettify highlight!&quot;)
+(println &amp;quot;google-code-prettify highlight!&amp;quot;)
 CLJ&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;テンプレートではコメント内に以下のフォーマットでテンプレートオプションを定義できます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; @key value&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;テンプレートオプションではそのテンプレートに適用するレイアウトを指定したり、
     テンプレート自体のタイトルを定義することができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;レイアウトはテンプレート同様にClojureコードなので
     オプションや関数を同様に定義することができます。
     共通して使う定義や関数についてはレイアウト側で定義しておくと便利かもしれないです。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;レイアウトの詳細についてはドキュメントの &lt;a href=&quot;https://github.com/liquidz/misaki/wiki/Edit-Template&quot;&gt;Edit Template&lt;/a&gt; の &quot;Layout file&quot; の項目を参照してください。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なおテンプレートオプションへのアクセスについては
    上記サンプルにもある通り &lt;code class=&quot;prettyprint&quot;&gt;site&lt;/code&gt; といった特別な変数が利用できます。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;s&lt;/span&gt;ite の内容&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;site
-;=&gt; {:title &quot;sample template&quot;
+;=&amp;gt; {:title &amp;quot;sample template&amp;quot;
 ;    :date  org.joda.time.DateTime  ;更新日
 ;    :posts [post1 post2 ... postN]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;:posts&lt;/code&gt;の内容については後述します。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;エ&lt;/span&gt;ントリーの追加&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルトでは _template/_posts/ 配下にファイルを作成することで
     ブログのエントリーを追加することができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;エントリーファイルはJekyll同様にファイル名のフォーマットが以下のように決まっています。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;strong&gt;YYYY-MM-DD-タイトル.html.clj&lt;/strong&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;このファイル名が &lt;strong&gt;/YYYY/MM/タイトル.html&lt;/strong&gt; というURLに対応します。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;(&lt;/span&gt;:posts site) の内容&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(first (:posts site))
-;=&gt; {:title &quot;post title&quot;
-;    :url   &quot;post url&quot;
+;=&amp;gt; {:title &amp;quot;post title&amp;quot;
+;    :url   &amp;quot;post url&amp;quot;
 ;    :date  org.joda.time.DateTime  ;ファイル名の日付
 ;    :file  java.io.File ; エントリーファイル
 ;    :lazy-content エントリーの内容(clojure.lang.Delay) }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;なおテンプレート編集やレイアウトに関する詳細はドキュメントの &lt;a href=&quot;https://github.com/liquidz/misaki/wiki/Edit-Template&quot;&gt;Edit Template&lt;/a&gt; を参照してください。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;出&lt;/span&gt;力されたHTML&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;今回の例でいえば &quot;your_blog/&quot; ディレクトリ配下がドキュメントルートになり
@@ -93,20 +93,20 @@ CLJ&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;テンプレートではコ�
     CSSまわりで良いライブラリがあればそれを導入して、
     前回のエントリのタイトルじゃないですが、全部Clojureでブログ運用
     とか出来ても良いのかなぁと思っています。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;参&lt;/span&gt;考ページ&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;&lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;&lt;a href=&quot;http://thegeez.github.com/2012/03/15/static_blog_on_github_with_enlive.html&quot;&gt;Simple static blog with Clojure&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;&lt;a href=&quot;http://d.hatena.ne.jp/nokturnalmortum/20100527/1274961805&quot;&gt;Clojureのリードマクロでヒアドキュメント実装してみた&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;</content></entry><entry><title>全部Clojureのターン(noir+noir-cljs)</title><link>http://localhost:8080/2012/03/clojurescript.html</link><updated>2012-03-18T00:00:00</updated><id>http://localhost:8080/2012/03/clojurescript.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;node.jsがサーバ、クライアントをJSだけで書けるのに対して、Clojureも&lt;a href=&quot;https://github.com/clojure/clojurescript&quot;&gt;ClojureScript&lt;/a&gt;を使えばサーバ、クライアントを1つの言語で書けます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;さらにClojureには&lt;a href=&quot;https://github.com/weavejester/hiccup&quot;&gt;hiccup&lt;/a&gt;というS式を使ったテンプレートエンジンがあるので&lt;strong&gt;サーバ(ビューも含め)+クライアントを全部Clojureで書けます。&lt;/strong&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot; style=&quot;font-size: 50px;&quot;&gt;まさに全部Clojureのターン！&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;今回は &lt;a href=&quot;http://webnoir.org/&quot;&gt;noir&lt;/a&gt; と &lt;a href=&quot;https://github.com/ibdknox/noir-cljs&quot;&gt;noir-cljs&lt;/a&gt; を使って、単純にボタンを押してテキストを変更するだけのアプリ(?)を作るまでの手順です。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oirのインストール&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;まずはnoirをインストールしましょう。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;lein plugin install lein-noir 1.2.1&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;次にサンプルアプリを作成します。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;lein noir new zenbu-clojure
-cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設定&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;noir-cljsのREADMEに沿って project.clj を修正します。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;p&lt;/span&gt;roject.clj&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject zenbu-clojure &quot;0.1.0-SNAPSHOT&quot;
-            :description &quot;FIXME: write this!&quot;
-            :dependencies [[org.clojure/clojure &quot;1.3.0&quot;]
-                           [noir &quot;1.2.1&quot;]
-                           [noir-cljs &quot;0.2.5&quot;]] ; 追加
+cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設定&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;noir-cljsのREADMEに沿って project.clj を修正します。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;p&lt;/span&gt;roject.clj&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject zenbu-clojure &amp;quot;0.1.0-SNAPSHOT&amp;quot;
+            :description &amp;quot;FIXME: write this!&amp;quot;
+            :dependencies [[org.clojure/clojure &amp;quot;1.3.0&amp;quot;]
+                           [noir &amp;quot;1.2.1&amp;quot;]
+                           [noir-cljs &amp;quot;0.2.5&amp;quot;]] ; 追加
             :main ^{:skip-aot true} zenbu-clojure.server) ; aotコンパイルをスキップ&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;次に src ディレクトリ配下の .cljs ファイルが変更された時に自動的にコンパイルが走るよう
    server.clj を変更します。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;s&lt;/span&gt;rc/zenbu_clojure/server.clj&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns zenbu-clojure.server
   (:require [noir.server :as server]))
 
-(server/load-views &quot;src/zenbu_clojure/views/&quot;)
+(server/load-views &amp;quot;src/zenbu_clojure/views/&amp;quot;)
 
-(defn -main [&amp; m]
+(defn -main [&amp;amp; m]
   (let [mode (keyword (or (first m) :dev))
-        port (Integer. (get (System/getenv) &quot;PORT&quot; &quot;8080&quot;))]
+        port (Integer. (get (System/getenv) &amp;quot;PORT&amp;quot; &amp;quot;8080&amp;quot;))]
     (noir.cljs.core/start mode) ; ここを追加
     (server/start port {:mode mode
                         :ns 'zenbu-clojure})))&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;テ&lt;/span&gt;ンプレート修正&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;まずはコンパイルされた cljs を読み込むようレイアウトを修正します&lt;/p&gt;&lt;h3&gt;&lt;span&gt;s&lt;/span&gt;rc/zenbu_clojure/views/common.clj&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns zenbu-clojure.views.common
@@ -114,11 +114,11 @@ cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設�
         [hiccup.page-helpers :only [include-css html5]])
   (:require [noir.cljs.core :as noir-cljs])) ; 追加
 
-(defpartial layout [&amp; content]
+(defpartial layout [&amp;amp; content]
             (html5
               [:head
-               [:title &quot;zenbu-clojure&quot;]
-               (include-css &quot;/css/reset.css&quot;)]
+               [:title &amp;quot;zenbu-clojure&amp;quot;]
+               (include-css &amp;quot;/css/reset.css&amp;quot;)]
               [:body
                [:div#wrapper
                 content]
@@ -129,10 +129,10 @@ cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設�
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]))
 
-(defpage &quot;/&quot; [] ; index ページに変更
+(defpage &amp;quot;/&amp;quot; [] ; index ページに変更
          (common/layout
-           [:button {:id &quot;btn&quot;} &quot;全部...&quot;] ; ボタンを追加
-           [:p {:id &quot;text&quot;} &quot;Welcome to zenbu-clojure&quot;] ; id属性を追加
+           [:button {:id &amp;quot;btn&amp;quot;} &amp;quot;全部...&amp;quot;] ; ボタンを追加
+           [:p {:id &amp;quot;text&amp;quot;} &amp;quot;Welcome to zenbu-clojure&amp;quot;] ; id属性を追加
            ))&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;lojureScript作成&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;最後にClojureScriptを書きます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なお個人的にちょっとハマった点として
     noir-cljs 0.2.5 では &quot;cljs&quot; という名前のディレクトリは
     ClojureScriptとして認識されてしまうようでサーバ起動時にエラーになってしまいます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;(同作者の&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;https://github.com/ibdknox/watchtower&quot;&gt;watchtower&lt;/a&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;というライブラリによる挙動で、pull requestだけ出してあるのでもしマージされれば問題なくなるかもしれません)&lt;/p&gt;&lt;p class=&quot;paragraph add&quot;&gt;2012-04-08 追記: マージしていただいたので ver 0.1.1 を使えば問題ありません&lt;/p&gt;&lt;h3&gt;&lt;span&gt;s&lt;/span&gt;rc/zenbu_clojure/mycljs/core.cljs&lt;/h3&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns zenbu-clojure.mycljs.core
@@ -140,14 +140,14 @@ cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設�
             [clojure.browser.dom :ad dom]))
 
 (defn click-event
-  &quot;#btnクリック時のクリックイベント&quot;
+  &amp;quot;#btnクリック時のクリックイベント&amp;quot;
   []
-  (dom/set-text (dom/get-element &quot;text&quot;) &quot;Clojureのターン!&quot;))
+  (dom/set-text (dom/get-element &amp;quot;text&amp;quot;) &amp;quot;Clojureのターン!&amp;quot;))
 
 (defn init
-  &quot;onload時に呼ばれる関数&quot;
+  &amp;quot;onload時に呼ばれる関数&amp;quot;
   []
-  (event/listen (dom/get-element &quot;btn&quot;) :click click-event))
+  (event/listen (dom/get-element &amp;quot;btn&amp;quot;) :click click-event))
 
 ; onloadイベントを追加
 (goog.events/listen js/window goog.events.EventType/LOAD init)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ここまできたらサーバを起動してみましょう。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;lein run&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ポート指定していなければ http://localhost:8080 で確認できます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;今回はアプリというのにはおこがましいくらい単純なものでしたが、
@@ -170,7 +170,7 @@ cd zenbu-clojure&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;n&lt;/span&gt;oir-cljsの設�
        (mpg, wmv, rm あたりが開けないのは困りますよね！&lt;/s&gt;&lt;/p&gt;&lt;p class=&quot;paragraph add&quot;&gt;Ubuntuでの関連付けが使えない件はEnter(VimFilerの関連付け)で開けなかっただけで
  x(システムの関連付け)であれば開けました。勘違いスミマセン&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_sort_type = &quot;Time&quot;
+let g:vimfiler_sort_type = &amp;quot;Time&amp;quot;
 let g:vimfiler_sendto = {
 \   'unzip' : 'unzip'
 \ , 'Inkscape ベクターグラフィックエディタ' : 'inkspace'
@@ -178,42 +178,42 @@ let g:vimfiler_sendto = {
 \ , 'gedit' : 'gedit'
 \ }
 
-nnoremap &lt;Leader&gt;&lt;leader&gt; :VimFiler&lt;CR&gt;
+nnoremap &amp;lt;Leader&amp;gt;&amp;lt;leader&amp;gt; :VimFiler&amp;lt;CR&amp;gt;
 aug VimFilerKeyMapping
     au!
     autocmd FileType vimfiler call s:vimfiler_local()
 
     function! s:vimfiler_local()
-        &quot; キーマップのカスタマイズ
-        nmap &lt;buffer&gt; &lt;C-r&gt; &lt;Plug&gt;(vimfiler_rename_file)
-        nmap &lt;buffer&gt; a &lt;Plug&gt;(vimfiler_toggle_mark_all_lines)
-        nmap &lt;buffer&gt; m &lt;Plug&gt;(vimfiler_set_current_mask)
-        nmap &lt;buffer&gt; M &lt;Plug&gt;(vimfiler_move_file)
-        nmap &lt;buffer&gt; D &lt;Plug&gt;(vimfiler_make_directory)
-        nmap &lt;buffer&gt; h &lt;Plug&gt;(vimfiler_smart_h)zz
-        nmap &lt;buffer&gt; F &lt;Plug&gt;(vimfiler_new_file)
-        &quot; sendto呼び出し
-        nnoremap &lt;buffer&gt; &lt;Leader&gt;s :Unite sendto&lt;CR&gt;
+        &amp;quot; キーマップのカスタマイズ
+        nmap &amp;lt;buffer&amp;gt; &amp;lt;C-r&amp;gt; &amp;lt;Plug&amp;gt;(vimfiler_rename_file)
+        nmap &amp;lt;buffer&amp;gt; a &amp;lt;Plug&amp;gt;(vimfiler_toggle_mark_all_lines)
+        nmap &amp;lt;buffer&amp;gt; m &amp;lt;Plug&amp;gt;(vimfiler_set_current_mask)
+        nmap &amp;lt;buffer&amp;gt; M &amp;lt;Plug&amp;gt;(vimfiler_move_file)
+        nmap &amp;lt;buffer&amp;gt; D &amp;lt;Plug&amp;gt;(vimfiler_make_directory)
+        nmap &amp;lt;buffer&amp;gt; h &amp;lt;Plug&amp;gt;(vimfiler_smart_h)zz
+        nmap &amp;lt;buffer&amp;gt; F &amp;lt;Plug&amp;gt;(vimfiler_new_file)
+        &amp;quot; sendto呼び出し
+        nnoremap &amp;lt;buffer&amp;gt; &amp;lt;Leader&amp;gt;s :Unite sendto&amp;lt;CR&amp;gt;
 
-        &quot; 関連付け
+        &amp;quot; 関連付け
         if has('unix')
             call vimfiler#set_execute_file('sh', 'sh')
-            &quot; 2/12 不要になったのでコメントアウト
-            &quot;for ext in [&quot;html&quot;, &quot;htm&quot;, &quot;pdf&quot;, &quot;jpg&quot;, &quot;gif&quot;, &quot;png&quot;, &quot;svg&quot;, &quot;zip&quot;, &quot;lzh&quot;, &quot;mp3&quot;, &quot;mpg&quot;, &quot;wmv&quot;, &quot;rm&quot;, &quot;flv&quot;]
-            &quot;    call vimfiler#set_execute_file(ext, 'xdg-open')
-            &quot;endfor
+            &amp;quot; 2/12 不要になったのでコメントアウト
+            &amp;quot;for ext in [&amp;quot;html&amp;quot;, &amp;quot;htm&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;jpg&amp;quot;, &amp;quot;gif&amp;quot;, &amp;quot;png&amp;quot;, &amp;quot;svg&amp;quot;, &amp;quot;zip&amp;quot;, &amp;quot;lzh&amp;quot;, &amp;quot;mp3&amp;quot;, &amp;quot;mpg&amp;quot;, &amp;quot;wmv&amp;quot;, &amp;quot;rm&amp;quot;, &amp;quot;flv&amp;quot;]
+            &amp;quot;    call vimfiler#set_execute_file(ext, 'xdg-open')
+            &amp;quot;endfor
         endif
 
-        &quot; Unite bookmark連携
-        nnoremap &lt;buffer&gt; z &lt;C-u&gt;:Unite bookmark&lt;CR&gt;
-        nnoremap &lt;buffer&gt; A &lt;C-u&gt;:UniteBookmarkAdd&lt;CR&gt;
-        &quot; Unite bookmarkのアクションをVimFilerに
+        &amp;quot; Unite bookmark連携
+        nnoremap &amp;lt;buffer&amp;gt; z &amp;lt;C-u&amp;gt;:Unite bookmark&amp;lt;CR&amp;gt;
+        nnoremap &amp;lt;buffer&amp;gt; A &amp;lt;C-u&amp;gt;:UniteBookmarkAdd&amp;lt;CR&amp;gt;
+        &amp;quot; Unite bookmarkのアクションをVimFilerに
         call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-        &quot; incremental search
-        nnoremap &lt;buffer&gt; / /^\s*\(\|-\\|\|+\\|+\\|-\) \zs
+        &amp;quot; incremental search
+        nnoremap &amp;lt;buffer&amp;gt; / /^\s*\(\|-\\|\|+\\|+\\|-\) \zs
     endfunction
 aug END&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;以上です。&lt;/p&gt;&lt;p class=&quot;paragraph add&quot;&gt;追記&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;ちなみに vimfiler#set_execute_file は拡張子の指定にコンマ区切りが使えるそうです。
-    (現状、コンマの前後にスペースは入れられないようです)&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なので上記のように for で回す必要はありませんでした。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;call vimfiler#set_execute_file(&quot;jpg,png&quot;, 'xdg-open')&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;また sendto に似た機能で g:vimfiler_execute_file_list というのがすでにありました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;以下のように指定するとjpgファイルを開こうとした場合に
+    (現状、コンマの前後にスペースは入れられないようです)&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なので上記のように for で回す必要はありませんでした。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;call vimfiler#set_execute_file(&amp;quot;jpg,png&amp;quot;, 'xdg-open')&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;また sendto に似た機能で g:vimfiler_execute_file_list というのがすでにありました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;以下のように指定するとjpgファイルを開こうとした場合に
     Uniteのインターフェイスで xdg-open, gimp のどちらで開くかを指定できます。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;let g:vimfiler_execute_file_list = {
 \   'jpg' : ['xdg-open', 'gimp']
 \ }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;sendtoでは必要な時だけ指定するようにできることと、
@@ -221,11 +221,11 @@ aug END&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;以上です。&lt;/p&gt
    ある程度実践的(?)なTipsなどを紹介します。&lt;/p&gt;&lt;strong&gt;長文なのでご注意ください&lt;/strong&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;ompojureとは&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;https://github.com/weavejester/compojure&quot;&gt;Compojure&lt;/a&gt;はClojure向けの軽量ウェブフレームワークです。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;Clojure版Sinatraのようなフレームワークでウェブアプリをシンプルに記述できることが特徴で、&lt;a href=&quot;https://github.com/mmcgrana/ring&quot;&gt;ring&lt;/a&gt;というウェブアプリケーションライブラリがベースになっています。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;H&lt;/span&gt;ello World&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;最初にベースとなるHelloWorldを作ります。
    HelloWorldの作り方自体はググれば他にたくさん記事が見つかると思うので
    詳細な説明は割愛して、コード内のコメントで軽く補足します。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なおこれから先は&lt;a href=&quot;https://github.com/technomancy/leiningen&quot;&gt;Leiningen&lt;/a&gt;がインストール済みであることを前提にしています。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;プロジェクトの作成&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein new helloworld
-$ cd helloworld&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の編集&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject helloworld &quot;1.0.0-SNAPSHOT&quot;
-  :description &quot;FIXME: write description&quot;
-  :dependencies [[org.clojure/clojure &quot;1.3.0&quot;]
-                 [compojure &quot;0.6.5&quot;] ; 12/03時点で最新のタグ
-                 [ring/ring-jetty-adapter &quot;0.3.11&quot;]]
+$ cd helloworld&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の編集&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject helloworld &amp;quot;1.0.0-SNAPSHOT&amp;quot;
+  :description &amp;quot;FIXME: write description&amp;quot;
+  :dependencies [[org.clojure/clojure &amp;quot;1.3.0&amp;quot;]
+                 [compojure &amp;quot;0.6.5&amp;quot;] ; 12/03時点で最新のタグ
+                 [ring/ring-jetty-adapter &amp;quot;0.3.11&amp;quot;]]
   :main helloworld.core)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj の編集&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     [compojure.core :only [defroutes GET]]
@@ -233,17 +233,17 @@ $ cd helloworld&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の�
     [ring.adapter.jetty :only [run-jetty]]))
 
 (defroutes app
-  (GET &quot;/&quot; req &quot;hello world&quot;)
+  (GET &amp;quot;/&amp;quot; req &amp;quot;hello world&amp;quot;)
   ; defroutesは定義した順に処理するためnot-foundは最後に書く
-  (not-found &quot;NOT FOUND&quot;))
+  (not-found &amp;quot;NOT FOUND&amp;quot;))
 
 (defn -main []
   ; heroku向けのport取得
-  (let [port (Integer/parseInt (get (System/getenv) &quot;PORT&quot; &quot;8080&quot;))]
+  (let [port (Integer/parseInt (get (System/getenv) &amp;quot;PORT&amp;quot; &amp;quot;8080&amp;quot;))]
     (run-jetty app {:port port})))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;実行&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein deps
 $ lein run
 $ open http://localhost:8080&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Hello World!!&lt;/p&gt;&lt;h2&gt;&lt;span&gt;静&lt;/span&gt;的ファイルを扱う&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;無事HelloWorldが表示できました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;あとはhiccupやenliveといったテンプレートエンジンを使えば動的な画面は問題ないでしょう。
-    では静的な画面は？というと以下のようにします。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;:web-content &quot;public&quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj のルートを編集&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
+    では静的な画面は？というと以下のようにします。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;:web-content &amp;quot;public&amp;quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj のルートを編集&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     [compojure.core :only [defroutes GET]]
     ; filesを追加
@@ -251,14 +251,14 @@ $ open http://localhost:8080&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Hel
     [ring.adapter.jetty :only [run-jetty]]))
 
 (defroutes app
-  (GET &quot;/&quot; req &quot;hello world&quot;)
-  (files &quot;/&quot;) ; publicディレクトリを&quot;/&quot;にひもづける
-  (not-found &quot;NOT FOUND&quot;))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;静的ファイルを用意&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ pwd
+  (GET &amp;quot;/&amp;quot; req &amp;quot;hello world&amp;quot;)
+  (files &amp;quot;/&amp;quot;) ; publicディレクトリを&amp;quot;/&amp;quot;にひもづける
+  (not-found &amp;quot;NOT FOUND&amp;quot;))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;静的ファイルを用意&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ pwd
 プロジェクトディレクトリ
 $ mkdir public; cd public
-$ echo NEKO &gt; neko.txt&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Jettyの再起動を再起動して http://localhost:8080/neko.txt へアクセスすれば
+$ echo NEKO &amp;gt; neko.txt&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Jettyの再起動を再起動して http://localhost:8080/neko.txt へアクセスすれば
    静的ファイルを参照できます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;開&lt;/span&gt;発を効率化&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;先ほどの静的ファイルへの対応では修正後にJettyを再起動しました。
-   でも修正の度に再起動するのは効率的ではありません。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;そこでring-develの&lt;code class=&quot;prettyprint&quot;&gt;reload&lt;/code&gt; と &lt;code class=&quot;prettyprint&quot;&gt;stacktrace&lt;/code&gt; を使いましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj に追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;:dev-dependencies [[ring/ring-devel &quot;0.3.11&quot;]]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj の修正&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
+   でも修正の度に再起動するのは効率的ではありません。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;そこでring-develの&lt;code class=&quot;prettyprint&quot;&gt;reload&lt;/code&gt; と &lt;code class=&quot;prettyprint&quot;&gt;stacktrace&lt;/code&gt; を使いましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj に追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;:dev-dependencies [[ring/ring-devel &amp;quot;0.3.11&amp;quot;]]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj の修正&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     [compojure.core :only [defroutes GET]]
     [compojure.route :only [not-found files]]
@@ -266,103 +266,103 @@ $ echo NEKO &gt; neko.txt&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Jetty�
     [ring.adapter.jetty :only [run-jetty]]))
 
 (defn index
-  &quot;/ にアクセスされたときの処理&quot;
+  &amp;quot;/ にアクセスされたときの処理&amp;quot;
   [req]
-  &quot;hello world&quot;)
+  &amp;quot;hello world&amp;quot;)
 
 (defroutes main-route
-  (GET &quot;/&quot; req (index req)) ; 処理を関数に
-  (GET &quot;/err&quot; _ (throw (Exception.))) ; stacktraceの確認用
-  (files &quot;/&quot;)
-  (not-found &quot;NOT FOUND&quot;))
+  (GET &amp;quot;/&amp;quot; req (index req)) ; 処理を関数に
+  (GET &amp;quot;/err&amp;quot; _ (throw (Exception.))) ; stacktraceの確認用
+  (files &amp;quot;/&amp;quot;)
+  (not-found &amp;quot;NOT FOUND&amp;quot;))
 
 (defroutes app
-  (-&gt; main-route
+  (-&amp;gt; main-route
     (wrap-reload '[helloworld.core])
     wrap-stacktrace))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;実行&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein deps
 $ lein run&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Jettyの再起動に関係なく index の戻り値が反映されるのが確認できたでしょうか？
    また &lt;code class=&quot;prettyprint&quot;&gt;stacktrace&lt;/code&gt; を使うと /err にアクセスした際に、画面上に例外の内容を表示させることができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なお &lt;code class=&quot;prettyprint&quot;&gt;reload&lt;/code&gt; ですが、&lt;code class=&quot;prettyprint&quot;&gt;defroutes&lt;/code&gt; 内の変更は反映されないようなので、
 routeの変更の際にはJettyの再起動が必要です。(この点、対処方法があれば誰か教えてください。)&lt;/p&gt;&lt;h2&gt;&lt;span&gt;M&lt;/span&gt;iddlewareで拡張&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;先ほどの reload, stacktrace はringのmiddlewareと言われるもので、
     これらを使うとCompojureの挙動を拡張することができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;主要なmiddlewareは以下の通りです。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.params/wrap-params&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;QueryString, POSTデータを &lt;code class=&quot;prettyprint&quot;&gt;{:params request}&lt;/code&gt; に展開&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes main-routes
-  (GET &quot;/&quot; {params :params}
-    (get params &quot;get_parameter&quot;)))
+  (GET &amp;quot;/&amp;quot; {params :params}
+    (get params &amp;quot;get_parameter&amp;quot;)))
 
 (defroutes app
-  (-&gt; main-routes wrap-params))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.nested-params/wrap-nested-params&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;添字付きのパラメータをネストしたマップに展開。要 &lt;code class=&quot;prettyprint&quot;&gt;wrap-params&lt;/code&gt;。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なお展開できる階層は1階層のネストまで&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes main-routes
-  (GET &quot;/&quot; {params :params} (str params)))
+  (-&amp;gt; main-routes wrap-params))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.nested-params/wrap-nested-params&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;添字付きのパラメータをネストしたマップに展開。要 &lt;code class=&quot;prettyprint&quot;&gt;wrap-params&lt;/code&gt;。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;なお展開できる階層は1階層のネストまで&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes main-routes
+  (GET &amp;quot;/&amp;quot; {params :params} (str params)))
 
 (defroutes app
-  (-&gt; main-routes wrap-nested-params wrap-params))&lt;/pre&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &quot;http://localhost:8080/?a[b]=c&amp;a[d]=e&quot;&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{&quot;a&quot; {&quot;d&quot; &quot;e&quot;, &quot;b&quot; &quot;c&quot;}}&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.keyword-params/wrap-keyword-params&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;パラメータ名をStringからKeywordに変換。&lt;code class=&quot;prettyprint&quot;&gt;wrap-params&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;wrap-nested-params&lt;/code&gt;と一緒に使う&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes main-routes
+  (-&amp;gt; main-routes wrap-nested-params wrap-params))&lt;/pre&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &amp;quot;http://localhost:8080/?a[b]=c&amp;amp;a[d]=e&amp;quot;&lt;/pre&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;{&amp;quot;a&amp;quot; {&amp;quot;d&amp;quot; &amp;quot;e&amp;quot;, &amp;quot;b&amp;quot; &amp;quot;c&amp;quot;}}&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.keyword-params/wrap-keyword-params&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;パラメータ名をStringからKeywordに変換。&lt;code class=&quot;prettyprint&quot;&gt;wrap-params&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;wrap-nested-params&lt;/code&gt;と一緒に使う&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes main-routes
   ; 分配束縛が楽
-  (GET &quot;/&quot; { {:keys [param1 param2]} :params}
-    (str &quot;param1 = &quot; param1 &quot;, param2 = &quot; param2)))
+  (GET &amp;quot;/&amp;quot; { {:keys [param1 param2]} :params}
+    (str &amp;quot;param1 = &amp;quot; param1 &amp;quot;, param2 = &amp;quot; param2)))
 
 (defroutes app
-  (-&gt; main-routes wrap-keyword-params wrap-params))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.session&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;セッションを扱う。
+  (-&amp;gt; main-routes wrap-keyword-params wrap-params))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.session&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;セッションを扱う。
    セッション情報はリクエストの :session キーで渡される&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     ..省略..
     [ring.util.response :only [redirect]]))
 
 (defroutes main-routes
-  (GET &quot;/set/:vlue&quot; [value]
+  (GET &amp;quot;/set/:vlue&amp;quot; [value]
     ; セッションのセットはレスポンスに :session を指定するだけ
-    (assoc (redirect &quot;/&quot;) :session {:value value}))
+    (assoc (redirect &amp;quot;/&amp;quot;) :session {:value value}))
 
-  (GET &quot;/&quot; { {:keys [value], :or {value &quot;no data&quot;}} :session}
-    (str &quot;value = &quot; value)))
+  (GET &amp;quot;/&amp;quot; { {:keys [value], :or {value &amp;quot;no data&amp;quot;}} :session}
+    (str &amp;quot;value = &amp;quot; value)))
 
 (defroutes app
-  (-&gt; main-routes wrap-session))&lt;/pre&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &quot;http://localhost:8080/set/helloworld&quot;&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.flash&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;セッションを使って一時的なメッセージを保存。要 &lt;code class=&quot;prettyprint&quot;&gt;wrap-session&lt;/code&gt;。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;リダイレクト先でちょろっとメッセージを表示したいときとかに使う&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
+  (-&amp;gt; main-routes wrap-session))&lt;/pre&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &amp;quot;http://localhost:8080/set/helloworld&amp;quot;&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.flash&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;セッションを使って一時的なメッセージを保存。要 &lt;code class=&quot;prettyprint&quot;&gt;wrap-session&lt;/code&gt;。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;リダイレクト先でちょろっとメッセージを表示したいときとかに使う&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     ..省略..
     [ring.util.response :only [redirect]]))
 
 (defroutes main-routes
-  (GET &quot;/set/:value&quot; [value]
+  (GET &amp;quot;/set/:value&amp;quot; [value]
     ; flashのセットはレスポンスに :flash で指定
-    (assoc (redirect &quot;/&quot;) :flash value))
-  (GET &quot;/&quot; {flash :flash}
-    (str &quot;flash = &quot; flash)))
+    (assoc (redirect &amp;quot;/&amp;quot;) :flash value))
+  (GET &amp;quot;/&amp;quot; {flash :flash}
+    (str &amp;quot;flash = &amp;quot; flash)))
 
 (defroutes app
-  (-&gt; main-routes wrap-flash wrap-session))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;flashをセット&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &quot;http://localhost:8080/set/helloworld&quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;セットされてるのが確認できますが、もう一度アクセスすると一時的な情報なので削除されています。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &quot;http://localhost:8080/&quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;なお以下のような凡ミスはしないようご注意を&lt;/p&gt;&lt;a href=&quot;http://twitter.com/#!/uochan/status/141546228574982144&quot;&gt;http://twitter.com/#!/uochan/status/141546228574982144&lt;/a&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.cookies&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;クッキーを扱う。クッキー情報はリクエストの :cookies キーで渡される&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
+  (-&amp;gt; main-routes wrap-flash wrap-session))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;flashをセット&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &amp;quot;http://localhost:8080/set/helloworld&amp;quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;セットされてるのが確認できますが、もう一度アクセスすると一時的な情報なので削除されています。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ open &amp;quot;http://localhost:8080/&amp;quot;&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;なお以下のような凡ミスはしないようご注意を&lt;/p&gt;&lt;a href=&quot;http://twitter.com/#!/uochan/status/141546228574982144&quot;&gt;http://twitter.com/#!/uochan/status/141546228574982144&lt;/a&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.cookies&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;クッキーを扱う。クッキー情報はリクエストの :cookies キーで渡される&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     ..省略..
     [ring.util.response :only [redirect]]))
 
 (defroutes main-routes
-  (GET &quot;/set/:value&quot; [value]
+  (GET &amp;quot;/set/:value&amp;quot; [value]
     ; クッキーの設定はレスポンスの :cookies キーで行う
-    (assoc (redirect &quot;/&quot;) :cookies {:hello {:value value :path &quot;/&quot;}}))
-  (GET &quot;/&quot; {cookies :cookies}
+    (assoc (redirect &amp;quot;/&amp;quot;) :cookies {:hello {:value value :path &amp;quot;/&amp;quot;}}))
+  (GET &amp;quot;/&amp;quot; {cookies :cookies}
     (str cookies)))
 
 (defroutes app
-  (-&gt; main-routes wrap-cookies))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;クッキー設定時には上記以外に
+  (-&amp;gt; main-routes wrap-cookies))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;クッキー設定時には上記以外に
    :domain, :port, :max-age, :expires, :secure, :http-only
    が使えます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;詳細は以下のソース末尾を見ると良いです。&lt;/p&gt;&lt;a href=&quot;https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj&quot;&gt;https://github.com/mmcgrana/ring/blob/master/ring-core/src/ring/middleware/cookies.clj&lt;/a&gt;&lt;h3&gt;&lt;span&gt;r&lt;/span&gt;ing.middleware.file/file&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;静的ファイルを扱います。こちらだと project.clj に &lt;code class=&quot;prettyprint&quot;&gt;:web-content&lt;/code&gt; を指定しなくてもディレクトリを割り当てられます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defroutes app
-  (-&gt; main-routes (wrap-file &quot;public&quot;)))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;M&lt;/span&gt;iddlewareのちょっとした注意&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;wrap系は処理をラップした関数を返すので
-   &lt;code class=&quot;prettyprint&quot;&gt;-&gt;&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;-&gt;&gt;&lt;/code&gt;で適用する場合には逆順に処理されるので注意してください。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(wrap-A (wrap-B (wrap-C app))) ; A-&gt;B-&gt;Cの順で処理される
-(-&gt; app wrap-A wrap-B wrap-C)  ; C-&gt;B-&gt;Aの順で処理される
-(-&gt; app wrap-params wrap-keyword-params) ; NG: paramsの前にkeyword-paramsが処理される
-(-&gt; app wrap-keyword-params wrap-params) ; OK: paramsのあとにkeyword-paramsが処理される&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;面&lt;/span&gt;倒くさい&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;route毎にどのmiddlewareをラップすれば良いのかわからない！面倒くさい！
+  (-&amp;gt; main-routes (wrap-file &amp;quot;public&amp;quot;)))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;M&lt;/span&gt;iddlewareのちょっとした注意&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;wrap系は処理をラップした関数を返すので
+   &lt;code class=&quot;prettyprint&quot;&gt;-&gt;&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;-&gt;&gt;&lt;/code&gt;で適用する場合には逆順に処理されるので注意してください。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(wrap-A (wrap-B (wrap-C app))) ; A-&amp;gt;B-&amp;gt;Cの順で処理される
+(-&amp;gt; app wrap-A wrap-B wrap-C)  ; C-&amp;gt;B-&amp;gt;Aの順で処理される
+(-&amp;gt; app wrap-params wrap-keyword-params) ; NG: paramsの前にkeyword-paramsが処理される
+(-&amp;gt; app wrap-keyword-params wrap-params) ; OK: paramsのあとにkeyword-paramsが処理される&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;面&lt;/span&gt;倒くさい&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;route毎にどのmiddlewareをラップすれば良いのかわからない！面倒くさい！
    という人用に(?)、Compojureでは&lt;code class=&quot;prettyprint&quot;&gt;site&lt;/code&gt;、&lt;code class=&quot;prettyprint&quot;&gt;api&lt;/code&gt;を用意しています。&lt;/p&gt;&lt;h4&gt;&lt;span&gt;c&lt;/span&gt;ompojure.handler/site&lt;/h4&gt;&lt;p class=&quot;paragraph&quot;&gt;HTMLを出力するroute向け。以下7つをラップ&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;wrap-session&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-flash&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-cookies&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-multipart-params&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-params&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-nested-params&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-keyword-params&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h4&gt;&lt;span&gt;c&lt;/span&gt;ompojure.handler/api&lt;/h4&gt;&lt;p class=&quot;paragraph&quot;&gt;ウェブAPI向け。以下3つをラップ&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;wrap-params&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-nested-params&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;wrap-keyword-params&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;&lt;span&gt;テ&lt;/span&gt;ストする&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ここまでに紹介したmiddlewareを使えば一般的なウェブアプリであれば
-    問題なく開発できるかと思います。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;最後にテストです。例えば以下のようなAPIのテストを書いてみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の dependencies に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;[org.clojure/data.json &quot;0.1.1&quot;]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
+    問題なく開発できるかと思います。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;最後にテストです。例えば以下のようなAPIのテストを書いてみましょう。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の dependencies に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;[org.clojure/data.json &amp;quot;0.1.1&amp;quot;]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;src/helloworld/core.clj&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.core
   (:use
     ..省略..
     [compojure.handler :only [api]]
     [clojure.data.json :only [json-str]]))
 
 (defn word-count [text]
-  (-&gt;&gt; text (re-seq #&quot;\w+&quot;) (map (fn [x] {x 1})) (apply (partial merge-with +))))
+  (-&amp;gt;&amp;gt; text (re-seq #&amp;quot;\w+&amp;quot;) (map (fn [x] {x 1})) (apply (partial merge-with +))))
 
 (defroutes api-route
-  (GET &quot;/wc&quot; { {:keys [text]} :params}
+  (GET &amp;quot;/wc&amp;quot; { {:keys [text]} :params}
     (json-str (word-count text))))
 
 (defroutes app
-  (api api-route))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;HTMLを返すルートのテストは難しいですが、APIでデータを返すルートのテストは&lt;code class=&quot;prettyprint&quot;&gt;ring-mock&lt;/code&gt; を使うことで簡単に記述することができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の dev-dependencies に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;[ring-mock &quot;0.1.1&quot;]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;test/helloworld/test/core.clj&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.test.core
+  (api api-route))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;HTMLを返すルートのテストは難しいですが、APIでデータを返すルートのテストは&lt;code class=&quot;prettyprint&quot;&gt;ring-mock&lt;/code&gt; を使うことで簡単に記述することができます。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;project.clj の dev-dependencies に以下を追加&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;[ring-mock &amp;quot;0.1.1&amp;quot;]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;test/helloworld/test/core.clj&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns helloworld.test.core
   (:use
     helloworld.core
     clojure.test
@@ -372,9 +372,9 @@ routeの変更の際にはJettyの再起動が必要です。(この点、対処
 (deftest word-count-test
   (let [; ring.mock.request/request でレスポンスを取得
         ; 第3引数のマップはQueryStringに展開される
-        res (app (request :get &quot;/wc&quot; {:text &quot;hello world hello&quot;}))
+        res (app (request :get &amp;quot;/wc&amp;quot; {:text &amp;quot;hello world hello&amp;quot;}))
         ; JSON形式からマップに変換
-        body (-&gt; res :body read-json)]
+        body (-&amp;gt; res :body read-json)]
     ; are って便利
     (are [x y] (= x y)
       200 (:status res)
@@ -387,10 +387,10 @@ Ran 1 tests containing 3 assertions.
    実際にリクエストで得られる結果もテストできます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;長文になってしまいましたがいかがでしたでしょうか？
     少しでも Compojure でのウェブアプリ開発に役立てれば幸いです。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;具体的なコード例は以下にコミットしてあります。
     (middlewareまわりは面倒だったので書いてないです。もし要望があれば書きます)&lt;/p&gt;&lt;a href=&quot;https://github.com/liquidz/practical-compojure-sample&quot;&gt;https://github.com/liquidz/practical-compojure-sample&lt;/a&gt;&lt;p class=&quot;paragraph&quot;&gt;なお間違いや、より良い方法などあればご指摘ください！&lt;/p&gt;</content></entry><entry><title>clojureでspymemcachedの薄すぎるラッパー書いた</title><link>http://localhost:8080/2011/10/spymemcached.html</link><updated>2011-10-16T00:00:00</updated><id>http://localhost:8080/2011/10/spymemcached.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;herokuでmemcached使うのにちょうど良いライブラリが見当たらなかったので、&lt;a href=&quot;http://code.google.com/p/spymemcached/&quot;&gt;spymemcached&lt;/a&gt; の set/get のみをラップしたclojureライブラリ書きました。薄い！&lt;/p&gt;&lt;dl&gt;&lt;dt&gt;github&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;https://github.com/liquidz/clj-spymemcached&quot;&gt;https://github.com/liquidz/clj-spymemcached&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;clojars&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;https://clojars.org/clj-spymemcached&quot;&gt;https://clojars.org/clj-spymemcached&lt;/a&gt;&lt;/dd&gt;&lt;/dl&gt;&lt;h2&gt;&lt;span&gt;使&lt;/span&gt;い方&lt;/h2&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; 接続
-(memcached! :host &quot;localhost&quot; :port 11211)
+(memcached! :host &amp;quot;localhost&amp;quot; :port 11211)
 ; 文字列
-(cache-set :hello &quot;world&quot;) ; default expiration = 3600
-(cache-get :hello :default &quot;default value&quot;)
+(cache-set :hello &amp;quot;world&amp;quot;) ; default expiration = 3600
+(cache-get :hello :default &amp;quot;default value&amp;quot;)
 ; リスト
 (cache-set :ls '(1 2 3 4) :expiration 3600)
 (= 1 (first (cache-get :ls)))
@@ -409,38 +409,38 @@ $ git push heroku master&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;setup.s
 $ cd plojuctor
 $ lein deps
 $ lein repl
-user=&gt; (use 'plojuctor.core :reload)
-user=&gt; (next-page!)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;スライドの移動は &lt;code class=&quot;prettyprint&quot;&gt;(next-page!)&lt;/code&gt; , &lt;code class=&quot;prettyprint&quot;&gt;(prev-page!)&lt;/code&gt; で行います。&lt;code class=&quot;prettyprint&quot;&gt;(move-page! N)&lt;/code&gt; でページ番号指定の移動も可です。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;V&lt;/span&gt;imClojure&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;元ネタ同様に単純なClojure REPL上では色付けされません。
+user=&amp;gt; (use 'plojuctor.core :reload)
+user=&amp;gt; (next-page!)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;スライドの移動は &lt;code class=&quot;prettyprint&quot;&gt;(next-page!)&lt;/code&gt; , &lt;code class=&quot;prettyprint&quot;&gt;(prev-page!)&lt;/code&gt; で行います。&lt;code class=&quot;prettyprint&quot;&gt;(move-page! N)&lt;/code&gt; でページ番号指定の移動も可です。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;V&lt;/span&gt;imClojure&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;元ネタ同様に単純なClojure REPL上では色付けされません。
    VimClojure上のREPLで動作させるとカラースキームによって色付けされます。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;プ&lt;/span&gt;レゼンの書き方&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;詳細は plojuctor.core, plojuctor.sentence を参照してください。
    気が向いたらドキュメント書きます。
    以下は単純な例です。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defslide
- (title &quot;スライドタイトル&quot;)
- (item &quot;itemは箇条書き&quot;
-  (code (println &quot;コードはこんな感じ&quot;))
-  &quot;スライドは定義した順に表示&quot;))
+ (title &amp;quot;スライドタイトル&amp;quot;)
+ (item &amp;quot;itemは箇条書き&amp;quot;
+  (code (println &amp;quot;コードはこんな感じ&amp;quot;))
+  &amp;quot;スライドは定義した順に表示&amp;quot;))
 
 (defslide
  (middle-page
   (center-page
-   &quot;上下左右中央&quot;)))&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;基本的なセンテンスは実装したつもりなので、あとは関数なりマクロなりで
+   &amp;quot;上下左右中央&amp;quot;)))&lt;/pre&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;基本的なセンテンスは実装したつもりなので、あとは関数なりマクロなりで
    自分の使いやすいようにカスタマイズすれば良いかなぁという感じです。
    ただ実際のプロジェクタで表示した時に見やすいかは全く保証できませんが、、、&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;というClojureネタでした。&lt;/p&gt;</content></entry><entry><title>DotCloudでCompojureしてみた(Hello World, MySQL)</title><link>http://localhost:8080/2011/02/dotcloud-clojure.html</link><updated>2011-02-25T00:00:00</updated><id>http://localhost:8080/2011/02/dotcloud-clojure.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;約2ヶ月の時間を経てDotCloudのinvitationがようやくきたからいじってみました。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;http://twitter.com/making&quot;&gt;@making&lt;/a&gt;さんの以下の記事と同じことをClojureでやってみただけなので
    真新しいことは何一つやってませんのでご承知置きください。&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;a href=&quot;http://blog.ik.am/entry/view/id/59/title/%E6%96%B0%E3%81%97%E3%81%84PaaS%EF%BC%9F%E3%81%AEDotCloud%E3%82%92%E8%A9%A6%E3%81%99/&quot;&gt;新しいPaaS？のDotCloudを試す&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p class=&quot;paragraph&quot;&gt;なおeasy_install, leiningenはインストール済みという前提で進めます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;環&lt;/span&gt;境作り&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;以下の公式ドキュメントに沿って進めます。&lt;/p&gt;&lt;a href=&quot;http://docs.dotcloud.com/static/tutorials/firststeps/&quot;&gt;http://docs.dotcloud.com/static/tutorials/firststeps/&lt;/a&gt;&lt;p class=&quot;paragraph&quot;&gt;dotcloudのインストール&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ sudo easy_install dotcloud&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;アプリケーションの作成&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ dotcloue create liquidz&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;サービスをデプロイ&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ dotcloud deply -t java liquidz.www&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;今回はClojureを使うのでサービスのタイプはJavaを選びました。
    またサービス名を liquidz.www としてので、このサービスには&lt;a href=&quot;http://www.liquidz.dotcloud.com/&quot;&gt;http://www.liquidz.dotcloud.com/&lt;/a&gt;というURLが割り当てられることになります。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;サ&lt;/span&gt;ービスの作成&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;Compojureを使ってサクッと作ります。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein new liquidz
-$ cd liquidz&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;p&lt;/span&gt;roject.clj&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;こちらも&lt;a href=&quot;http://twitter.com/making&quot;&gt;@making&lt;/a&gt;さんの以下の記事をベースにwarファイルを作成できるようにしています。&lt;a href=&quot;http://twitter.com/making&quot;&gt;@making&lt;/a&gt;さん様々です。&lt;/p&gt;&lt;a href=&quot;http://blog.ik.am/entry/view/id/58/title/Clojure%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9FWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92AWS+Elastic+Beanstalk%E3%81%AB%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4/&quot;&gt;http://blog.ik.am/entry/view/id/58/title/Clojureで作成したWebアプリをAWS Elastic Beanstalkにデプロイ/&lt;/a&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject liquidz &quot;1.0.0-SNAPSHOT&quot;
-  :description &quot;FIXME: write&quot;
-  :dependencies [[org.clojure/clojure &quot;1.2.0&quot;]
-                 [org.clojure/clojure-contrib &quot;1.2.0&quot;]
-                 [compojure &quot;0.5.3&quot;]]
-  :dev-dependencies [[lein-ring &quot;0.2.4&quot;]]
-  :uberjar-name &quot;service/root.war&quot;
+$ cd liquidz&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;p&lt;/span&gt;roject.clj&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;こちらも&lt;a href=&quot;http://twitter.com/making&quot;&gt;@making&lt;/a&gt;さんの以下の記事をベースにwarファイルを作成できるようにしています。&lt;a href=&quot;http://twitter.com/making&quot;&gt;@making&lt;/a&gt;さん様々です。&lt;/p&gt;&lt;a href=&quot;http://blog.ik.am/entry/view/id/58/title/Clojure%E3%81%A7%E4%BD%9C%E6%88%90%E3%81%97%E3%81%9FWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92AWS+Elastic+Beanstalk%E3%81%AB%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4/&quot;&gt;http://blog.ik.am/entry/view/id/58/title/Clojureで作成したWebアプリをAWS Elastic Beanstalkにデプロイ/&lt;/a&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defproject liquidz &amp;quot;1.0.0-SNAPSHOT&amp;quot;
+  :description &amp;quot;FIXME: write&amp;quot;
+  :dependencies [[org.clojure/clojure &amp;quot;1.2.0&amp;quot;]
+                 [org.clojure/clojure-contrib &amp;quot;1.2.0&amp;quot;]
+                 [compojure &amp;quot;0.5.3&amp;quot;]]
+  :dev-dependencies [[lein-ring &amp;quot;0.2.4&amp;quot;]]
+  :uberjar-name &amp;quot;service/root.war&amp;quot;
   :ring {:handler liquidz.core/app})&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;uberjar-nameがなぜ&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;service&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;配下なのかは後ほど説明します。また war のファイル名は root.war にすると http://www.hogehoge.dotcloud.com/ といった
    &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;/&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;直下でサービスで動きます。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;c&lt;/span&gt;ore.clj&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;単純なhello worldです。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(ns liquidz.core
   (:use [compojure core route]))
 
 (defroutes app
-  (GET &quot;/&quot; _ &quot;hello clojure world&quot;)
-  (not-found &quot;page not found&quot;))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;動&lt;/span&gt;作確認&amp;war化&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;ローカルでring起動&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring server&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;war化&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ mkdir service
+  (GET &amp;quot;/&amp;quot; _ &amp;quot;hello clojure world&amp;quot;)
+  (not-found &amp;quot;page not found&amp;quot;))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;動&lt;/span&gt;作確認&amp;war化&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;ローカルでring起動&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring server&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;war化&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ mkdir service
 $ lein ring uberwar&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;war化する際に存在しないディレクトリ配下にwarを吐こうとするとエラーになるので
    事前にディレクトリは作成しておきます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;D&lt;/span&gt;otCloudへのプッシュ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;プッシュも公式ドキュメントに書いてある通り行います。
    なお以下コマンドはカレントディレクトリがleiningenで作成したプロジェクト直下である想定です。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ dotcloud push liquidz.www ./service&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;上記コマンドで service 配下にある全てのファイルがDotCloud上にrsyncされます。
@@ -451,18 +451,18 @@ $ dotcloud info liquidz.db&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;上�
      [compojure core route]
      [clojure.contrib.sql]))
 
-(def db {:classname &quot;com.mysql.jdbc.Driver&quot;
-         :subprotocol &quot;mysql&quot;
-         :subname &quot;//db.liquidz.dotcloud.com:1455&quot;
-         :user &quot;root&quot;
-         :password &quot;パスワード&quot; })
+(def db {:classname &amp;quot;com.mysql.jdbc.Driver&amp;quot;
+         :subprotocol &amp;quot;mysql&amp;quot;
+         :subname &amp;quot;//db.liquidz.dotcloud.com:1455&amp;quot;
+         :user &amp;quot;root&amp;quot;
+         :password &amp;quot;パスワード&amp;quot; })
 
 (defroutes app
-  (GET &quot;/&quot; _ &quot;hello clojure world&quot;)
-  (GET &quot;/sql&quot; _ (with-connection db
-                  (with-query-results rs [&quot;select 40+2&quot;]
-                    (-&gt; rs first str))))
-  (not-found &quot;page not found&quot;))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;M&lt;/span&gt;ySQLのJDBCドライバを準備&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;以下から拾ってきて leiningen で作成したプロジェクトの lib にコピーしておきます。&lt;a href=&quot;http://java.keicode.com/lib/mysql-driver.php&quot;&gt;http://java.keicode.com/lib/mysql-driver.php&lt;/a&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;これがないと &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;java.sql.SQLException: No suitable driver&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; のようなエラーが出るはずです。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;動&lt;/span&gt;作確認&amp;war化&amp;プッシュ&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;前回同様です。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;ローカルでring起動&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring server&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;war化&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring uberwar&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;push&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ dotcloud push liquidz.www ./service&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;プッシュが完了したら本番環境でも確認してみましょう。&lt;/p&gt;&lt;a href=&quot;http://www.liquidz.dotcloud.com/sql&quot;&gt;http://www.liquidz.dotcloud.com/sql&lt;/a&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;{:40+2 42}&lt;/code&gt;こんな結果が返ってくるはずです。
+  (GET &amp;quot;/&amp;quot; _ &amp;quot;hello clojure world&amp;quot;)
+  (GET &amp;quot;/sql&amp;quot; _ (with-connection db
+                  (with-query-results rs [&amp;quot;select 40+2&amp;quot;]
+                    (-&amp;gt; rs first str))))
+  (not-found &amp;quot;page not found&amp;quot;))&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;M&lt;/span&gt;ySQLのJDBCドライバを準備&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;以下から拾ってきて leiningen で作成したプロジェクトの lib にコピーしておきます。&lt;a href=&quot;http://java.keicode.com/lib/mysql-driver.php&quot;&gt;http://java.keicode.com/lib/mysql-driver.php&lt;/a&gt;&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;これがないと &lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;java.sql.SQLException: No suitable driver&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; のようなエラーが出るはずです。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;動&lt;/span&gt;作確認&amp;war化&amp;プッシュ&lt;/h3&gt;&lt;p class=&quot;paragraph&quot;&gt;前回同様です。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;ローカルでring起動&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring server&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;war化&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein ring uberwar&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;push&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ dotcloud push liquidz.www ./service&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;プッシュが完了したら本番環境でも確認してみましょう。&lt;/p&gt;&lt;a href=&quot;http://www.liquidz.dotcloud.com/sql&quot;&gt;http://www.liquidz.dotcloud.com/sql&lt;/a&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;{:40+2 42}&lt;/code&gt;こんな結果が返ってくるはずです。
    ちゃんとMySQL上で足し算ができ、結果も受け取れてますね。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;感&lt;/span&gt;想&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;想像以上に簡単に動いたのでビックリしました。
    言語もPHP, Python, Ruby, Javaと使えるので、何か作って公開したいという時にはかなり有力候補になるんじゃないかなぁと。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;ただ、まだじっくり触れてない何とも言えないですが、現状はデプロイ、プッシュが簡単に出来るコマンド類と実際にアプリが動く環境が提供されているだけなので、
    テストする際には自前でいろいろ準備しないといけないはず。
@@ -472,54 +472,54 @@ $ dotcloud info liquidz.db&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;上�
    なおここで示すClojureコードの例はあくまで個人的な書き方なので必ずしも正しい、効率的ではないのでおかしな点があればコメントください。
    使ってるバージョンは Clojure 1.2.0 です。&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;lojureだってだいたいJavaと同じよu...ゴメンなさい嘘です&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ClojureもJavaの機能をそのまま使うことができます。
    以下はFileReaderを使った例。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(import '[java.io File FileReader BufferedReader])
-(let [reader (BufferedReader. (FileReader. (File. &quot;temp.txt&quot;)))]
+(let [reader (BufferedReader. (FileReader. (File. &amp;quot;temp.txt&amp;quot;)))]
  (try
   (doseq [line (take-while (comp not nil?) (repeatedly #(.readLine reader)))]
    (println line))
   (finally (.close reader))))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Scalaと違ってJava使いに馴染みやすい記述とは言えないものになっています。
-   ちなみに with-open マクロを使うと close が不要になります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(with-open [reader (BufferedReader. (FileReader. (File. &quot;temp.txt&quot;)))]
+   ちなみに with-open マクロを使うと close が不要になります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(with-open [reader (BufferedReader. (FileReader. (File. &amp;quot;temp.txt&amp;quot;)))]
  (doseq [line (take-while (comp not nil?) (repeatedly #(.readLine reader)))]
   (println line)))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;あとちょっと脱線しますが、 clojure.contrib.io/read-lines を使うともっと楽です。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(use '[clojure.contrib.io :only [read-lines]])
-(doseq [line (read-lines &quot;temp.txt&quot;)]
+(doseq [line (read-lines &amp;quot;temp.txt&amp;quot;)]
  (println line))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;初&lt;/span&gt;期化での折り返しは不要ですよ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;Java, Scalaは元記事のとおり。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;J&lt;/span&gt;ava&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 DocumentBuilder builder = factory.newDocumentBuilder();
-Document doc = builder.parse(new File(&quot;foo.xml&quot;));&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;S&lt;/span&gt;cala&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;val factory = DocumentBuilderFactory.newInstance();
+Document doc = builder.parse(new File(&amp;quot;foo.xml&amp;quot;));&lt;/pre&gt;&lt;h3&gt;&lt;span&gt;S&lt;/span&gt;cala&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;val factory = DocumentBuilderFactory.newInstance();
 val builder = factory.newDocumentBuilder();
-val doc = builder.parse(new File(&quot;foo.xml&quot;));&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Clojureだと以下です。この状況でdefを使うのは変なのでlet使ってます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [factory (DocumentBuilderFactory/newInstance)
+val doc = builder.parse(new File(&amp;quot;foo.xml&amp;quot;));&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Clojureだと以下です。この状況でdefを使うのは変なのでlet使ってます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [factory (DocumentBuilderFactory/newInstance)
       builder (.newDocumentBuilder factory)
-      doc (.parse builder (File. &quot;foo.xml&quot;))]
-  (do something))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;factory, builder を束縛する必要がないなら &lt;code class=&quot;prettyprint&quot;&gt;..&lt;/code&gt; を使って以下のようにも書けます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [doc (.. (DocumentBuilderFactory/newInstance) (newDocumentBuilder) (parse (File. &quot;foo.xml&quot;)))]
+      doc (.parse builder (File. &amp;quot;foo.xml&amp;quot;))]
+  (do something))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;factory, builder を束縛する必要がないなら &lt;code class=&quot;prettyprint&quot;&gt;..&lt;/code&gt; を使って以下のようにも書けます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [doc (.. (DocumentBuilderFactory/newInstance) (newDocumentBuilder) (parse (File. &amp;quot;foo.xml&amp;quot;)))]
   (do something))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;言語の説明記事じゃないので&lt;code class=&quot;prettyprint&quot;&gt;..&lt;/code&gt;の詳細は省きますが、Clojureなら1つ1つ束縛しなくても書けます。
 なお Scala にある 別名import はClojureにはありません。(ドキュメントを見る限り)&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;L&lt;/span&gt;istや配列の初期化はClojureでは問題なし&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;リストの扱い易さはLisp方言であるClojureの強み。
-   Common Lisp, Scheme同様に以下で出来ます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def ls '(&quot;abc&quot; &quot;def&quot; &quot;ghi&quot;))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;またClojureにはリストの他にベクターもあります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def v [&quot;abc&quot; &quot;def&quot; &quot;ghi&quot;])&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ベクターはベクター用の操作関数を利用することで、リストよりも効率よく操作できたりします。&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;デ&lt;/span&gt;フォルト引数、あるよ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事にある foo を参考にします。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;S&lt;/span&gt;cala&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;def foo(c1 : Char = 'A', c2 : Char = 'B', c3 : Char = 'C') {
+   Common Lisp, Scheme同様に以下で出来ます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def ls '(&amp;quot;abc&amp;quot; &amp;quot;def&amp;quot; &amp;quot;ghi&amp;quot;))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;またClojureにはリストの他にベクターもあります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def v [&amp;quot;abc&amp;quot; &amp;quot;def&amp;quot; &amp;quot;ghi&amp;quot;])&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ベクターはベクター用の操作関数を利用することで、リストよりも効率よく操作できたりします。&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;デ&lt;/span&gt;フォルト引数、あるよ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事にある foo を参考にします。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;S&lt;/span&gt;cala&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;def foo(c1 : Char = 'A', c2 : Char = 'B', c3 : Char = 'C') {
     println(c1.toString + c2.toString + c3.toString)
-}&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Clojureのcoreだけ使うと以下のようになります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn foo [&amp; {:keys [c1 c2 c3] :or {c1 &quot;A&quot;, c2 &quot;B&quot;, c3 &quot;C&quot;}}]
+}&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Clojureのcoreだけ使うと以下のようになります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn foo [&amp;amp; {:keys [c1 c2 c3] :or {c1 &amp;quot;A&amp;quot;, c2 &amp;quot;B&amp;quot;, c3 &amp;quot;C&amp;quot;}}]
   (println (str c1 c2 c3)))
-(foo) ; =&gt; ABC
-(foo :c1 &quot;D&quot;) ; =&gt; DBC
-(foo :c2 &quot;E&quot; :c3 &quot;F&quot;) ; =&gt; AEF&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;1つの引数の場合でも名前を指定しないといけないところがScalaとの違いです。
+(foo) ; =&amp;gt; ABC
+(foo :c1 &amp;quot;D&amp;quot;) ; =&amp;gt; DBC
+(foo :c2 &amp;quot;E&amp;quot; :c3 &amp;quot;F&amp;quot;) ; =&amp;gt; AEF&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;1つの引数の場合でも名前を指定しないといけないところがScalaとの違いです。
 また &lt;code class=&quot;prettyprint&quot;&gt;keys&lt;/code&gt; や &lt;code class=&quot;prettyprint&quot;&gt;or&lt;/code&gt; でゴチャゴチャしてます。
 ここは &lt;code class=&quot;prettyprint&quot;&gt;clojure.contrib.def/defnk&lt;/code&gt; を使うと見やすくなります。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(use '[clojure.contrib.def :only [defnk]])
-(defnk foo2 [:c1 &quot;A&quot; :c2 &quot;B&quot; :c3 &quot;C&quot;]
+(defnk foo2 [:c1 &amp;quot;A&amp;quot; :c2 &amp;quot;B&amp;quot; :c3 &amp;quot;C&amp;quot;]
   (println (str c1 c2 c3)))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;t&lt;/span&gt;hrows はClojureだって省略できるよ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;こんな感じで書いても大丈夫です。Clojureも例外処理は書かなくて良いようにできています。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn get-connection []
-  (DriverManager/getConnection &quot;jdbc:sqlite:hoge.sqlite3&quot;))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;文&lt;/span&gt;字列の比較は罠になりません&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事にあった以下の比較&lt;/p&gt;&lt;h3&gt;&lt;span&gt;J&lt;/span&gt;ava&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;String str1 = &quot;テスト&quot;;
-String str2 = &quot;テスト&quot;;
-String str3 = new String(&quot;テスト&quot;);
-System.out.println(str1 + &quot; == &quot; + str2 + &quot; = &quot; + (str1 == str2));
-  //=&gt; テスト == テスト = true
-System.out.println(str1 + &quot; == &quot; + str3 + &quot; = &quot; + (str1 == str3));
-  //=&gt; テスト == テスト = false&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ClojureでもScala同様に値で比較を行います。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [str1 &quot;test&quot;
-      str2 &quot;test&quot;
-      str3 (String. &quot;test&quot;)]
-  (println str1 &quot;=&quot; str2 &quot;=&quot; (= str1 str2)) ; =&gt; true
-  (println str1 &quot;=&quot; str3 &quot;=&quot; (= str1 str3))) ; =&gt; true&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;オブジェクトの比較を行う場合は &lt;code class=&quot;prettyprint&quot;&gt;identical?&lt;/code&gt; が使えます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(println str1 &quot;identical?&quot; str2 &quot;=&quot; (identical? str1 str2))
-(println str1 &quot;identical?&quot; str3 &quot;=&quot; (identical? str1 str3))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;lojureもいろいろ省略できます&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事のJavaは以下。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;J&lt;/span&gt;ava&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;public int sum(int i1, int i2)  {
+  (DriverManager/getConnection &amp;quot;jdbc:sqlite:hoge.sqlite3&amp;quot;))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;文&lt;/span&gt;字列の比較は罠になりません&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事にあった以下の比較&lt;/p&gt;&lt;h3&gt;&lt;span&gt;J&lt;/span&gt;ava&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;String str1 = &amp;quot;テスト&amp;quot;;
+String str2 = &amp;quot;テスト&amp;quot;;
+String str3 = new String(&amp;quot;テスト&amp;quot;);
+System.out.println(str1 + &amp;quot; == &amp;quot; + str2 + &amp;quot; = &amp;quot; + (str1 == str2));
+  //=&amp;gt; テスト == テスト = true
+System.out.println(str1 + &amp;quot; == &amp;quot; + str3 + &amp;quot; = &amp;quot; + (str1 == str3));
+  //=&amp;gt; テスト == テスト = false&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ClojureでもScala同様に値で比較を行います。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(let [str1 &amp;quot;test&amp;quot;
+      str2 &amp;quot;test&amp;quot;
+      str3 (String. &amp;quot;test&amp;quot;)]
+  (println str1 &amp;quot;=&amp;quot; str2 &amp;quot;=&amp;quot; (= str1 str2)) ; =&amp;gt; true
+  (println str1 &amp;quot;=&amp;quot; str3 &amp;quot;=&amp;quot; (= str1 str3))) ; =&amp;gt; true&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;オブジェクトの比較を行う場合は &lt;code class=&quot;prettyprint&quot;&gt;identical?&lt;/code&gt; が使えます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(println str1 &amp;quot;identical?&amp;quot; str2 &amp;quot;=&amp;quot; (identical? str1 str2))
+(println str1 &amp;quot;identical?&amp;quot; str3 &amp;quot;=&amp;quot; (identical? str1 str3))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;lojureもいろいろ省略できます&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事のJavaは以下。&lt;/p&gt;&lt;h3&gt;&lt;span&gt;J&lt;/span&gt;ava&lt;/h3&gt;&lt;pre class=&quot;prettyprint&quot;&gt;public int sum(int i1, int i2)  {
     return i1 + i2;
 }&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;素直に書いても型、returnが省略されます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn sum [i1 i2] (+ i1 i2))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;無名関数を使うと引き数名も省略できます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(def sum #(+ % %2))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;t&lt;/span&gt;ry-catchの共通化だって&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;マクロ使えばできます。
-   ちなみにここでいうマクロはC言語にあるようなマクロやエクセルマクロとはまったくの別物です。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defmacro trycatch [&amp; body] `(try ~@body (catch Exception e# nil)))
-(println (trycatch (/ 10 3))) ; =&gt; 10/3 Clojureでは分数になります
-(println (trycatch (/ 10 0))) ; =&gt; nil&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;最初の例で使った &lt;code class=&quot;prettyprint&quot;&gt;with-open&lt;/code&gt; も同様に close するという処理を共通化したマクロです。&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;ル&lt;/span&gt;ープの入れ子も楽々&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事の以下のループ&lt;/p&gt;&lt;h4&gt;Java&lt;/h4&gt;&lt;pre class=&quot;prettyprint&quot;&gt;for (int i = 1; i &gt; 10; i++)
-    for (int j = 1; j &gt; 10; j++)
+   ちなみにここでいうマクロはC言語にあるようなマクロやエクセルマクロとはまったくの別物です。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defmacro trycatch [&amp;amp; body] `(try ~@body (catch Exception e# nil)))
+(println (trycatch (/ 10 3))) ; =&amp;gt; 10/3 Clojureでは分数になります
+(println (trycatch (/ 10 0))) ; =&amp;gt; nil&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;最初の例で使った &lt;code class=&quot;prettyprint&quot;&gt;with-open&lt;/code&gt; も同様に close するという処理を共通化したマクロです。&lt;/p&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;ル&lt;/span&gt;ープの入れ子も楽々&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;元記事の以下のループ&lt;/p&gt;&lt;h4&gt;Java&lt;/h4&gt;&lt;pre class=&quot;prettyprint&quot;&gt;for (int i = 1; i &amp;gt; 10; i++)
+    for (int j = 1; j &amp;gt; 10; j++)
         System.out.println(i * j);&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;Scalaのforみたく、Clojureのforでもできます。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(doseq [x (for [i (range 1 10), j (range 1 10)] (* i j))]
   (println x))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ただClojureのforは他言語のforと違ってリストを返す関数なので
    &lt;code class=&quot;prettyprint&quot;&gt;doseq&lt;/code&gt; でループして出力してあげてます。
@@ -541,7 +541,7 @@ System.out.println(str1 + &quot; == &quot; + str3 + &quot; = &quot; + (str1 == s
 (let [ls (ArrayList.)]
   (doto ls (.add 1) (.add 2) (.add 3))
   (println (apply + ls))
-  (println (map #(str &quot;x=&quot; %) ls)))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;あ&lt;/span&gt;とがき&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ぜんぜんたいしたコードではないですが、ClojureでもScala並に短く書けることはわかってもらえたと思います。
+  (println (map #(str &amp;quot;x=&amp;quot; %) ls)))&lt;/pre&gt;&lt;hr /&gt;&lt;h2&gt;&lt;span&gt;あ&lt;/span&gt;とがき&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ぜんぜんたいしたコードではないですが、ClojureでもScala並に短く書けることはわかってもらえたと思います。
    見た目のわかりやすさといった点では括弧が大きな壁にはなると思いますが、
    まぁこんな言語もあるんだよというのが伝われば幸いかなぁと思います。&lt;/p&gt;</content></entry><entry><title>パスワードチェックライブラリ作ったった</title><link>http://localhost:8080/2011/01/password-check.html</link><updated>2011-01-11T00:00:00</updated><id>http://localhost:8080/2011/01/password-check.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;自分で使うためのものだけど、パスワードの入力制限を簡単に実装できるライブラリ作ったった。&lt;/p&gt;&lt;dl&gt;&lt;dt&gt;github&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;https://github.com/liquidz/clj-password-check&quot;&gt;https://github.com/liquidz/clj-password-check&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;clojars&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;http://clojars.org/org.clojars.liquidz/clj-password-check&quot;&gt;http://clojars.org/org.clojars.liquidz/clj-password-check&lt;/a&gt;&lt;/dd&gt;&lt;/dl&gt;&lt;p class=&quot;paragraph&quot;&gt;使い方は、一般的に使われるであろうチェック用関数は用意してあるので、
    その中で自サービスで使いたいものを選ぶだけな感じ。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; アルファベット、数字、記号を含んでいて、文字数が6～10文字
@@ -551,30 +551,30 @@ System.out.println(str1 + &quot; == &quot; + str3 + &quot; = &quot; + (str1 == s
    どのチェックで失敗したかを判別したい場合には @last-checker に
    最後にチェックした関数の関数名がシンボル型で入ってるのでそれが使える。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; 文字数3～5かつ、全て同じ文字でないチェック関数
 (let [checker (combine-checkers (length-range 3 5) not-same-characters?)]
-  (checker &quot;aa&quot;) ; false
+  (checker &amp;quot;aa&amp;quot;) ; false
   (println @last-checker) ; length-range
   ; --
-  (checker &quot;aaa&quot;) ; false
+  (checker &amp;quot;aaa&amp;quot;) ; false
   (println @last-checker) ; not-same-characters?
   ; --
-  (checker &quot;aaaaaa&quot;) ; false
+  (checker &amp;quot;aaaaaa&amp;quot;) ; false
   (println @last-checker) ; length-range
   ; --
-  (checker &quot;abc&quot;)) ; true&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルトで用意してあるチェック用関数は上記のソース(github)を参照のこと。
+  (checker &amp;quot;abc&amp;quot;)) ; true&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルトで用意してあるチェック用関数は上記のソース(github)を参照のこと。
    そんな感じで。&lt;/p&gt;</content></entry><entry><title>Gravatarのライブラリ作ったった</title><link>http://localhost:8080/2011/01/gravatar.html</link><updated>2011-01-07T00:00:00</updated><id>http://localhost:8080/2011/01/gravatar.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;需要は全然ないと思うけど自分でちょっと使いそうだったから作ったった。
    でもGravatarのAPIをそのままラッピングだけの簡単なものデス。&lt;/p&gt;&lt;dl&gt;&lt;dt&gt;github&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;https://github.com/liquidz/clj-gravatar&quot;&gt;https://github.com/liquidz/clj-gravatar&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;clojars&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;http://clojars.org/org.clojars.liquidz/clj-gravatar&quot;&gt;http://clojars.org/org.clojars.liquidz/clj-gravatar&lt;/a&gt;&lt;/dd&gt;&lt;/dl&gt;&lt;p class=&quot;paragraph&quot;&gt;以下、使用例&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; アバター画像URL取得
-(gravatar-image &quot;your@mail.address&quot;)
+(gravatar-image &amp;quot;your@mail.address&amp;quot;)
 ; サイズ指定
-(gravatar-image &quot;your@mail.address&quot; :size 24)
+(gravatar-image &amp;quot;your@mail.address&amp;quot; :size 24)
 ; デフォルト画像指定
-(gravatar-image &quot;your@mail.address&quot; :default &quot;ttp://hoge.com/fuga.png&quot;)
+(gravatar-image &amp;quot;your@mail.address&amp;quot; :default &amp;quot;ttp://hoge.com/fuga.png&amp;quot;)
 ; HTTPS利用
-(gravatar-image &quot;your@mail.address&quot; :secure? true)
+(gravatar-image &amp;quot;your@mail.address&amp;quot; :secure? true)
 ; ------
 ; プロフィール取得
-(gravatar-profile &quot;your@mail.address&quot;)
+(gravatar-profile &amp;quot;your@mail.address&amp;quot;)
 ; HTTPS利用
-(gravatar-profile &quot;your@mail.address&quot; :secure? true)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルト画像指定はURLちゃんと書いたらimgタグに展開されちゃったからわざと抜いて書いてます。
+(gravatar-profile &amp;quot;your@mail.address&amp;quot; :secure? true)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルト画像指定はURLちゃんと書いたらimgタグに展開されちゃったからわざと抜いて書いてます。
    あれ、でもプロフィール取得のHTTPSって必要なさそうだな。。まぁいいや。&lt;/p&gt;</content></entry><entry><title>Compojure 0.5.3 on GAE/Jの問題点?自分だけ?</title><link>http://localhost:8080/2010/12/compojure-problem.html</link><updated>2010-12-22T00:00:00</updated><id>http://localhost:8080/2010/12/compojure-problem.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;ローカルでdevサーバを起動してアクセスすると
    以下の例外が起きるのはうちだけの問題？？&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;java.lang.NoClassDefFoundError: compojure/response/Renderable&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ググっても特にそれらしい情報がなかった。
    Renderableだから0.5系全般でそうだったのかな？&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;で、例外からして単純に &lt;code class=&quot;prettyprint&quot;&gt;defprotocol&lt;/code&gt; で生成されるはずの
