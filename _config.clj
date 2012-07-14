@@ -2,9 +2,9 @@
  ;directory setting
  :public-dir   "./"
  :tag-out-dir  "tag/"
- :template-dir "_template/"
- :post-dir     "_posts/"
- :layout-dir   "_layouts/"
+ :template-dir ".template/"
+ :post-dir     "posts/"
+ :layout-dir   "layouts/"
 
  :url-base     "/"
  :port 8080
