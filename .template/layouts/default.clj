@@ -23,11 +23,10 @@
          :title (:title site)
          :type  "application/atom-xml"}]
  [:title (:title site)]
+ (absolute-css (:css site ()))
  (absolute-css
-   "http://fonts.googleapis.com/css?family=Inconsolata"
-   "/css/prettify.css"
-   "/css/sunburst.css"
-   "/css/main.css")]
+   {:media "only screen and (max-device-width:480px)"}
+   (:device-css site))]
 
 [:body {:id "top"}
  (github-ribbon "https://github.com/liquidz/")

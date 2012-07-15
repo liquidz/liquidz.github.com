@@ -13,7 +13,9 @@
  :site {:charset    "utf-8"
         :site-title "(code \"liquidz.uo\")"
         :twitter    "uochan"
-        :css        ["http://fonts.googleapis.com/css?family=Josefin+Sans"
+        :css        ["http://fonts.googleapis.com/css?family=Inconsolata"
+                     "/css/prettify.css"
+                     "/css/sunburst.css"
                      "/css/main.css"]
         :device-css ["/css/smartphone.css"]
         :js         ["/js/main.js"]
