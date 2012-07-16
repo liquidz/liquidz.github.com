@@ -1,17 +1,13 @@
 /* =hidden */
-a.github_ribbon { display: none; }
+#posts span.map, #posts span.double-quote, a.github_ribbon, ul#toc
+{ display: none; }
 
 /* =header */
-header h1 a {
-    background: transparent url(../img/smp_logo.png) no-repeat top left;
-    width: 150px;
-    height: 52px;
-}
 header p { font-size: 15px; }
 
 /* =container */
 .container {
-    margin: 0;
+    margin: 0 10px;
     width: 100%;
     font-size: 90%;
 }
@@ -22,4 +18,6 @@ header p { font-size: 15px; }
 
 /* code highlight */
 pre.prettyprint { overflow: scroll; }
+.post code { padding: 0 1px; }
+
 
