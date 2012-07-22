@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="外部S式リード時のエラー行取得" type="application/atom-xml"><title>外部S式リード時のエラー行取得</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"><link href="/css/smartphone.css" media="only screen and (max-device-width:480px)" rel="stylesheet" type="text/css"></head><body id="top"><a class="github_ribbon" href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/">(code <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="contents"><article><div class="page-header"><h1><span>外</span>部S式リード時のエラー行取得</h1><p class="paragraph">22 Jul 2012</p></div><div class="post"><p class="paragraph"><a href="https://github.com/liquidz/misaki">misaki</a>ではプロジェクト外の*.cljファイルをリードしてHTMLに変換しているのですが、
+   そのcljファイルにエラーがあったとしても今まではmisaki内の評価関数内のエラーとして
+   例外が発生してしまって、具体的なエラー箇所がぱっとわかる状態ではありませんでした。</p><h2><span>解</span>決策</h2><p class="paragraph">これを解決するために<code class="prettyprint">clojure.core/read</code>で使っている<code class="prettyprint">java.io.PushbackReader</code>を
+   プロキシする形で行数をカウントするようにしてみました。</p><pre class="prettyprint lang-clj">(defn create-pushback-reader-with-line [in]
+  (let [line-num (atom 1)]
+    (proxy [PushbackReader IDeref] [in]
+      (read [] (let [c (proxy-super read)]
+                 (if (and (not= -1 c) (= \newline (char c)))
+                   (swap! line-num inc))
+                 c))
+      (deref [] @line-num))))</pre><p class="paragraph">readをオーバーライドして改行があった場合に<code class="prettyprint">line-num</code>をインクリメントしているだけです。
+   <code class="prettyprint">clojure.lang.IDeref</code>を継承しているのは<code class="prettyprint">deref</code>でカウントした行数を取得するためです。
+   (<code class="prettyprint">deref</code>を選んだのはなんとなくアクセスが楽だったので)</p><pre class="prettyprint lang-clj">(require '[clojure.java.io :as io])
+
+(let [r   (io/reader &quot;file-path.clj&quot;)
+      pbr (create-pushback-reader-with-line r)]
+  ; 通常のread
+  (println (.read pbr))
+  ; 行数を取得
+  (println @pbr))</pre><p class="paragraph">これで各S式がファイルのどの行数に書かれているかをリード時に把握できようになったので
+   あとは以下のように<code class="prettyprint">clojure.core/read</code>のエラー時に行番号を利用するだけです。</p><pre class="prettyprint lang-clj">(let [file-path &quot;foo.clj&quot;
+      pbr       (create-pushback-reader-with-line (io/reader file-path))
+      line-num  @pbr]
+  (try
+    (read pbr)
+    (catch Exception ex
+      (println &quot;エラー箇所は&quot; file-path &quot;の&quot; line-num &quot;行目です！！&quot;))))</pre><p class="paragraph">上記の例は実際にはEOFまでループしなければ意味がないのですが、
+   そこまで書くと肝心の部分が見づらくなるので省略しました。</p><p class="paragraph">なおあくまでもリード時の処理だけなので、評価時のエラー(例えば未定義変数へのアクセス)は
+   評価関数内のエラーとして扱われます。</p><p class="paragraph">また私が他の方法を知らないのでこういった方法で対応しましたが、
+   もし他にスマートな方法があれば是非教えてください！</p><h2><span>最</span>後に</h2><p class="paragraph">misakiの<a href="https://github.com/liquidz/misaki/tree/dev">devブランチ</a>には上記対応を反映済みなので、具体的にエラーにどう反映させているかなどは
+   devブランチの<a href="https://github.com/liquidz/misaki/blob/dev/src/misaki/reader.clj">src/misaki/reader.clj</a>をご参照ください。</p></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article>
+<div id='disqus_thread'></div>
+<script type='text/javascript'>
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'codeliquidzuo';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href='http://disqus.com/?ref_noscript'>comments powered by Disqus.</a></noscript>
+<a href='http://disqus.com' class='dsq-brlink'>blog comments powered by <span class='logo-disqus'>Disqus</span></a>
+<script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer class="footer"><p class="right back_to_top"><a href="#">Back to top</a></p><p><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2012<p class="paragraph"><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></p></p></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>

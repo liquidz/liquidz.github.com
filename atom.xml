@@ -1,4 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated></updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>Clojure1.4のReader Literalsで遊んでみた</title><link>http://localhost:8080/2012/04/reader-literal.html</link><updated>2012-04-16T00:00:00</updated><id>http://localhost:8080/2012/04/reader-literal.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;Clojure 1.4が出ました！
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>(code "liquidz.uo")</title><link href="http://localhost:8080/atom.xml" rel="self" /><link href="http://localhost:8080" /><updated></updated><id>http://localhost:8080</id><author><name>@uochan</name></author><entry><title>外部S式リード時の詳細エラー</title><link>http://localhost:8080/2012/07/detailed-read-error.html</link><updated>2012-07-22T00:00:00</updated><id>http://localhost:8080/2012/07/detailed-read-error.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;misaki&lt;/a&gt;ではプロジェクト外の*.cljファイルをリードしてHTMLに変換しているのですが、
+   そのcljファイルにエラーがあったとしても今まではmisaki内の評価関数内のエラーとして
+   例外が発生してしまって、具体的なエラー箇所がぱっとわかる状態ではありませんでした。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;解&lt;/span&gt;決策&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;これを解決するために&lt;code class=&quot;prettyprint&quot;&gt;clojure.core/read&lt;/code&gt;で使っている&lt;code class=&quot;prettyprint&quot;&gt;java.io.PushbackReader&lt;/code&gt;を
+   プロキシする形で行数をカウントするようにしてみました。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(defn create-pushback-reader-with-line [in]
+  (let [line-num (atom 1)]
+    (proxy [PushbackReader IDeref] [in]
+      (read [] (let [c (proxy-super read)]
+                 (if (and (not= -1 c) (= \newline (char c)))
+                   (swap! line-num inc))
+                 c))
+      (deref [] @line-num))))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;readをオーバーライドして改行があった場合に&lt;code class=&quot;prettyprint&quot;&gt;line-num&lt;/code&gt;をインクリメントしているだけです。
+   &lt;code class=&quot;prettyprint&quot;&gt;clojure.lang.IDeref&lt;/code&gt;を継承しているのは&lt;code class=&quot;prettyprint&quot;&gt;deref&lt;/code&gt;でカウントした行数を取得するためです。
+   (&lt;code class=&quot;prettyprint&quot;&gt;deref&lt;/code&gt;を選んだのはなんとなくアクセスが楽だったので)&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;(require '[clojure.java.io :as io])
+
+(let [r   (io/reader &amp;quot;file-path.clj&amp;quot;)
+      pbr (create-pushback-reader-with-line r)]
+  ; 通常のread
+  (println (.read pbr))
+  ; 行数を取得
+  (println @pbr))&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;私が他の方法を知らないのでこういった方法で対応しましたが、
+   もし他にスマートな方法があれば是非教えてください！&lt;/p&gt;&lt;h2&gt;&lt;span&gt;注&lt;/span&gt;意&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;あくまでもリード時のエラー検知だけなので、評価時のエラー(例えば未定義変数へのアクセス)は
+   今まで通り評価関数内のエラーとして扱われてしまいます。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;misakiの&lt;a href=&quot;https://github.com/liquidz/misaki/tree/dev&quot;&gt;devブランチ&lt;/a&gt;には上記対応を反映済みなので、具体的にエラーにどう反映させているかなどは
+   devブランチの&lt;a href=&quot;https://github.com/liquidz/misaki/blob/dev/src/misaki/reader.clj&quot;&gt;src/misaki/reader.clj&lt;/a&gt;をご参照ください。&lt;/p&gt;</content></entry><entry><title>Clojureでブログ生成: misakiのベータ版公開</title><link>http://localhost:8080/2012/07/misaki-beta.html</link><updated>2012-07-16T00:00:00</updated><id>http://localhost:8080/2012/07/misaki-beta.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;実際の公開からちょっと間空いてしまいましたが、
+   &lt;a href=&quot;https://github.com/liquidz/misaki&quot;&gt;misaki&lt;/a&gt;のベータ版を公開しました。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;m&lt;/span&gt;isakiとは?&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;rubyの&lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll&lt;/a&gt;を参考にClojureで作った静的サイトジェネレータです。当ブログもmisakiで生成していて、
+   misaki自体の&lt;a href=&quot;http://liquidz.github.com/misaki/&quot;&gt;ドキュメント&lt;/a&gt;もmisakiで管理・生成しています。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;何&lt;/span&gt;が新しいの?&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ベータ版で追加した主な機能は以下の通りです。&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Clojurescriptへの対応&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;出力のカスタマイズ&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;ビルトイン関数の拡充&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;スマホ対応&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;&lt;span&gt;C&lt;/span&gt;lojurescript対応&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;設定ファイルに定義を追加することでClojurescriptをビルドすることができるようになりました。
+   今まではテンプレートをS式で書くだけでしたが、これでJSもS式で書けるようになったので
+   また一歩、全部Clojureのターンに近づいた感じです。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;;; clojurescript compile options
+ ;; src-dir base is `:template-dir`
+ ;; output-dir base is `:public-dir`
+ :cljs {:src-dir       &amp;quot;cljs&amp;quot;
+        :output-to     &amp;quot;js/hello.js&amp;quot;
+        :optimizations :whitespace
+        :pretty-print true}&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;上記の定義を _config.clj に書く(デフォルトでコメントアウトされています)ことで
+   テンプレートディレクトリ(&lt;code class=&quot;prettyprint&quot;&gt;:template-dir&lt;/code&gt;)内の&lt;code class=&quot;prettyprint&quot;&gt;cljs&lt;/code&gt;ディレクトリにあるcljsファイルを
+   出力先ディレクトリ(&lt;code class=&quot;prettyprint&quot;&gt;:public-dir&lt;/code&gt;)の&lt;code class=&quot;prettyprint&quot;&gt;js/hello.js&lt;/code&gt;としてビルドします。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;出&lt;/span&gt;力のカスタマイズ&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;Alpha版で指定できたポストファイル名の正規表現と出力ファイル名は
+   ブログ生成に重点を置いていたため日付が付くことが前提でカスタマイズとしては微妙な機能でした。&lt;br /&gt;   Beta版では日付への縛りをなくすことでより自由な出力ができるようになっています。
+   その良い例がmisakiの&lt;a href=&quot;http://liquidz.github.com/misaki/&quot;&gt;ドキュメント&lt;/a&gt;です。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;;; post setting
+ ;;   default value: #&amp;quot;(\d{4})[-_](\d{1,2})[-_](\d{1,2})[-_](.+)$&amp;quot;
+ :post-filename-regexp #&amp;quot;(\d{4})[-_](\d{1,2})[-_](\d{1,2})[-_](.+)$&amp;quot;
+ ;:post-filename-format &amp;quot;{{year}}-{{month}}/{{filename}}&amp;quot;
+ :post-filename-format &amp;quot;toc/{{filename}}&amp;quot;
+
+ ;; post sort type (:date :name :title :date-desc :name-desc :title-desc)
+ ;;   default value: :date-desc
+ :post-sort-type :name&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ドキュメントの&lt;code class=&quot;prettyprint&quot;&gt;:post-filename-regexp&lt;/code&gt;はデフォルトのままですが、
+   実際のポストのファイル名は&lt;span class=&quot;string&quot;&gt;&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;01-getting-started.html.clj&lt;span class=&quot;double-quote&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;となっており、日付に縛られていないことがわかります。&lt;br /&gt;   なおファイル名の先頭の数字はポストのソート順(&lt;code class=&quot;prettyprint&quot;&gt;:post-sort-type&lt;/code&gt;)で使っているのみで
+   この数字も必須というわけではありません。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;ビ&lt;/span&gt;ルトイン関数の拡充&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;Alpha版ではhiccupを使ったS式からHTMLへのコンパイラという意味合いが強かったのですが、
+   Beta版ではテンプレートを生成するためのビルトイン関数を(ある程度)充実させました。
+   それにより、より容易にサイトを構成することが可能になっています。&lt;br /&gt;   詳細は&lt;a href=&quot;http://liquidz.github.com/misaki/api/uberdoc.html#misaki.html.core&quot;&gt;ビルトイン関数のAPI&lt;/a&gt;を参照してください。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;ス&lt;/span&gt;マホ対応&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;「ビルトイン関数の拡充」にも関係してきますが、ビルトイン関数で提供している
+   &lt;code class=&quot;prettyprint&quot;&gt;header&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;container&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;footer&lt;/code&gt; など共通の機能を使っている場合には
+   スマホでもそこまで違和感なく表示できるようにしました。&lt;br /&gt;   なお当ブログはいろいろカスタマイズしてるので、まだスマホ対応ちゃんとしてません。。そのうちします(´・ω・｀)&lt;p class=&quot;paragraph add&quot;&gt;あくまで共通機能を使っている場合のみなので、
+         どんな使い方をしてもスマホ対応できるわけではないのでご注意ください。
+         また「違和感なく見れる程度」なのでスマホに最適化されているわけでもありません。&lt;/p&gt;&lt;/p&gt;&lt;h2&gt;&lt;span&gt;ど&lt;/span&gt;う使えばいいの?&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;&lt;a href=&quot;http://liquidz.github.com/misaki/&quot;&gt;ドキュメント&lt;/a&gt;、もしくは&lt;a href=&quot;/2012/04/misaki.html&quot;&gt;以前のエントリー&lt;/a&gt;に具体例をまとめているのでそちらを参照してください。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;最&lt;/span&gt;後に&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;ソースは&lt;a href=&quot;https://github.com/liquidz/misaki/&quot;&gt;GitHub&lt;/a&gt;で管理しているので
+   動作のおかしい箇所や要望はIssuesに追加してもらえるとありがたいです！&lt;/p&gt;</content></entry><entry><title>Clojure1.4のReader Literalsで遊んでみた</title><link>http://localhost:8080/2012/04/reader-literal.html</link><updated>2012-04-16T00:00:00</updated><id>http://localhost:8080/2012/04/reader-literal.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;Clojure 1.4が出ました！
    前々から話題になっていたReader Literalsが使えるようになったので
    ちょっと遊んでみました。&lt;/p&gt;&lt;h2&gt;&lt;span&gt;ま&lt;/span&gt;ずは下準備&lt;/h2&gt;&lt;p class=&quot;paragraph&quot;&gt;基本は&lt;a href=&quot;https://github.com/clojure/clojure/blob/master/changes.md&quot;&gt;こちら&lt;/a&gt;に書いてある通りです。&lt;/p&gt;&lt;pre class=&quot;prettyprint&quot;&gt;$ lein new myreader
 $ cd myreader
@@ -561,24 +614,4 @@ System.out.println(str1 + &amp;quot; == &amp;quot; + str3 + &amp;quot; = &amp;qu
   (println @last-checker) ; length-range
   ; --
   (checker &amp;quot;abc&amp;quot;)) ; true&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルトで用意してあるチェック用関数は上記のソース(github)を参照のこと。
-   そんな感じで。&lt;/p&gt;</content></entry><entry><title>Gravatarのライブラリ作ったった</title><link>http://localhost:8080/2011/01/gravatar.html</link><updated>2011-01-07T00:00:00</updated><id>http://localhost:8080/2011/01/gravatar.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;需要は全然ないと思うけど自分でちょっと使いそうだったから作ったった。
-   でもGravatarのAPIをそのままラッピングだけの簡単なものデス。&lt;/p&gt;&lt;dl&gt;&lt;dt&gt;github&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;https://github.com/liquidz/clj-gravatar&quot;&gt;https://github.com/liquidz/clj-gravatar&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;clojars&lt;/dt&gt;&lt;dd&gt;&lt;a href=&quot;http://clojars.org/org.clojars.liquidz/clj-gravatar&quot;&gt;http://clojars.org/org.clojars.liquidz/clj-gravatar&lt;/a&gt;&lt;/dd&gt;&lt;/dl&gt;&lt;p class=&quot;paragraph&quot;&gt;以下、使用例&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;; アバター画像URL取得
-(gravatar-image &amp;quot;your@mail.address&amp;quot;)
-; サイズ指定
-(gravatar-image &amp;quot;your@mail.address&amp;quot; :size 24)
-; デフォルト画像指定
-(gravatar-image &amp;quot;your@mail.address&amp;quot; :default &amp;quot;ttp://hoge.com/fuga.png&amp;quot;)
-; HTTPS利用
-(gravatar-image &amp;quot;your@mail.address&amp;quot; :secure? true)
-; ------
-; プロフィール取得
-(gravatar-profile &amp;quot;your@mail.address&amp;quot;)
-; HTTPS利用
-(gravatar-profile &amp;quot;your@mail.address&amp;quot; :secure? true)&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;デフォルト画像指定はURLちゃんと書いたらimgタグに展開されちゃったからわざと抜いて書いてます。
-   あれ、でもプロフィール取得のHTTPSって必要なさそうだな。。まぁいいや。&lt;/p&gt;</content></entry><entry><title>Compojure 0.5.3 on GAE/Jの問題点?自分だけ?</title><link>http://localhost:8080/2010/12/compojure-problem.html</link><updated>2010-12-22T00:00:00</updated><id>http://localhost:8080/2010/12/compojure-problem.html</id><content type="html">&lt;p class=&quot;paragraph&quot;&gt;ローカルでdevサーバを起動してアクセスすると
-   以下の例外が起きるのはうちだけの問題？？&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;java.lang.NoClassDefFoundError: compojure/response/Renderable&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ググっても特にそれらしい情報がなかった。
-   Renderableだから0.5系全般でそうだったのかな？&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;で、例外からして単純に &lt;code class=&quot;prettyprint&quot;&gt;defprotocol&lt;/code&gt; で生成されるはずの
-   クラスファイルが参照できてないだけっぽいから、
-   compojure の project.clj に以下を追加してみて問題なくなったことを確認。&lt;/p&gt;&lt;pre class=&quot;prettyprint lang-clj&quot;&gt;:aot [compojure.response]&lt;/pre&gt;&lt;p class=&quot;paragraph&quot;&gt;ちなみに上記を追加して lein compile とかすると classes に
-   Renderable.class が生成されてることがわかるはず。&lt;/p&gt;&lt;p class=&quot;paragraph&quot;&gt;毎回修正しなくても良いように :aot を追加修正しただけのを
-   clojarsにプッシュして作業終了。&lt;/p&gt;&lt;a href=&quot;http://clojars.org/org.clojars.liquidz/compojure&quot;&gt;http://clojars.org/org.clojars.liquidz/compojure&lt;/a&gt;&lt;p class=&quot;paragraph&quot;&gt;という自分のためのメモ&lt;/p&gt;</content></entry></feed>
+   そんな感じで。&lt;/p&gt;</content></entry></feed>
