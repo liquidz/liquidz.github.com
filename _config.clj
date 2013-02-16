@@ -7,6 +7,7 @@
  :layout-dir   "layouts/"
 
  :url-base     "/"
+ ;:url-base     "/host/0B9D8N5xmx-U-UlNVU1VRamVCTzg/"
  :port 8080
 
  ; default site data
@@ -19,7 +20,7 @@
                      "/css/main.css"]
         :device-css ["/css/smartphone.css"]
         :js         ["/js/main.js"]
-        :post-max   15}
+        :atom-post-max 15}
 
  :lang "ja"
 
@@ -33,6 +34,8 @@
 
  ;;   default value: :date-desc
  :post-sort-type :date-desc
+
+ :posts-per-page 15
 
  ;highlight setting
  :code-highlight {:CLJ "lang-clj"

@@ -12,6 +12,15 @@ header p { font-size: 15px; }
     font-size: 90%;
 }
 
+/* =posts */
+#posts ul li {
+    font-size:   10px;
+    text-indent: 0;
+    line-height: 2em;
+}
+
+#aboutme p { font-size: 10px; }
+
 /* tag style */
 .tag ul { float-left: 10px; }
 .tag ul li a { padding: 2px 5px; }

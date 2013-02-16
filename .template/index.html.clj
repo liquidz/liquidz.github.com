@@ -20,12 +20,13 @@
 ;; POSTS
 
 [:div {:id "posts"}
- [:p (_comment ";; " (:post-max site) " recent posts")]
- (let [posts (take (:post-max site) (:posts site))]
-   [:ul
-    (make-post-link (first posts) :first? true)
-    (map make-post-link (-> posts rest drop-last))
-    (make-post-link (last posts) :last? true)])]
+ [:ul
+  (make-post-link (-> site :posts first) :first? true)
+  (map make-post-link (-> site :posts rest drop-last))
+  (make-post-link (-> site :posts last) :last? true)]]
+
+;; PAGER
+(prev-next-page-link :prev-label "前のページ" :next-label "次のページ")
 
 ;; ABOUT ME
 [:div {:id "aboutme"}

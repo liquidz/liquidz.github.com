@@ -45,7 +45,7 @@
        (list _space "|" _space)
        [(link "Top" "/")
         (link "Archives" "/archives.html")
-        (list (link "@uochan" "http://twitter.com/uochan") "&nbsp;2012")])
+        (list (link "@uochan" "http://twitter.com/uochan") "&nbsp;2013")])
 
      (p (link (img "misaki" "/img/misaki_banner.png")
               "https://github.com/liquidz/misaki"))))

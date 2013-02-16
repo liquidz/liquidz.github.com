@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="misaki 0.2.6-beta リリースしますた" type="application/atom-xml"><title>misaki 0.2.6-beta リリースしますた</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"><link href="/css/smartphone.css" media="only screen and (max-device-width:480px)" rel="stylesheet" type="text/css"></head><body id="top"><a class="github_ribbon" href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/">(code <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="contents"><article><div class="page-header"><h1 id="G__3895"><span>m</span>isaki 0.2.6-beta リリースしますた<a class="dagger" href="#G__3895">&dagger;</a></h1><p class="paragraph">16 Feb 2013</p></div><div class="post"><p class="paragraph"><a href="https://github.com/liquidz/misaki/tree/0.2.6-beta">misaki 0.2.6-beta</a> をリリースしました。
+   変更内容は大してないので、詳細は<a href="http://liquidz.github.com/misaki/toc/99-change-log.html">こちら</a>を見ていただきたいですが
+   今回は特に大きな変更点であるページネーションについて簡単に説明します。</p><p class="paragraph">今まではトップページに出すポスト一覧は</p><ul><li><span>全件を表示する</span></li><li><span>件数を限定して表示する</span></li></ul><p class="paragraph">のいずれかしか選択できませんでした。<br />   ページネーションに対応することで普通のブログのように
+   一定のポスト数毎にトップページをページ分けさせることができます。</p><h2 id="G__3893"><span>設</span>定方法<a class="dagger" href="#G__3893">&dagger;</a></h2><p class="paragraph">_config.cljで以下を定義してください。</p><pre class="prettyprint lang-clj">{
+ ;; 1ページあたりのポスト数
+ ;;    デフォルト値: nil (ページネーション無効)
+ :posts-per-page 10
+
+ ;; 2ページ目以降のページ分けされたトップページのファイル名フォーマット
+ ;;   デフォルト値: &quot;page{{page}}/{{filename}}&quot;
+ ;;   利用可能な変数:
+ ;;     @page    : ページ番号(1..N)
+ ;;     @filename: ファイル名
+ ;;     @name    : 拡張子抜きのファイル名
+ ;;     @ext     : 拡張子
+ :post-filename-format &quot;page{{page}}/{{filename}}&quot;
+ }</pre><p class="paragraph">次にトップページ(index.html.clj)では以下のように記述します。</p><pre class="prettyprint lang-clj">; ポスト一覧は今まで通りの記述でおｋ
+(post-list)
+
+; 前のページ、次のページへのリンク作成
+(prev-next-page-link)
+
+;; リンクのデザインをカスタマイズしたい場合には
+;; `site`変数からアクセスできるので以下の記述でもおｋ
+(if-let [url (:prev-page site)]
+  (link &quot;前のページ&quot; url))
+
+(if-let [url (:next-page site)]
+  (link &quot;次のページ&quot; url))</pre><p class="paragraph">より詳細な内容については<a href="http://liquidz.github.com/misaki/toc/08-pagination.html">ドキュメント</a>を参照していただければと思います。</p><h2 id="G__3894"><span>最</span>後に<a class="dagger" href="#G__3894">&dagger;</a></h2><p class="paragraph">ページネーションについてはポスト毎にページ分けされることを
+   テンプレート内でほとんど意識しなくてもいいような作りにしているつもりです。<br />   また今回は<code class="prettyprint">default</code>コンパイラで独自のソートがある関係でソース修正が多かったですが
+   外部コンパイラでは特別な修正なく対応できるような作りにもしているので
+   misakiコンパイラを開発する側にも恩恵は大きいのかなと思っています。<br />   バグなどあれば<a href="http://twitter.com/uochan">uochan</a>までご連絡ください！</p></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article>
+<div id='disqus_thread'></div>
+<script type='text/javascript'>
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'codeliquidzuo';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href='http://disqus.com/?ref_noscript'>comments powered by Disqus.</a></noscript>
+<a href='http://disqus.com' class='dsq-brlink'>blog comments powered by <span class='logo-disqus'>Disqus</span></a>
+<script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer class="footer"><p class="right back_to_top"><a href="#">&uArr; Page Top</a></p><p><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2013<p class="paragraph"><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.png"></a></p></p></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>

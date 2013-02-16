@@ -28,6 +28,9 @@ header h1 a span.string { color: #d657c1; }
 #posts ul li { line-height: 1.5em; font-size: 15px; text-indent: 8px; }
 #posts ul li.first { text-indent: 0; }
 
+/* PAGER */
+.pager { text-align: center;
+         margin: 1em 0; }
 
 /* POST PAGE */
 .page-header { margin: 1em 0 1.5em 0; border-bottom: 1px solid #eaeaea; overflow: hidden; }
@@ -77,6 +80,17 @@ header h1 a span.string { color: #d657c1; }
 ul#toc { position: absolute; margin-top: 10%; right: 5%; list-style: none; width: 15%; }
 ul#toc li { font-size: 0.9em; margin-bottom: 0.5em; }
 
+/* DAGGER STYLE */
+.dagger {
+    font-size: 50%;
+    text-decoration: none;
+    padding-left: 0.5em;
+    opacity: 0;
+}
+h1:hover .dagger, h2:hover .dagger, h3:hover .dagger,
+h4:hover .dagger, h5:hover .dagger, .dagger:hover {
+    opacity: 1;
+}
 
 /* ARCHIVES */
 .archives h2 { margin: 1em 0 0 0; color: #444; }

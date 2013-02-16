@@ -18,6 +18,6 @@
       [:id (str (:base site) (:url post))]
       [:content {:type "html"}
        (force (:lazy-content post) )]])
-   (take (:post-max site) (:posts site)))]
+   (take (:atom-post-max site) (:posts site)))]
 
 
