@@ -21,7 +21,7 @@
  [:link {:href  "/atom.xml"
          :rel   "alternate"
          :title (:title site)
-         :type  "application/atom-xml"}]
+         :type  "application/atom+xml"}]
  [:title (:title site)]
  (absolute-css (:css site ()))
  (absolute-css

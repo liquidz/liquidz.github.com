@@ -14,7 +14,7 @@
    一定のポスト数毎にトップページをページ分けさせることができます。")
 
 (h2 "設定方法")
-(p "_config.cljで以下を定義してください。")
+(p "_config.cljで以下を定義してください。 ※2013/03/07修正")
 ##CLJ
 {
  ;; 1ページあたりのポスト数
@@ -28,7 +28,7 @@
  ;;     @filename: ファイル名
  ;;     @name    : 拡張子抜きのファイル名
  ;;     @ext     : 拡張子
- :post-filename-format "page{{page}}/{{filename}}"
+ :page-filename-format "page{{page}}/{{filename}}"
  }
 CLJ
 
