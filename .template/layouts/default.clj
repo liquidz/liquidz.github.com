@@ -47,7 +47,7 @@
         (link "Archives" "/archives.html")
         (list (link "@uochan" "http://twitter.com/uochan") "&nbsp;2013")])
 
-     (p (link (img "misaki" "/img/misaki_banner.png")
+     (p (link (img "misaki" "/img/misaki_banner.svg")
               "https://github.com/liquidz/misaki"))))
 
  ;; js
