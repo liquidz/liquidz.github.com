@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta content="http://liquidz.github.com/img/site_image.png" property="og:image"><meta content="http://liquidz.github.com/img/site_image.png" property="image_src"><link href="/atom.xml" rel="alternate" title="Mac上のVimを最新にした際のメモ(LuaJIT対応)" type="application/atom+xml"><title>Mac上のVimを最新にした際のメモ(LuaJIT対応)</title><link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css"><link href="/css/prettify.css" rel="stylesheet" type="text/css"><link href="/css/sunburst.css" rel="stylesheet" type="text/css"><link href="/css/main.css" rel="stylesheet" type="text/css"><link href="/css/smartphone.css" media="only screen and (max-device-width:480px)" rel="stylesheet" type="text/css"></head><body id="top"><a class="github_ribbon" href="https://github.com/liquidz/"><img alt="Fork me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" style="position: absolute; top: 0; right: 0; border: 0;"></a><div class="container"><header><h1><a href="/">(code <span class="string"><span class="double-quote">"</span>liquidz.uo<span class="double-quote">"</span></span>)</a></h1></header><div class="contents"><article><div class="page-header"><h1 id="G__5578"><span>M</span>ac上のVimを最新にした際のメモ(LuaJIT対応)<a class="dagger" href="#G__5578">&dagger;</a></h1><p class="paragraph">22 Dec 2013</p></div><div class="post"><p class="paragraph">Mac上でVimをソースからインストールしたことがなかったので、ソースビルドするついでにLua対応した際のメモです。</p><h2 id="G__5572"><span>参</span>考<a class="dagger" href="#G__5572">&dagger;</a></h2><p class="paragraph">作業する際に参考したページは以下の通りです。</p><ul><li><span><a href="http://saihoooooooo.hatenablog.com/entry/2013/11/29/152525">neocompleteを入れてみた作業ログ - Make 鮫 noise</a></span></li><li><span><a href="http://saihoooooooo.hatenablog.com/entry/2013/12/02/122005">vimにluajitを対応させてみた作業ログ - Make 鮫 noise</a></span></li><li><span><a href="http://kazuomabuo.hatenablog.jp/entry/2013/08/21/112226">Installed Vim7.4 - mabulog</a></span></li></ul><h2 id="G__5573"><span>必</span>要なライブラリをインストール<a class="dagger" href="#G__5573">&dagger;</a></h2><pre class="prettyprint">brew install mercurial
+brew install lua</pre><h2 id="G__5574"><span>L</span>uaJITをビルド<a class="dagger" href="#G__5574">&dagger;</a></h2><pre class="prettyprint">cd ~/opt/src
+git clone http://luajit.org/git/luajit-2.0.git luajit
+cd luajit
+
+make
+make install</pre><h2 id="G__5575"><span>V</span>imをビルド<a class="dagger" href="#G__5575">&dagger;</a></h2><pre class="prettyprint">cd ~/opt/src
+hg clone https://vim.googlecode.com/hg/ vim
+cd vim
+
+./configure --prefix=/usr/local --with-features=huge --enable-multibyte --enable-luainterp --with-luajit --enable-fail-if-missing --with-lua-prefix=/usr/local
+
+make
+make install</pre><ul><li><span>最後の '--with-lua-prefix' を指定しないとconfigure時に 'configure: error: could not configure lua' が出てしまう</span></li></ul><h2 id="G__5576"><span>余</span>談: Vim 設定<a class="dagger" href="#G__5576">&dagger;</a></h2><h3 id="G__5577"><span>N</span>eoComplete<a class="dagger" href="#G__5577">&dagger;</a></h3><p class="paragraph">NeoComplete の設定をした際に <code class="prettyprint">Another plugin set completefunc! Disabled neocomplete.</code> というエラーが出たので、.vimrc にて以下を指定して回避。</p><pre class="prettyprint">let g:neocomplete#force_overwrite_completefunc = 1</pre><p class="paragraph">参考ページ</p><ul><li><span><a href="https://github.com/tpope/vim-rails/issues/283">issue with neocomplete plugin · Issue #283 · tpope/vim-rails</a></span></li></ul></div><div id="tweet_button"><a class="twitter-share-button" data-count="horizontal" data-lang="ja" href="https://twitter.com/share">ツイート</a><script src="//platform.twitter.com/widgets.js" type="text/javascript"></script></div><p class="gotop"><a href="#top">&raquo; Go page top</a></p></article>
+<div id='disqus_thread'></div>
+<script type='text/javascript'>
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'codeliquidzuo';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href='http://disqus.com/?ref_noscript'>comments powered by Disqus.</a></noscript>
+<a href='http://disqus.com' class='dsq-brlink'>blog comments powered by <span class='logo-disqus'>Disqus</span></a>
+<script src="http://embedtweet.com/javascripts/embed_v2.js" type="text/javascript"></script></div><footer class="footer"><p class="right back_to_top"><a href="#">&uArr; Page Top</a></p><p><a href="/">Top</a>&nbsp;|&nbsp;<a href="/archives.html">Archives</a>&nbsp;|&nbsp;<a href="http://twitter.com/uochan">@uochan</a>&nbsp;2013<p class="paragraph"><a href="https://github.com/liquidz/misaki"><img alt="misaki" src="/img/misaki_banner.svg"></a></p></p></footer></div><script src="/js/prettify.js" type="text/javascript"></script><script src="/js/lang-clj.js" type="text/javascript"></script><script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="/js/jquery-contained-sticky-scroll-min.js" type="text/javascript"></script><script src="/js/coderwall.js" type="text/javascript"></script><script src="/js/main.js" type="text/javascript"></script></body></html>
