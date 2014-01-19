@@ -1,7 +1,8 @@
 ; @layout post
-; @title  Light Tableのプラグインでのnode.jsモジュールの使い方メモ
+; @title  Light Tableプラグインでのnode.jsモジュールの使い方メモ
 
 (p "個人用メモ。今回は [moment.js](http://momentjs.com/) を使う方法。")
+[:p [:strong "2014/01/20: node.jsのpath.joinではなくlt.objs.files/joinを使うよう修正"]]
 
 (h2 "package.json の用意")
 
@@ -32,18 +33,17 @@ SH
 (ns lt.plugins.foo
   (:require
     [clojure.string :as string]
+    [lt.objs.files :as files]
     [lt.objs.plugins :as plugins]))
 
 ;; プラグイン名。あとで使う
 (def PLUGIN_NAME "foo")
-;; パスの連結のために path モジュールを読み込む
-(def path (js/require "path"))
 
 ;; ユーザプラグインのディレクトリは lt.objs.plugins/user_plugins_dir から取得
 ;; TODO: PLUGIN_NAME を使わないようにしたい。。
 (def moment
   (js/require
-     (.join path plugins/user_plugins_dir PLUGIN_NAME "node_modules" "moment")))
+    (files/join plugins/user_plugins_dir PLUGIN_NAME "node_modules" "moment")))
 
 (defn foo-task
   []
