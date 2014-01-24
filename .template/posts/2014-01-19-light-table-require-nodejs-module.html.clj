@@ -3,6 +3,7 @@
 
 (p "個人用メモ。今回は [moment.js](http://momentjs.com/) を使う方法。")
 [:p [:strong "2014/01/20: node.jsのpath.joinではなくlt.objs.files/joinを使うよう修正"]]
+[:p [:strong "2014/01/24: lt.objs.plugins/find-plugin の補足を追加"]]
 
 (h2 "package.json の用意")
 
@@ -53,6 +54,11 @@ CLJ
 
 (h2 "課題")
 (p "ソース内のコメントにも書いた通り、ユーザプラグインのディレクトリまでは取れるけれども、作っているプラグインのディレクトリまでは取得できないため、プラグイン名を定数としてもたざるを得ず気持ち悪いこと。良い解決策を知っている方がいれば教えていただけると助かります！")
+
+(p "[2014.01.24 追記] Light Table 0.6.1 からは lt.objs.plugins/find-plugin が追加され、プラグイン名を渡せばプラグインのディレクトリが取れるようになりました。結局プラグイン名は必要ですが。。")
+##CLJ
+(plugins/find-plugin PLUGIN_NAME) ; => (files/join plugins/user_plugins_dir PLUGIN_NAME) と同じ
+CLJ
 
 (h2 "参考")
 (ul ["[Claire](https://github.com/joshuafcole/claire)"])
